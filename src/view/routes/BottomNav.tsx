@@ -1,6 +1,8 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { BottomNavigation, BottomNavigationTab, Icon, Text } from "@ui-kitten/components";
+import React from 'react';
+import { View, ViewProps } from "react-native";
 import Flow from "../screens/Flow";
 import Home from "../screens/Home";
 import User from "../screens/User";
@@ -17,7 +19,7 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
 
     return (
         <BottomNavigation
-            style={{ height: "7%" }}
+            style={{ backgroundColor: "white", height: "7%" }}
             indicatorStyle={{ backgroundColor: "black", borderWidth: 0.1 }}
             selectedIndex={state.index}
             onSelect={(index) => navigation.navigate(state.routeNames[index])}
@@ -44,14 +46,16 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
 
 const Tab = createBottomTabNavigator();
 
-export default function MainNav() {
+export default function BottomNav(props: ViewProps) {
     return (
-        <NavigationContainer>
-            <Tab.Navigator initialRouteName="Home" tabBar={(props) => <UiKittenBottomTabNav {...props} />} screenOptions={{ headerShown: false }}>
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Flow" component={Flow} />
-                <Tab.Screen name="User" component={User} />
-            </Tab.Navigator>
-        </NavigationContainer>
+        <View {...props}>
+            <NavigationContainer>
+                <Tab.Navigator initialRouteName="Home" tabBar={(props) => <UiKittenBottomTabNav {...props} />} screenOptions={{ headerShown: false }}>
+                    <Tab.Screen name="Home" component={Home} />
+                    <Tab.Screen name="Flow" component={Flow} />
+                    <Tab.Screen name="User" component={User} />
+                </Tab.Navigator>
+            </NavigationContainer>
+        </View>
     )
 }

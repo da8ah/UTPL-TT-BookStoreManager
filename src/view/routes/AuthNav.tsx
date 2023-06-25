@@ -22,13 +22,13 @@ export default function AuthNav() {
         }, 2000);
     });
     return (
-        <>
+        <Layout>
             {
                 isAuth ?
                     <Main /> :
                     <SignIn />
             }
-        </>
+        </Layout>
     )
 }
 

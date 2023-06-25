@@ -1,9 +1,9 @@
-import { Text } from "@ui-kitten/components";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import MainNav from "./routes/MainNav";
+import { Layout, Text } from "@ui-kitten/components";
+import { StyleSheet, View } from "react-native";
+import BottomNav from "./routes/BottomNav";
 
 const Header = () => (
-    <View style={styles.header}>
+    <View style={[styles.common, styles.header]}>
         <Text category='h1' style={{ color: "white", fontFamily: "serif" }}>
             BOOKSTORE
         </Text>
@@ -14,24 +14,25 @@ const Header = () => (
 );
 
 export default function Main() {
-    return <SafeAreaView style={styles.container}>
+    return <Layout style={styles.common}>
         <Header />
-        <MainNav />
-    </SafeAreaView>
+        <BottomNav style={styles.body} />
+    </Layout>
 }
 
 const styles = StyleSheet.create({
-    container: {
+    common: {
         flex: 1,
-        width: "100%",
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    header: {
-        width: "100%",
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+    },
+    header: {
         backgroundColor: 'black'
+    },
+    body: {
+        flex: 9,
+        width: '100%'
     }
 });

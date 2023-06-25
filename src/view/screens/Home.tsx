@@ -1,16 +1,18 @@
-import { Text } from "@ui-kitten/components";
+import { Text, useTheme } from "@ui-kitten/components";
 import { StyleSheet, View } from "react-native";
 
 export default function Home() {
-    return <View style={styles.container}><Text>Home</Text></View>
+    const theme = useTheme()
+    return <View style={[styles.container, { backgroundColor: theme['background-basic-color-4'] }]}>
+        <Text category="h1" style={[{ color: theme['color-info-500'] }]}>Home</Text>
+    </View>
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 10,
+        flex: 1,
         width: "100%",
         alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'blue'
+        justifyContent: 'center'
     },
 })
