@@ -1,20 +1,10 @@
 import { Layout, Text } from "@ui-kitten/components";
-import { ActivityIndicator, StyleSheet } from "react-native";
-import useAuth from "../../hooks/useAuth";
-import Main from "../Main";
-import SignIn from "../auth/SignIn";
 import React from "react";
+import { ActivityIndicator, StyleSheet, ViewProps } from "react-native";
+import SignIn from "../auth/SignIn";
+import BottomNav from "../routes/BottomNav";
 
-const LoadingAlert = () => (
-    <Layout style={styles.container}>
-        <Text status='info' appearance='hint' style={{ fontSize: 10, fontStyle: "italic", textTransform: "uppercase" }}>
-            BookStore Manager
-        </Text>
-        <ActivityIndicator />
-    </Layout>
-);
-
-export default function AuthNav() {
+export default function AuthNav(props: ViewProps) {
     const [isAuth, setAuth] = React.useState<boolean>(false)
     React.useEffect(() => {
         setTimeout(async () => {
@@ -22,21 +12,33 @@ export default function AuthNav() {
         }, 2000);
     });
     return (
-        <Layout>
+        <>
             {
                 isAuth ?
-                    <Main /> :
-                    <SignIn />
+                    <BottomNav {...props} /> :
+                    <SignIn {...props} />
             }
-        </Layout>
+        </>
     )
 }
 
+const LoadingAlert = () => (
+    <Layout style={[styles.common, styles.container]}>
+        <Text status='info' appearance='hint' style={{ fontSize: 10, fontStyle: "italic", textTransform: "uppercase" }}>
+            BookStore Manager
+        </Text>
+        <ActivityIndicator />
+    </Layout>
+);
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    common: {
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        textAlign: 'center',
+    },
+    container: {
+        flex: 1
     },
 });

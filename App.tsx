@@ -4,7 +4,7 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
-import Main from "./src/view/Main";
+import MainFrame from "./src/view/MainFrame";
 import { ThemeContext } from "./src/view/theme/ThemeContext";
 import { default as customTheme } from './src/view/theme/theme.json';
 
@@ -19,9 +19,9 @@ export default () => {
 			<IconRegistry icons={EvaIconsPack} />
 			<ThemeContext.Provider value={{ theme, toggleTheme }}>
 				<ApplicationProvider {...eva} theme={{ ...eva[theme], ...customTheme }}>
+					<View style={{ height: 25, backgroundColor: "transparent" }} />
 					<SafeAreaView style={styles.container}>
-						<View style={{ height: 25, backgroundColor: "transparent" }} />
-						<Main />
+						<MainFrame />
 						<StatusBar style="auto" />
 					</SafeAreaView>
 				</ApplicationProvider>
