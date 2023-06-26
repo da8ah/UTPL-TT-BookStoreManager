@@ -1,19 +1,20 @@
 import { Button, Text, useTheme } from "@ui-kitten/components";
-import React from "react";
-import { View, ViewProps } from "react-native";
-import ThemeToggle from "../components/ThemeToggle";
+import { useState } from "react";
+import { View } from "react-native";
+import ThemeModeToggle from "../components/ThemeModeToggle";
+import { globalStyles as styles } from "../styles/styles";
 
-export default function SignIn(props: ViewProps) {
-    const [isOpened, setOpen] = React.useState(false)
+export default function SignIn() {
+    const [isOpened, setOpen] = useState(false)
     const theme = useTheme();
     return (
-        <View {...props}>
+        <View style={[styles.common, styles.body]}>
             <Text>Opened: {`${isOpened}`}</Text>
             <Button
-                style={{ backgroundColor: theme['color-danger-500'], borderColor: theme['border-basic-color-5'], marginVertical: 4 }}
+                style={{ backgroundColor: theme['color-info-500'], borderColor: theme['border-basic-color-5'], marginVertical: 4 }}
                 onPress={() => setOpen(!isOpened)}
             >OPEN DETAILS</Button>
-            <ThemeToggle />
+            <ThemeModeToggle />
         </View>
     )
 }

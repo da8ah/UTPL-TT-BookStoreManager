@@ -1,12 +1,12 @@
 import { Layout, Text } from "@ui-kitten/components";
-import React from "react";
-import { ActivityIndicator, StyleSheet, ViewProps } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import SignIn from "../auth/SignIn";
-import BottomNav from "../routes/BottomNav";
+import RootNav from "./RootNav";
 
-export default function AuthNav(props: ViewProps) {
-    const [isAuth, setAuth] = React.useState<boolean>(false)
-    React.useEffect(() => {
+export default function AuthNav() {
+    const [isAuth, setAuth] = useState<boolean>(false)
+    useEffect(() => {
         setTimeout(async () => {
             if (!isAuth) setAuth(!isAuth);
         }, 2000);
@@ -15,8 +15,8 @@ export default function AuthNav(props: ViewProps) {
         <>
             {
                 isAuth ?
-                    <BottomNav {...props} /> :
-                    <SignIn {...props} />
+                    <RootNav /> :
+                    <SignIn />
             }
         </>
     )
