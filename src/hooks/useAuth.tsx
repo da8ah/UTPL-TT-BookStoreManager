@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const useAuth = () => {
-    const [auth, setAuth] = useState<boolean>(false);
-    const changeAuthState = (value: boolean = false) => {
-        // setTimeout(async () => {
-        //     if (!isAuth) setAuth(!isAuth);
-        // }, 2000);
-        setAuth(value);
+export const useAuth = () => {
+    const [isAuth, setAuth] = useState(false);
+    const tryToAuth = async () => {
+        setTimeout(async () => {
+            if (!isAuth) setAuth(!isAuth);
+        }, 2000);
     }
-    return [auth, changeAuthState] as const;
+    return [isAuth, tryToAuth] as const;
 }
-
-export default useAuth;

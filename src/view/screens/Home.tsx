@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 export default function Home() {
     const theme = useTheme()
-    return <View style={[styles.container, { backgroundColor: theme['background-basic-color-4'] }]}>
+    return <View style={[styles.container]}>
         <Text category="h1" style={[{ color: theme['color-info-500'] }]}>Home</Text>
     </View>
 }

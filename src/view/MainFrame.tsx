@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Layout, Text } from "@ui-kitten/components";
 import { useContext } from "react";
 import { View, ViewProps } from "react-native";
+import { AuthContext } from "../hooks/context/AuthContext";
 import { ThemeContext } from "../hooks/context/ThemeContext";
 import BookEditorToggle from "./components/BookEditorToggle";
 import ThemeModeToggle from "./components/ThemeModeToggle";
@@ -19,21 +20,24 @@ export default function MainFrame() {
     </Layout>
 }
 
-const Header = (props: ViewProps) => (
-    <View {...props}>
-        <View style={[styles.common, { width: '20%' }]}>
-            <ThemeModeToggle />
+const Header = (props: ViewProps) => {
+    const { isAuth } = useContext(AuthContext)
+    return (
+        <View {...props}>
+            <View style={[styles.common, { width: '20%' }]}>
+                <ThemeModeToggle />
+            </View>
+            <View style={[styles.common, { width: '60%' }]}>
+                <Text category='h2' style={{ color: 'white', fontSize: 12, fontStyle: "italic" }}>
+                    MANAGER
+                </Text>
+                <Text category="h1" status="primary" style={{ fontFamily: "serif" }}>
+                    BOOKSTORE
+                </Text>
+            </View>
+            <View style={[styles.common, { width: '20%' }]}>
+                {isAuth && <BookEditorToggle />}
+            </View>
         </View>
-        <View style={[styles.common, { width: '60%' }]}>
-            <Text category='h2' style={{ color: 'white', fontSize: 12, fontStyle: "italic" }}>
-                MANAGER
-            </Text>
-            <Text category="h1" status="primary" style={{ fontFamily: "serif" }}>
-                BOOKSTORE
-            </Text>
-        </View>
-        <View style={[styles.common, { width: '20%' }]}>
-            <BookEditorToggle />
-        </View>
-    </View>
-);
+    )
+};
