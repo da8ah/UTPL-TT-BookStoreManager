@@ -78,7 +78,7 @@ const BookStore = () => {
 
 export default function Home() {
     return <View style={{ flex: 1 }}>
-        <SearchBar />
+        <SearchBar placeholder="Buscar por coincidencia o ISBN" />
         <BookStore />
     </View>
 }

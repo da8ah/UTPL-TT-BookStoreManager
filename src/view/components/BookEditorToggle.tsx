@@ -10,11 +10,13 @@ export default function BookEditorToggle() {
     const theme = useTheme()
 
     const Open = () => <Icon name="plus" fill="white" height="30" width="30" />;
-    const Close = () => <Icon name="close" fill="white" height="30" width="30" />;
+    const Close = () => <Icon name="close" fill={theme['color-danger-700']} height="30" width="30" />;
     return <Button
         size="tiny"
+        status={isEditorOpen ? 'danger' : 'basic'}
+        appearance="outline"
         accessoryLeft={isEditorOpen ? Close : Open}
-        style={{ flexDirection: 'column', backgroundColor: isEditorOpen ? theme['color-danger-700'] : 'transparent', borderWidth: 0 }}
+        style={{ flexDirection: 'column', borderWidth: 0 }}
         onPress={() => {
             navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
         }}

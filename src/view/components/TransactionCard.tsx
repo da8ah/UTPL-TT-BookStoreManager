@@ -40,7 +40,7 @@ const CardLateral = (props: { user: string; cant: number }) => (
                 showsVerticalScrollIndicator={false}
                 fadingEdgeLength={50}
             >
-                <Text style={{ fontSize: 16, textAlign: "center" }} allowFontScaling>
+                <Text style={{ fontSize: 12, textAlign: "center" }} allowFontScaling>
                     {props.user}
                 </Text>
             </ScrollView>
@@ -112,7 +112,7 @@ export default function TransactionCard(info: ListRenderItemInfo<CardTransaction
                         />
                     }
                 </View>
-                {cart && <CardLateral user={"User"} cant={cart.getToBuyBooks().length} />}
+                {cart && <CardLateral user={"Usuario"} cant={cart.getToBuyBooks().length} />}
             </View>
             {/* Button */}
             <Divider />

@@ -5,7 +5,7 @@ import { ThemeContext } from "../../hooks/context/ThemeContext";
 import { globalStyles } from "../styles/styles";
 
 
-export default function SearchBar() {
+export default function SearchBar(props: { placeholder: string }) {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
     const SearchIcon = () => <Icon name="search-outline" fill={themeMode === 'dark' ? 'white' : 'black'} height="30" width="30" />;
@@ -18,7 +18,7 @@ export default function SearchBar() {
                 selectionColor={themeMode === 'dark' ? 'black' : 'gray'}
                 cursorColor={themeMode === 'dark' ? theme['color-primary-500'] : 'gray'}
                 style={styles.input}
-                placeholder={"Buscar por coincidencia o ISBN"}
+                placeholder={props.placeholder}
             // onChangeText={}
             // onFocus={}
             />
