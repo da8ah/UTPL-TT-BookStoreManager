@@ -5,7 +5,7 @@ import { EditorContext } from "../../hooks/context/EditorContext";
 import { RootNavProps } from "../screens/screen";
 
 export default function BookEditorToggle() {
-    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
+    const { isEditorOpen } = useContext(EditorContext)
     const navigation = useNavigation<RootNavProps>()
     const theme = useTheme()
 
@@ -16,7 +16,6 @@ export default function BookEditorToggle() {
         accessoryLeft={isEditorOpen ? Close : Open}
         style={{ flexDirection: 'column', backgroundColor: isEditorOpen ? theme['color-danger-700'] : 'transparent', borderWidth: 0 }}
         onPress={() => {
-            toggleEditor()
             navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
         }}
     >{isEditorOpen ? 'Cerrar' : 'Nuevo'}

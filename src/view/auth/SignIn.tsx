@@ -20,6 +20,9 @@ export default function SignIn() {
                         onPress={() => {
                             setLoading(true)
                             tryToAuth()
+                            setTimeout(() => {
+                                setLoading(false)
+                            }, 2000);
                         }}
                     >Auth</Button>
                 </>

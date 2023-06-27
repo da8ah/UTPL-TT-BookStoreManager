@@ -3,9 +3,14 @@ import { useContext, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 
-export default function BookEditor() {
-    const { toggleEditor } = useContext(EditorContext)
+export default function BookEditor(bookIndex: number) {
+    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
+
+    useEffect(() => {
+        toggleEditor()
+        console.log(bookIndex);
+    }, [])
 
     useEffect(() => {
         return () => toggleEditor()

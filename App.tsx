@@ -7,9 +7,9 @@ import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { AuthContext } from "./src/hooks/context/AuthContext";
 import { EditorContext } from "./src/hooks/context/EditorContext";
 import { ThemeContext } from "./src/hooks/context/ThemeContext";
-import { useAuth } from "./src/hooks/useAuth";
-import useBookEditor from "./src/hooks/useBookEditor";
-import useThemeMode from "./src/hooks/useThemeMode";
+import { useAuth } from "./src/hooks/context/useAuth";
+import useBookEditor from "./src/hooks/context/useBookEditor";
+import useThemeMode from "./src/hooks/context/useThemeMode";
 import MainFrame from "./src/view/MainFrame";
 import customTheme from './src/view/styles/theme.json';
 
