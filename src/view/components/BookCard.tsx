@@ -5,7 +5,7 @@ import useStockBook from "../../hooks/useStockBook";
 import StockBook from "../../model/core/entities/StockBook";
 import { RootNavProps } from "../screens/screen";
 
-const Header = (props: { isVisible: boolean; isInOffer: boolean; discountPercentage: number }) => {
+const CardTop = (props: { isVisible: boolean; isInOffer: boolean; discountPercentage: number }) => {
     return (
         <View style={[styles.common, styles.cardHeader]}>
             {/* <View style={{ marginLeft: 1 }}> */}
@@ -20,7 +20,7 @@ const Header = (props: { isVisible: boolean; isInOffer: boolean; discountPercent
     );
 };
 
-const Body = (props: { isRecommended: boolean; isBestSeller: boolean; isRecent: boolean }) => {
+const CardMiddle = (props: { isRecommended: boolean; isBestSeller: boolean; isRecent: boolean }) => {
     return (
         <View style={styles.cardStatus}>
             <View style={styles.icons}>
@@ -35,7 +35,7 @@ const Body = (props: { isRecommended: boolean; isBestSeller: boolean; isRecent: 
     );
 };
 
-const Footer = (props: { title: string; isbn: string; author: string; price: number; stock: number }) => {
+const CardBottom = (props: { title: string; isbn: string; author: string; price: number; stock: number }) => {
     return (
         <View style={styles.cardBody}>
             <ScrollView
@@ -103,13 +103,13 @@ export default function BookCard(info: ListRenderItemInfo<StockBook>) {
         <View style={styles.mainLayout}>
             {/* Card */}
             <View style={styles.cardLayout}>
-                <Header
+                <CardTop
                     isVisible={stockBook.isVisible()}
                     isInOffer={stockBook.isInOffer()}
                     discountPercentage={stockBook.getDiscountPercentage()}
                 />
-                <Body isRecommended={stockBook.isRecommended()} isBestSeller={stockBook.isBestSeller()} isRecent={stockBook.isRecent()} />
-                <Footer
+                <CardMiddle isRecommended={stockBook.isRecommended()} isBestSeller={stockBook.isBestSeller()} isRecent={stockBook.isRecent()} />
+                <CardBottom
                     title={stockBook.getTitle()}
                     isbn={stockBook.getIsbn()}
                     author={stockBook.getAuthor()}
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         display: "none",
     },
     cardLayout: {
-        backgroundColor: "gainsboro",
+        backgroundColor: transparent,
         width: "100%",
         height: 250,
         paddingVertical: 5,
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
     },
     cardStatus: {
+        backgroundColor: "white",
         width: "100%",
         height: 140,
         flexDirection: "row",

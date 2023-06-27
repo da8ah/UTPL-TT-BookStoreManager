@@ -5,7 +5,7 @@ import StockBook from "../../model/core/entities/StockBook";
 import BookCard from "../components/BookCard";
 import SearchBar from "../components/SearchBar";
 
-const stockBooks = [new StockBook(
+export const stockBooks = [new StockBook(
     "9780141988511",
     "https://azure.blob.url.jpg",
     "12 Rules for Life: An Antidote to Chaos",
