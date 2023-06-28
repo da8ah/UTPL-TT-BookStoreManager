@@ -2,7 +2,6 @@ import ActionButton, { ActionButtonProps } from "./ActionButton";
 
 type RoundButtonProps = {
     size?: 'small' | 'medium' | 'big'
-
 }
 
 export default function RoundButton(props: Omit<ActionButtonProps, 'size'> & RoundButtonProps) {
@@ -26,7 +25,6 @@ export default function RoundButton(props: Omit<ActionButtonProps, 'size'> & Rou
         default:
             size.height = 80
             size.width = 80
-
             break;
     }
     return <ActionButton {...props} height={size.height} width={size.width} rounded={100}>

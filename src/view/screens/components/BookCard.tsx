@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, Text } from "@ui-kitten/components";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
-import useStockBook from "../../hooks/useStockBook";
-import StockBook from "../../model/core/entities/StockBook";
-import { RootNavProps } from "../screens/screen";
+import useStockBook from "../../../hooks/useStockBook";
+import StockBook from "../../../model/core/entities/StockBook";
+import { RootNavProps } from "../screen";
 
 const CardTop = (props: { isVisible: boolean; isInOffer: boolean; discountPercentage: number }) => {
     return (

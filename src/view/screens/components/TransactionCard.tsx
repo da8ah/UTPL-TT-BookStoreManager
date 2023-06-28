@@ -1,6 +1,6 @@
 import { Button, Divider, Icon, Text } from "@ui-kitten/components";
 import { ListRenderItemInfo, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { CardTransaction } from "../../model/core/entities/CardTransaction";
+import { CardTransaction } from "../../../model/core/entities/CardTransaction";
 
 const CardHeader = (props: { id: string, date: string }) => (
     <View style={[styles.transparentBackground, styles.cardHeader]}>
@@ -112,7 +112,7 @@ export default function TransactionCard(info: ListRenderItemInfo<CardTransaction
                         />
                     }
                 </View>
-                {cart && <CardLateral user={"Usuario"} cant={cart.getToBuyBooks().length} />}
+                {cart && <CardLateral user={transaction.getUser()} cant={cart.getToBuyBooks().length} />}
             </View>
             {/* Button */}
             <Divider />

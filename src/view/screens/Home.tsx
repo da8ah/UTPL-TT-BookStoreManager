@@ -2,8 +2,8 @@ import { List } from "@ui-kitten/components";
 import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import StockBook from "../../model/core/entities/StockBook";
-import BookCard from "../components/BookCard";
 import SearchBar from "../components/SearchBar";
+import BookCard from "./components/BookCard";
 
 export const stockBooks = [new StockBook(
     "9780141988511",
@@ -85,9 +85,8 @@ export default function Home() {
 
 
 const styles = StyleSheet.create({
-    searchBarLayout: { flex: 1, paddingVertical: 20 },
     booksLayout: { flex: 9 },
-    mainListLayout: { flex: 1 },
-    flatListLayout: {},
+    mainListLayout: { backgroundColor: "transparent", flex: 1 },
+    flatListLayout: { backgroundColor: "transparent", },
     columnsStyle: { alignContent: "center" },
 });

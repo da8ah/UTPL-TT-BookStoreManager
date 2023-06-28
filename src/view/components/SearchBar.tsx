@@ -13,8 +13,8 @@ export default function SearchBar(props: { placeholder: string }) {
         <View style={[globalStyles.common, { paddingVertical: 1 }]}>
             <Input
                 // ref={(component: Input) => authorInputRef.current = component}
-                disabled={true}
                 accessoryLeft={<SearchIcon />}
+                inputMode="search"
                 selectionColor={themeMode === 'dark' ? 'black' : 'gray'}
                 cursorColor={themeMode === 'dark' ? theme['color-primary-500'] : 'gray'}
                 style={styles.input}
