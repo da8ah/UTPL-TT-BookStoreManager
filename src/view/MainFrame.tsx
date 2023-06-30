@@ -28,10 +28,10 @@ const Header = (props: ViewProps) => {
                 <ThemeModeToggle />
             </View>
             <View style={[styles.common, { width: '60%' }]}>
-                <Text category='h2' style={{ color: 'white', fontSize: 12, fontStyle: "italic" }}>
+                <Text category='h1' style={{ color: 'white', fontSize: 32 }}>
                     MANAGER
                 </Text>
-                <Text category="h1" status="primary" style={{ fontFamily: "serif" }}>
+                <Text category="h2" status="primary" style={{ fontSize: 10, fontFamily: "serif", fontStyle: "italic" }}>
                     BOOKSTORE
                 </Text>
             </View>

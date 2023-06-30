@@ -9,8 +9,6 @@ import User from "../screens/User";
 const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
-    const tabBgDarkColor = theme['tab-dark-basic-color']
-    const tabBgColor = theme['tab-basic-color']
     const indicatorColor = theme['background-alternative-color-1']
 
     const HomeIconOpen = () => <Icon name="book-open" fill={indicatorColor} height="30" width="30" />;
@@ -26,7 +24,7 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
 
     return (
         <BottomNavigation
-            style={{ backgroundColor: themeMode === 'dark' ? tabBgDarkColor : tabBgColor, paddingVertical: 2 }}
+            style={{ backgroundColor: theme['tab-basic-color'], paddingVertical: 2 }}
             indicatorStyle={{ backgroundColor: themeMode === 'dark' ? theme['color-info-500'] : indicatorColor, height: 2 }}
             selectedIndex={state.index}
             onSelect={(index) => {

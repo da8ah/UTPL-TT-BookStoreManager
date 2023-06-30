@@ -11,6 +11,7 @@ import { useAuth } from "./src/hooks/context/useAuth";
 import useBookEditor from "./src/hooks/context/useBookEditor";
 import useThemeMode from "./src/hooks/context/useThemeMode";
 import MainFrame from "./src/view/MainFrame";
+import theme from "./src/view/styles/theme.json"
 
 
 export default () => {
@@ -22,7 +23,7 @@ export default () => {
 			<AuthContext.Provider value={{ isAuth, tryToAuth }}>
 				<IconRegistry icons={EvaIconsPack} />
 				<ThemeContext.Provider value={{ themeMode, toggleThemeMode }}>
-					<ApplicationProvider {...eva} theme={{ ...eva[themeMode] }}>
+					<ApplicationProvider {...eva} theme={{ ...eva[themeMode], ...theme.basic, ...theme[themeMode] }}>
 						<EditorContext.Provider value={{ isEditorOpen, toggleEditor }}>
 							<View style={{ height: 25, backgroundColor: "transparent" }} />
 							<SafeAreaView style={styles.container}>

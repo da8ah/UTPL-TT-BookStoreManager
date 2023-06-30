@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import theme from './theme.json'
 
 export const globalStyles = StyleSheet.create({
     common: {
@@ -23,7 +22,7 @@ export const darkNavTheme = {
     dark: true,
     colors: {
         primary: 'transparent',
-        background: theme['tab-dark-basic-color'],
+        background: 'transparent',
         card: 'transparent',
         text: 'transparent',
         border: 'transparent',
@@ -35,7 +34,7 @@ export const lightNavTheme = {
     dark: false,
     colors: {
         primary: 'transparent',
-        background: theme['tab-basic-color'],
+        background: 'transparent',
         card: 'transparent',
         text: 'transparent',
         border: 'transparent',
