@@ -9,7 +9,6 @@ export const globalStyles = StyleSheet.create({
     },
     header: {
         flex: 1,
-        backgroundColor: 'black',
         flexDirection: "row",
         justifyContent: 'space-between'
     },

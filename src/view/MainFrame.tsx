@@ -14,7 +14,7 @@ export default function MainFrame() {
     const { themeMode } = useContext(ThemeContext);
     return <Layout style={[styles.common, { flex: 1 }]}>
         <NavigationContainer theme={themeMode === 'dark' ? darkNavTheme : lightNavTheme}>
-            <Header style={[styles.common, styles.header]} />
+            <Header style={[styles.common, styles.header, { backgroundColor: '#272729' }]} />
             <AuthNav />
         </NavigationContainer>
     </Layout>

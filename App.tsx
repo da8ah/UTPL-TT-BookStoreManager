@@ -11,7 +11,8 @@ import { useAuth } from "./src/hooks/context/useAuth";
 import useBookEditor from "./src/hooks/context/useBookEditor";
 import useThemeMode from "./src/hooks/context/useThemeMode";
 import MainFrame from "./src/view/MainFrame";
-import theme from "./src/view/styles/theme.json"
+import customTheme from "./src/view/styles/theme.json";
+import { globalStyles as styles } from "./src/view/styles/styles";
 
 
 export default () => {
@@ -20,28 +21,19 @@ export default () => {
 	const [isEditorOpen, toggleEditor] = useBookEditor()
 	return (
 		<>
-			<AuthContext.Provider value={{ isAuth, tryToAuth }}>
-				<IconRegistry icons={EvaIconsPack} />
-				<ThemeContext.Provider value={{ themeMode, toggleThemeMode }}>
-					<ApplicationProvider {...eva} theme={{ ...eva[themeMode], ...theme.basic, ...theme[themeMode] }}>
+			<IconRegistry icons={EvaIconsPack} />
+			<ThemeContext.Provider value={{ themeMode, toggleThemeMode }}>
+				<ApplicationProvider {...eva} theme={{ ...eva[themeMode], ...customTheme.basic, ...customTheme[themeMode] }}>
+					<AuthContext.Provider value={{ isAuth, tryToAuth }}>
 						<EditorContext.Provider value={{ isEditorOpen, toggleEditor }}>
 							<View style={{ height: 25, backgroundColor: "transparent" }} />
-							<SafeAreaView style={styles.container}>
+							<SafeAreaView style={[styles.common, { flex: 1 }]}>
 								<MainFrame />
 								<StatusBar style="auto" />
 							</SafeAreaView>
 						</EditorContext.Provider>
-					</ApplicationProvider>
-				</ThemeContext.Provider>
-			</AuthContext.Provider>
+					</AuthContext.Provider>
+				</ApplicationProvider>
+			</ThemeContext.Provider>
 		</>)
 };
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		width: "100%",
-		alignItems: 'center',
-		justifyContent: 'center',
-	},
-});

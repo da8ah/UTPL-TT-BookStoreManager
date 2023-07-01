@@ -10,14 +10,18 @@ export default function SearchBar(props: { placeholder: string }) {
     const theme = useTheme()
     const SearchIcon = () => <Icon name="search-outline" fill={themeMode === 'dark' ? 'white' : 'black'} height="30" width="30" />;
     return (
-        <View style={[globalStyles.common, { paddingVertical: 1 }]}>
+        <View style={[globalStyles.common, { paddingVertical: 5 }]}>
             <Input
                 // ref={(component: Input) => authorInputRef.current = component}
                 accessoryLeft={<SearchIcon />}
                 inputMode="search"
                 selectionColor={themeMode === 'dark' ? 'black' : 'gray'}
                 cursorColor={themeMode === 'dark' ? theme['color-primary-500'] : 'gray'}
-                style={styles.input}
+                style={[styles.input, {
+                    backgroundColor: themeMode === 'dark' ? 'transparent' : 'white',
+                    borderColor: themeMode === 'dark' ? 'gray' : 'white',
+                    borderRadius: themeMode === 'dark' ? 20 : 5
+                }]}
                 placeholder={props.placeholder}
             // onChangeText={}
             // onFocus={}
@@ -28,9 +32,6 @@ export default function SearchBar(props: { placeholder: string }) {
 
 const styles = StyleSheet.create({
     input: {
-        width: "90%",
-        backgroundColor: "transparent",
-        borderColor: "gray",
-        borderRadius: 20,
+        width: "95%"
     },
 });

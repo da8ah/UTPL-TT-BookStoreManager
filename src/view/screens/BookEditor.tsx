@@ -16,7 +16,7 @@ export default function BookEditor(bookIndex: number) {
         return () => toggleEditor()
     }, [])
 
-    return <View style={[styles.container, { backgroundColor: theme['background-basic-color-4'] }]}>
+    return <View style={[styles.container, { backgroundColor: theme['background-basic-color-3'] }]}>
         <Text category="h1" style={[{ color: theme['color-info-500'] }]}>BookEditor</Text>
     </View>
 }
