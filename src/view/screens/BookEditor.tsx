@@ -2,18 +2,16 @@ import { Text, useTheme } from "@ui-kitten/components";
 import { useContext, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
+import { RootNavProps } from "./screen";
 
-export default function BookEditor(bookIndex: number) {
-    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
+export default function BookEditor({ route }: { route?: RootNavProps }) {
+    const { toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
 
     useEffect(() => {
-        toggleEditor()
-        console.log(bookIndex);
-    }, [])
-
-    useEffect(() => {
-        return () => toggleEditor()
+        toggleEditor(true)
+        route.params && console.log(route.params.bookIndex);
+        return () => { toggleEditor(false) }
     }, [])
 
     return <View style={[styles.container, { backgroundColor: theme['background-basic-color-3'] }]}>

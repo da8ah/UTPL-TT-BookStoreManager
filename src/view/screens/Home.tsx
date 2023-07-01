@@ -87,6 +87,6 @@ export default function Home() {
 const styles = StyleSheet.create({
     booksLayout: { flex: 9 },
     mainListLayout: { backgroundColor: "transparent", flex: 1 },
-    flatListLayout: { backgroundColor: "transparent", },
-    columnsStyle: { alignContent: "center" },
+    flatListLayout: { backgroundColor: "transparent" },
+    columnsStyle: { alignContent: "center" }
 });

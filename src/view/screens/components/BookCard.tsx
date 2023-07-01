@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Button, Icon, Text } from "@ui-kitten/components";
+import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
 import { ThemeContext } from "../../../hooks/context/ThemeContext";
@@ -96,16 +96,20 @@ const CardButton = (props: { itemIndex: number }) => {
     );
 };
 
+
+export default function BookCard(info: ListRenderItemInfo<StockBook>) {
+    return <CardElement info={info} />
+};
 const CardElement = (props: { info: any }) => {
     // const [stockBook] = useStockBook(info.item)
     const { themeMode } = useContext(ThemeContext)
+    const theme = useTheme()
     const { info } = props
     const stockBook = info.item
-    console.log(info.index);
     return (
         <View style={styles.mainLayout}>
             {/* Card */}
-            <View style={[styles.cardLayout, { backgroundColor: themeMode === 'dark' ? 'transparent' : 'gainsboro', borderColor: 'black', borderWidth: themeMode === 'dark' ? 0.3 : 0 }]}>
+            <View style={[styles.cardLayout, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'gainsboro' }]}>
                 <CardTop
                     isVisible={stockBook.isVisible()}
                     isInOffer={stockBook.isInOffer()}
@@ -125,10 +129,6 @@ const CardElement = (props: { info: any }) => {
         </View>
     );
 }
-
-export default function BookCard(info: ListRenderItemInfo<StockBook>) {
-    return <CardElement info={info} />
-};
 
 const transparent = "transparent";
 

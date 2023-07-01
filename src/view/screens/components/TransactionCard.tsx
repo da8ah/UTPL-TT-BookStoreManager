@@ -1,6 +1,8 @@
-import { Button, Divider, Icon, Text } from "@ui-kitten/components";
+import { Button, Divider, Icon, Text, useTheme } from "@ui-kitten/components";
 import { ListRenderItemInfo, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { CardTransaction } from "../../../model/core/entities/CardTransaction";
+import { useContext } from "react";
+import { ThemeContext } from "../../../hooks/context/ThemeContext";
 
 const CardHeader = (props: { id: string, date: string }) => (
     <View style={[styles.transparentBackground, styles.cardHeader]}>
@@ -94,15 +96,21 @@ const CardButton = (props: { itemIndex: number }) => {
 };
 
 export default function TransactionCard(info: ListRenderItemInfo<CardTransaction>) {
+    return <CardElement info={info} />
+};
+const CardElement = (props: { info: any }) => {
+    const { themeMode } = useContext(ThemeContext)
+    const theme = useTheme()
+    const { info } = props
     const transaction = info.item
     const cart = transaction.getCart()
     return (
-        <View style={styles.mainLayout}>
+        <View style={[styles.mainLayout, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'gainsboro' }]}>
             {/* Card */}
             <View style={[styles.transparentBackground, styles.mainPanel]}>
                 <View style={[styles.transparentBackground, styles.internalPanel]}>
                     <CardHeader id={transaction.getId()} date={transaction.getDate()} />
-                    <Divider />
+                    <Divider style={{ backgroundColor: 'white' }} />
                     {cart !== undefined &&
                         <CardBody
                             subtotal={cart.getSubtotal()}
@@ -115,11 +123,12 @@ export default function TransactionCard(info: ListRenderItemInfo<CardTransaction
                 {cart && <CardLateral user={transaction.getUser()} cant={cart.getToBuyBooks().length} />}
             </View>
             {/* Button */}
-            <Divider />
+            <Divider style={{ backgroundColor: 'white' }} />
             <CardButton itemIndex={info.index} />
         </View>
     );
-};
+
+}
 
 const transparent = "transparent";
 
@@ -132,7 +141,6 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     mainLayout: {
-        backgroundColor: "gainsboro",
         height: 250,
         margin: 10,
         borderRadius: 7,

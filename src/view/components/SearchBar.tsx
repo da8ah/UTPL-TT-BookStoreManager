@@ -16,7 +16,7 @@ export default function SearchBar(props: { placeholder: string }) {
                 accessoryLeft={<SearchIcon />}
                 inputMode="search"
                 selectionColor={themeMode === 'dark' ? 'black' : 'gray'}
-                cursorColor={themeMode === 'dark' ? theme['color-primary-500'] : 'gray'}
+                cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
                 style={[styles.input, {
                     backgroundColor: themeMode === 'dark' ? 'transparent' : 'white',
                     borderColor: themeMode === 'dark' ? 'gray' : 'white',
