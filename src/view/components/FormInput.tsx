@@ -1,5 +1,7 @@
-import { Input, InputProps, Text } from "@ui-kitten/components";
+import { Input, InputProps, Text, useTheme } from "@ui-kitten/components";
+import { useContext } from "react";
 import { ColorValue, StyleSheet, View } from "react-native";
+import { ThemeContext } from "../../hooks/context/ThemeContext";
 
 type BorderTop = {
     isTop?: boolean;
@@ -18,19 +20,25 @@ type FormInputProps = (BorderTop | BorderBottom) & {
 }
 
 export default function FormInput(props: InputProps & FormInputProps) {
+    const { themeMode } = useContext(ThemeContext)
+    const theme = useTheme()
     return <View style={[styles.inputLayout, props.formColor !== undefined && { backgroundColor: props.formColor }]}>
         <View style={[styles.inputTitle, props.isTop && styles.top, props.isBottom && styles.bottom, props.formColor !== undefined && { backgroundColor: props.formColor }]}>
             <Text adjustsFontSizeToFit style={{ textTransform: props.capitalized ? "capitalize" : "uppercase" }}>{props.title}</Text>
         </View>
-        <Input {...props} style={[styles.input, props.style, props.formColor !== undefined && { borderBottomColor: props.formColor }]} />
+        <Input
+            {...props}
+            selectionColor={themeMode === 'dark' ? theme['color-info-500'] : undefined}
+            cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
+            style={[styles.input, props.style, props.formColor !== undefined && { borderBottomColor: props.formColor }]} />
     </View>
 }
 
 const styles = StyleSheet.create({
-    inputLayout: { width: "70%", height: 40, maxHeight: 40, flexDirection: "row", justifyContent: "center", marginVertical: 10 },
+    inputLayout: { width: "100%", height: 40, maxHeight: 40, flexDirection: "row", justifyContent: "center", marginVertical: 10 },
     inputTitle: { backgroundColor: "darkgrey", width: "30%", justifyContent: "center", alignItems: "center" },
     input: {
-        width: "80%",
+        width: "70%",
         borderRadius: 0,
         borderWidth: 0,
         borderBottomWidth: 2,

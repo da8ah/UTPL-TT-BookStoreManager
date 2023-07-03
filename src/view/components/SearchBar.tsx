@@ -12,9 +12,9 @@ export default function SearchBar(props: { placeholder: string }) {
         <View style={[styles.common, { paddingVertical: 10 }]}>
             <Input
                 // ref={(component: Input) => authorInputRef.current = component}
-                accessoryLeft={<SearchIcon />}
+                accessoryLeft={SearchIcon}
                 inputMode="search"
-                selectionColor={themeMode === 'dark' ? 'black' : 'gray'}
+                selectionColor={themeMode === 'dark' ? theme['color-info-500'] : undefined}
                 cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
                 style={{
                     width: "95%",
