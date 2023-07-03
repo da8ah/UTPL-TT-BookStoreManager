@@ -8,7 +8,7 @@ export const globalStyles = StyleSheet.create({
         textAlign: 'center',
     },
     header: {
-        flex: 1,
+        height: 75,
         flexDirection: "row",
         justifyContent: 'space-between'
     },

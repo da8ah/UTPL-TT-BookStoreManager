@@ -31,7 +31,7 @@ const Header = (props: ViewProps) => {
                 <Text category='h1' style={{ color: 'white', fontSize: 32 }}>
                     MANAGER
                 </Text>
-                <Text category="h2" status="primary" style={{ fontSize: 10, fontFamily: "serif", fontStyle: "italic" }}>
+                <Text category="h2" status="info" style={{ fontSize: 10, fontFamily: "serif", fontStyle: "italic" }}>
                     BOOKSTORE
                 </Text>
             </View>
