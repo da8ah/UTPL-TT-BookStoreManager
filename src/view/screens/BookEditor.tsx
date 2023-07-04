@@ -205,8 +205,7 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
         onPress={() => { setInputFocusState(false); Keyboard.dismiss(); return !Keyboard.isVisible(); }}
     >
-        <View style={[globalStyles.common, { flex: 1, backgroundColor: theme['background-basic-color-3'] }]}>
-
+        <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
             <EditorTop setInputFocusState={setInputFocusState} />
             <EditorMiddle isInputFocused={isInputFocused} />
             <EditorBottom setInputFocusState={setInputFocusState} isNew={route.params === undefined} />

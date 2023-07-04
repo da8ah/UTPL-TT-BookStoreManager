@@ -16,7 +16,7 @@ import { globalStyles as styles } from "./src/view/styles/styles";
 
 
 export default () => {
-	const [isAuth, tryToAuth] = useAuth()
+	const [isAuth, tryToAuth, logout] = useAuth()
 	const [themeMode, toggleThemeMode] = useThemeMode()
 	const [isEditorOpen, toggleEditor] = useBookEditor()
 	return (
@@ -24,7 +24,7 @@ export default () => {
 			<IconRegistry icons={EvaIconsPack} />
 			<ThemeContext.Provider value={{ themeMode, toggleThemeMode }}>
 				<ApplicationProvider {...eva} theme={{ ...eva[themeMode], ...customTheme.basic, ...customTheme[themeMode] }}>
-					<AuthContext.Provider value={{ isAuth, tryToAuth }}>
+					<AuthContext.Provider value={{ isAuth, tryToAuth, logout }}>
 						<EditorContext.Provider value={{ isEditorOpen, toggleEditor }}>
 							<View style={{ height: 25, backgroundColor: "transparent" }} />
 							<SafeAreaView style={[styles.common, { flex: 1 }]}>

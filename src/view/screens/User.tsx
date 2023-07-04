@@ -4,8 +4,11 @@ import ActionButton from "../components/ActionButton";
 import FormInput from "../components/FormInput";
 import RoundButton from "../components/RoundButton";
 import { globalStyles as styles } from "../styles/styles";
+import { useContext } from "react";
+import { AuthContext } from "../../hooks/context/AuthContext";
 
 export default function User() {
+    const { logout } = useContext(AuthContext)
     const theme = useTheme()
     const buttons = [
         {
@@ -43,6 +46,7 @@ export default function User() {
                 size="small"
                 icon={CloseIcon}
                 backgroundColor={theme['color-danger-600']}
+                onPress={logout}
             />
         </View>
         <View>
