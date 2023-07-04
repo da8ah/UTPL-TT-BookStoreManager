@@ -11,8 +11,8 @@ export default function RoundButton(props: Omit<ActionButtonProps, 'size'> & Rou
     } = { height: 0, width: 0 }
     switch (props.size) {
         case 'small':
-            size.height = 50
-            size.width = 50
+            size.height = 65
+            size.width = 65
             break;
         case 'medium':
             size.height = 80

@@ -7,20 +7,40 @@ import { globalStyles as styles } from "../styles/styles";
 
 export default function User() {
     const theme = useTheme()
+    const buttons = [
+        {
+            iconName: "edit",
+            disabled: true,
+            backgroundColor: theme['color-warning-500']
+        },
+        {
+            iconName: "slash",
+            disabled: true,
+            backgroundColor: theme['color-warning-500']
+        },
+        {
+            iconName: "trash-2",
+            disabled: true,
+            backgroundColor: theme['color-danger-500']
+        },
+        {
+            iconName: "save",
+            disabled: true,
+            backgroundColor: theme['color-success-500']
+        },
+    ]
     const AddIcon = () => <Icon name="person-add" fill="black" height="35" width="35" />;
     const CloseIcon = () => <Icon name="log-out" fill="black" height="35" width="35" />;
-    const EditIcon = () => <Icon name="edit" fill="white" height="30" width="30" />;
-    const StopIcon = () => <Icon name="slash" fill="white" height="30" width="30" />;
-    const TrashIcon = () => <Icon name="trash-2" fill={"white"} height="35" width="35" />;
-    const SaveIcon = () => <Icon name="save" fill={"white"} height="35" width="35" />;
     return <View style={[styles.common, { flex: 1 }]}>
         <View style={{ flex: 1, width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <RoundButton
                 disabled
+                size="small"
                 icon={AddIcon}
                 backgroundColor={theme['color-warning-500']}
             />
             <RoundButton
+                size="small"
                 icon={CloseIcon}
                 backgroundColor={theme['color-danger-600']}
             />
@@ -34,31 +54,18 @@ export default function User() {
             </Text>
         </View>
         <View style={{ flex: 2, width: '80%' }}>
-            <FormInput isTop title="Usuario" placeholder="Usuario" />
-            <FormInput title="Nombre" placeholder="Nombre" />
-            <FormInput isBottom inputMode="email" title="Email" placeholder="Email" />
+            <FormInput isTop title="Nombre" placeholder="Nombre" />
+            <FormInput inputMode="email" title="Email" placeholder="Email" />
+            <FormInput isBottom title="Móvil" placeholder="Móvil" />
         </View>
         <View style={{ flex: 1, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
-            <ActionButton
-                disabled
-                icon={EditIcon}
-                backgroundColor={theme['color-warning-500']}
-            />
-            <ActionButton
-                disabled
-                icon={StopIcon}
-                backgroundColor={theme['color-warning-500']}
-            />
-            <ActionButton
-                disabled
-                icon={TrashIcon}
-                backgroundColor={theme['color-danger-500']}
-            />
-            <ActionButton
-                disabled
-                icon={SaveIcon}
-                backgroundColor={theme['color-success-500']}
-            />
+            {buttons.map((button, index) => {
+                return <ActionButton key={`user-action-button-${index}`}
+                    disabled={button.disabled}
+                    icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}
+                    backgroundColor={button.backgroundColor}
+                />
+            })}
         </View>
     </View >
 }

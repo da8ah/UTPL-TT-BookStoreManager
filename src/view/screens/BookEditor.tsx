@@ -9,13 +9,19 @@ import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
 import { globalStyles } from "../styles/styles";
 import { RootNavProps } from "./screen";
+import { ThemeContext } from "../../hooks/context/ThemeContext";
 
 const EditorTop = (props: { setInputFocusState: any }) => {
+    const { themeMode } = useContext(ThemeContext)
     return <View style={[styles.common]}>
         <View
             style={[globalStyles.common, {
+                backgroundColor: themeMode === 'dark' ? 'transparent' : "gainsboro",
                 flexDirection: "row",
-                justifyContent: "space-around"
+                justifyContent: "space-around",
+                borderRadius: 20,
+                margin: 5
+
             }]}
         >
             <Text>Fecha de Lanzamiento: </Text>
@@ -41,6 +47,7 @@ const EditorTop = (props: { setInputFocusState: any }) => {
 }
 
 const EditorMiddle = (props: { isInputFocused: boolean }) => {
+    const { themeMode } = useContext(ThemeContext)
     const ClockIcon = <Icon name="clock-outline" fill={"tomato"} height="35" width="35" />
     // {/* <Icon name="clock-outline" fill={recent ? "tomato" : "darkgray"} height="35" width="35" /> */}
     // {/* <Icon name="clock" fill={recent ? "tomato" : "darkgray"} height="35" width="35" /> */}
@@ -106,8 +113,8 @@ const EditorMiddle = (props: { isInputFocused: boolean }) => {
                             <Text>IVA</Text>
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around", alignItems: "flex-start" }}>
-                            <StatusButton textLeft captionText={'% '}>25</StatusButton>
-                            <StatusButton textLeft captionText={'% '} status="danger">12</StatusButton>
+                            <StatusButton textLeft captionText={'% '} captionFontColor={themeMode === 'dark' ? 'white' : "black"}>25</StatusButton>
+                            <StatusButton textLeft captionText={'% '} status="danger" captionFontColor={themeMode === 'dark' ? 'white' : "black"}>12</StatusButton>
                         </View>
                     </View>
                     <View style={{ width: "30%", height: '100%', justifyContent: "space-around", alignItems: "flex-end" }}>
@@ -120,8 +127,26 @@ const EditorMiddle = (props: { isInputFocused: boolean }) => {
     </>
 }
 
-const EditorBottom = (props: { setInputFocusState: any }) => {
+const EditorBottom = (props: { setInputFocusState: any, isNew: boolean }) => {
     const theme = useTheme()
+    const buttons = [
+        {
+            iconName: "edit",
+            backgroundColor: theme['color-warning-500']
+        },
+        {
+            iconName: "slash",
+            backgroundColor: theme['color-warning-500']
+        },
+        {
+            iconName: "trash-2",
+            backgroundColor: theme['color-danger-500']
+        },
+        {
+            iconName: "save",
+            backgroundColor: theme['color-success-500']
+        },
+    ]
     return <View style={[styles.common, styles.bodyBottom]}>
         <View>
             <BookInput textarea title="Descripción" onFocus={() => props.setInputFocusState(true)} />
@@ -133,11 +158,20 @@ const EditorBottom = (props: { setInputFocusState: any }) => {
             onBackdropPress={() => setModalVisibility(false)}
             children={modalChildren}
         /> */}
-        <View style={[styles.common, { justifyContent: "space-around", alignItems: "center" }]}>
-            <ActionButton
-                icon={SaveIcon}
-                backgroundColor={theme['color-success-500']}
-            />
+
+        <View style={[styles.common, { flexDirection: 'row', justifyContent: 'space-evenly' }]}>
+            {props.isNew ?
+                <ActionButton
+                    icon={() => <Icon name="save" fill="white" height="30" width="30" />}
+                    backgroundColor={theme['color-success-500']}
+                />
+                :
+                buttons.map((button, index) => {
+                    return <ActionButton key={`editor-action-button-${index}`}
+                        icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}
+                        backgroundColor={button.backgroundColor}
+                    />
+                })}
         </View>
         <View>
             <Text style={{ fontSize: 10, fontStyle: "italic", textAlign: "right" }}>{`(Fecha de creación del registro: ${Intl.DateTimeFormat("ec", {
@@ -148,8 +182,6 @@ const EditorBottom = (props: { setInputFocusState: any }) => {
         </View>
     </View>
 }
-const SaveIcon = () => <Icon name="save" fill="white" height="30" width="30" />;
-
 
 export default function BookEditor({ route }: { route?: RootNavProps }) {
     const { toggleEditor } = useContext(EditorContext)
@@ -177,7 +209,7 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
 
             <EditorTop setInputFocusState={setInputFocusState} />
             <EditorMiddle isInputFocused={isInputFocused} />
-            <EditorBottom setInputFocusState={setInputFocusState} />
+            <EditorBottom setInputFocusState={setInputFocusState} isNew={route.params === undefined} />
         </View>
     </TouchableWithoutFeedback>
 }
