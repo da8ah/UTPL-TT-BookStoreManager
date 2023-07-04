@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useBookEditor() {
+export default function useBookEditorCTX() {
     const [isEditorOpen, setEditorState] = useState(false);
     const toggleEditor = (state: boolean) => {
         setEditorState(state);

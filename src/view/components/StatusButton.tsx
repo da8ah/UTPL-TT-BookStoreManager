@@ -4,6 +4,7 @@ import { globalStyles as styles } from "../styles/styles";
 
 export type StatusButtonProps = ButtonProps & {
     children: JSX.Element | string,
+    justifyToEnd?: boolean,
     textLeft?: boolean,
     captionText: JSX.Element | string,
     captionFontSize?: number,
@@ -20,7 +21,7 @@ const UIKittenButton = (props: ButtonProps & { backgroundColor?: ColorValue, act
 }
 
 export default function StatusButton(props: StatusButtonProps) {
-    return <View style={[styles.common, { flexDirection: 'row' }]}>
+    return <View style={[styles.common, { flexDirection: 'row' }, props.justifyToEnd && { justifyContent: 'flex-end' }]}>
         {props.textLeft ?
             <>
                 <CaptionText captionFontSize={props.captionFontSize} captionFontColor={props.captionFontColor}>{props.captionText}</CaptionText>

@@ -3,22 +3,22 @@ import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { AuthContext } from "./src/hooks/context/AuthContext";
 import { EditorContext } from "./src/hooks/context/EditorContext";
 import { ThemeContext } from "./src/hooks/context/ThemeContext";
-import { useAuth } from "./src/hooks/context/useAuth";
-import useBookEditor from "./src/hooks/context/useBookEditor";
-import useThemeMode from "./src/hooks/context/useThemeMode";
+import { useAuthCTX } from "./src/hooks/context/useAuthCTX";
+import useBookEditorCTX from "./src/hooks/context/useBookEditorCTX";
+import useThemeModeCTX from "./src/hooks/context/useThemeModeCTX";
 import MainFrame from "./src/view/MainFrame";
-import customTheme from "./src/view/styles/theme.json";
 import { globalStyles as styles } from "./src/view/styles/styles";
+import customTheme from "./src/view/styles/theme.json";
 
 
 export default () => {
-	const [isAuth, tryToAuth, logout] = useAuth()
-	const [themeMode, toggleThemeMode] = useThemeMode()
-	const [isEditorOpen, toggleEditor] = useBookEditor()
+	const [isAuth, tryToAuth, logout] = useAuthCTX()
+	const [themeMode, toggleThemeMode] = useThemeModeCTX()
+	const [isEditorOpen, toggleEditor] = useBookEditorCTX()
 	return (
 		<>
 			<IconRegistry icons={EvaIconsPack} />

@@ -3,6 +3,7 @@ import { useContext, useEffect } from "react";
 import { Image, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
+import useEditor from "../../hooks/useEditor";
 import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import BookInput from "../components/BookInput";
@@ -12,7 +13,7 @@ import StatusTouch from "../components/StatusTouch";
 import { globalStyles } from "../styles/styles";
 import { RootNavProps } from "./screen";
 
-const EditorTop = () => {
+const EditorTop = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
     return <View style={[styles.common]}>
@@ -28,7 +29,7 @@ const EditorTop = () => {
             }]}
         >
             <Text>Fecha de Lanzamiento: </Text>
-            <DatePicker />
+            <DatePicker disabled={props.isEditorDisabled} />
         </View>
         <View style={{ flexDirection: "row" }}>
             <View style={styles.topLeftPanel}>
@@ -36,20 +37,20 @@ const EditorTop = () => {
             </View>
             <View style={[styles.common, styles.topRightPanel]}>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"Título"} />
+                    <BookInput disabled={props.isEditorDisabled} title={"Título"} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"ISBN"} />
+                    <BookInput disabled={props.isEditorDisabled} title={"ISBN"} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"Autor"} />
+                    <BookInput disabled={props.isEditorDisabled} title={"Autor"} />
                 </View>
             </View>
         </View>
     </View>
 }
 
-const EditorMiddle = () => {
+const EditorMiddle = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
     const ClockIcon = <Icon name="clock-outline" fill={"tomato"} height="35" width="35" />
@@ -81,13 +82,12 @@ const EditorMiddle = () => {
                 >
                     <View style={{ width: "10%" }} />
                     <View style={{ width: "70%", flexDirection: "row", justifyContent: "space-around" }}>
-                        <StatusTouch title="Reciente" icon={ClockIcon
-                        } height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
-                        <StatusTouch title="Más vendido" icon={StarIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
-                        <StatusTouch title="Recomendado" icon={CheckIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <StatusTouch disabled={props.isEditorDisabled} title="Reciente" icon={ClockIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <StatusTouch disabled={props.isEditorDisabled} title="Más vendido" icon={StarIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <StatusTouch disabled={props.isEditorDisabled} title="Recomendado" icon={CheckIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
                     </View>
                     <View style={{ width: "10%", justifyContent: "center", alignItems: "flex-end" }}>
-                        <StatusTouch icon={EyeIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <StatusTouch disabled={props.isEditorDisabled} icon={EyeIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
                     </View>
                 </View>
                 {/* <Modal
@@ -109,21 +109,21 @@ const EditorMiddle = () => {
                         }}
                     >
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around" }}>
-                            <Toggle />
-                            <Toggle />
+                            <Toggle disabled={props.isEditorDisabled} />
+                            <Toggle disabled={props.isEditorDisabled} />
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around" }}>
                             <Text>Descuento</Text>
                             <Text>IVA</Text>
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around", alignItems: "flex-start" }}>
-                            <StatusButton textLeft captionText={'% '} captionFontColor={themeMode === 'dark' ? 'white' : "black"}>25</StatusButton>
-                            <StatusButton textLeft captionText={'% '} status="danger" captionFontColor={themeMode === 'dark' ? 'white' : "black"}>12</StatusButton>
+                            <StatusButton disabled={props.isEditorDisabled} textLeft captionText={'% '} captionFontColor={themeMode === 'dark' ? 'white' : "black"}>25</StatusButton>
+                            <StatusButton disabled={props.isEditorDisabled} textLeft captionText={'% '} status="danger" captionFontColor={themeMode === 'dark' ? 'white' : "black"}>12</StatusButton>
                         </View>
                     </View>
                     <View style={{ width: "30%", height: '100%', justifyContent: "space-around", alignItems: "flex-end" }}>
-                        <StatusButton captionText={' 💲'}>25</StatusButton>
-                        <StatusButton captionText={' 📦'}>100</StatusButton>
+                        <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={'💲'} captionFontSize={25}>25</StatusButton>
+                        <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={' 📦'} captionFontSize={20}>100</StatusButton>
                     </View>
                 </View>
             </View>
@@ -131,30 +131,36 @@ const EditorMiddle = () => {
     </>
 }
 
-const EditorBottom = (props: { isNew: boolean }) => {
+const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggleDisabledState: (state: boolean) => void }) => {
     const [isKeyboardVisible] = useKeyboard()
     const theme = useTheme()
     const bottomButtons = [
         {
+            disabled: !props.isEditorDisabled,
             iconName: "edit",
-            backgroundColor: theme['color-warning-500']
+            backgroundColor: theme['color-warning-500'],
+            onPress: () => props.toggleDisabledState(false)
         },
         {
+            disabled: props.isEditorDisabled,
             iconName: "slash",
-            backgroundColor: theme['color-warning-500']
+            backgroundColor: theme['color-warning-500'],
+            onPress: () => props.toggleDisabledState(true)
         },
         {
+            disabled: props.isEditorDisabled,
             iconName: "trash-2",
             backgroundColor: theme['color-danger-500']
         },
         {
+            disabled: props.isEditorDisabled,
             iconName: "save",
             backgroundColor: theme['color-success-500']
         },
     ]
     return <View style={[styles.common, styles.bodyBottom]}>
         <View>
-            <BookInput textarea title="Descripción" />
+            <BookInput disabled={props.isEditorDisabled} textarea title="Descripción" />
         </View>
         {/* <Modal
             visible={modalVisibility}
@@ -173,8 +179,10 @@ const EditorBottom = (props: { isNew: boolean }) => {
                 :
                 bottomButtons.map((button, index) => {
                     return <ActionButton key={`editor-action-button-${index}`}
+                        disabled={button.disabled}
                         icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}
                         backgroundColor={button.backgroundColor}
+                        onPress={button.onPress}
                     />
                 })}
         </View>
@@ -191,10 +199,12 @@ const EditorBottom = (props: { isNew: boolean }) => {
 export default function BookEditor({ route }: { route?: RootNavProps }) {
     const { toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
+    const [isEditorDisabled, toggleDisabledState] = useEditor()
 
     useEffect(() => {
         toggleEditor(true)
         route.params && console.log(route.params.bookIndex);
+        toggleDisabledState(route.params !== undefined)
         return () => { toggleEditor(false); }
     }, [])
 
@@ -209,9 +219,9 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         onPress={() => Keyboard.dismiss()}
     >
         <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
-            <EditorTop />
-            <EditorMiddle />
-            <EditorBottom isNew={route.params === undefined} />
+            <EditorTop isEditorDisabled={isEditorDisabled} />
+            <EditorMiddle isEditorDisabled={isEditorDisabled} />
+            <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
         </View>
     </TouchableWithoutFeedback>
 }

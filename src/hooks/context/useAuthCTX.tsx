@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-export const useAuth = () => {
+export const useAuthCTX = () => {
     const [isAuth, setAuth] = useState(false);
     const tryToAuth = async () => {
         setTimeout(async () => {
-            if (!isAuth) setAuth(true);
+            setAuth(true);
         }, 2000);
     }
     const logout = () => {
-        if (isAuth) setAuth(false);
+        setAuth(false);
     }
 
     return [isAuth, tryToAuth, logout] as const;
