@@ -5,7 +5,6 @@ import { ThemeContext } from "../../hooks/context/ThemeContext";
 import useDatePicker from "../../hooks/useDatePicker";
 
 export default function DatePicker(props: DatepickerProps) {
-    const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
 
     const i18n: I18nConfig = {

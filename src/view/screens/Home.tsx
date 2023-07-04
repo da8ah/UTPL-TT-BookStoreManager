@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import StockBook from "../../model/core/entities/StockBook";
 import SearchBar from "../components/SearchBar";
-import BookCard from "./components/BookCard";
+import BookCard from "./layouts/BookCard";
 
 export const stockBooks = [new StockBook(
     "9780141988511",

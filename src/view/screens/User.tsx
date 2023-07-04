@@ -27,8 +27,8 @@ export default function User() {
     const AddIcon = () => <Icon name="person-add" fill={fontColor} height="35" width="35" />;
     const CloseIcon = () => <Icon name="log-out" fill={fontColor} height="35" width="35" />;
     const SaveIcon = () => <Icon name="save" fill={fontColor} height="35" width="35" />;
-    const StarIcon = () => <Icon name="star" fill={star ? 'gold' : 'darkgray'} height="35" width="35" />;
-    const EyeIcon = () => <Icon name="eye" fill={star ? 'turquoise' : 'darkgray'} height="35" width="35" />;
+    const StarIcon = <Icon name="star" fill={star ? 'gold' : 'darkgray'} height="35" width="35" />;
+    const EyeIcon = <Icon name="eye" fill={star ? 'turquoise' : 'darkgray'} height="35" width="35" />;
     const TrashIcon = () => <Icon name="trash-2" fill={fontColor} height="35" width="35" />;
     return <View style={[styles.common, { flex: 1 }]}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>

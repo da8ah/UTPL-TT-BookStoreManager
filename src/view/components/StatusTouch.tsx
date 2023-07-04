@@ -10,7 +10,7 @@ export type StatusTouchProps = Omit<TouchableOpacityProps, 'title' | 'color' | '
     activeOpacity?: number,
     backgroundColor?: ColorValue,
     title?: JSX.Element | string,
-    icon: () => JSX.Element
+    icon: JSX.Element
 }
 
 export default function StatusTouch(props: StatusTouchProps) {
@@ -28,7 +28,7 @@ export default function StatusTouch(props: StatusTouchProps) {
             ]}
         >
             <>
-                {props.icon()}
+                {props.icon}
             </>
         </TouchableOpacity>
     </View>

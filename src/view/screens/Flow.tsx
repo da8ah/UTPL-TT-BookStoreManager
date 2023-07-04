@@ -10,7 +10,7 @@ import Client from "../../model/core/entities/Client";
 import ToBuyBook from "../../model/core/entities/ToBuyBook";
 import SearchBar from "../components/SearchBar";
 import { stockBooks } from "./Home";
-import TransactionCard from "./components/TransactionCard";
+import TransactionCard from "./layouts/TransactionCard";
 
 const billingInfo = new BillingInfo("tiber", "1000000001", "Loja", "Loja", "000", "Principal y Secundaria");
 const client = new Client("tiber", "da8ah", "tiber@email.com", "+593000000001", "tiber", billingInfo);
