@@ -17,7 +17,7 @@ export default function ActionButton(props: ActionButtonProps) {
         accessoryLeft={props.icon}
         activeOpacity={props.activeOpacity || 0.7}
         style={[
-            { borderRadius: props.rounded || 5, height: props.height || 50, width: props.width || 80, backgroundColor: props.disabled ? 'darkgray' : props.backgroundColor, borderWidth: 0 },
+            { borderRadius: props.rounded || 5, height: props.height || 50, width: props.width || 80, backgroundColor: props.disabled ? 'darkgray' : props.backgroundColor, borderWidth: 0, opacity: props.disabled ? 0.3 : 1 },
             {
                 justifyContent: 'center',
                 alignItems: 'center',

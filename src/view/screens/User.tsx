@@ -1,16 +1,32 @@
 import { Icon, Text, useTheme } from "@ui-kitten/components";
-import { View } from "react-native";
+import { useContext } from "react";
+import { KeyboardAvoidingView, View } from "react-native";
+import { AuthContext } from "../../hooks/context/AuthContext";
+import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import FormInput from "../components/FormInput";
 import RoundButton from "../components/RoundButton";
 import { globalStyles as styles } from "../styles/styles";
-import { useContext } from "react";
-import { AuthContext } from "../../hooks/context/AuthContext";
 
 export default function User() {
+    const [isKeyboardVisible] = useKeyboard()
     const { logout } = useContext(AuthContext)
     const theme = useTheme()
-    const buttons = [
+
+    const topButtons = [
+        {
+            iconName: "person-add",
+            disabled: true,
+            backgroundColor: theme['color-warning-500']
+        },
+        {
+            iconName: "log-out",
+            disabled: false,
+            backgroundColor: theme['color-danger-600'],
+            onPress: logout
+        },
+    ]
+    const bottomButtons = [
         {
             iconName: "edit",
             disabled: true,
@@ -32,22 +48,18 @@ export default function User() {
             backgroundColor: theme['color-success-500']
         },
     ]
-    const AddIcon = () => <Icon name="person-add" fill="black" height="35" width="35" />;
-    const CloseIcon = () => <Icon name="log-out" fill="black" height="35" width="35" />;
+
     return <View style={[styles.common, { flex: 1 }]}>
-        <View style={{ flex: 1, width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <RoundButton
-                disabled
-                size="small"
-                icon={AddIcon}
-                backgroundColor={theme['color-warning-500']}
-            />
-            <RoundButton
-                size="small"
-                icon={CloseIcon}
-                backgroundColor={theme['color-danger-600']}
-                onPress={logout}
-            />
+        <View style={{ display: isKeyboardVisible ? 'none' : 'flex', flex: 1, width: '80%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            {topButtons.map((button, index) => {
+                return <RoundButton key={`user-round-button-${index}`}
+                    disabled={button.disabled}
+                    size="small"
+                    icon={() => <Icon name={button.iconName} fill="black" height="40" width="40" />}
+                    backgroundColor={button.backgroundColor}
+                    onPress={button.onPress}
+                />
+            })}
         </View>
         <View>
             <Icon name="person-outline" fill={theme['background-alternative-color-4']} height="100" width="100" />
@@ -57,13 +69,13 @@ export default function User() {
                 Admin
             </Text>
         </View>
-        <View style={{ flex: 2, width: '80%' }}>
-            <FormInput isTop title="Nombre" placeholder="Nombre" />
-            <FormInput inputMode="email" title="Email" placeholder="Email" />
-            <FormInput isBottom title="Móvil" placeholder="Móvil" />
-        </View>
-        <View style={{ flex: 1, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
-            {buttons.map((button, index) => {
+        <KeyboardAvoidingView style={{ flex: 2, width: '80%' }}>
+            <FormInput isTop disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Nombre" placeholder="Nombre" />
+            <FormInput disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} inputMode="email" title="Email" placeholder="Email" />
+            <FormInput isBottom disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Móvil" placeholder="Móvil" />
+        </KeyboardAvoidingView>
+        <View style={{ display: isKeyboardVisible ? 'none' : 'flex', flex: 1, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
+            {bottomButtons.map((button, index) => {
                 return <ActionButton key={`user-action-button-${index}`}
                     disabled={button.disabled}
                     icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}

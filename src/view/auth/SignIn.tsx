@@ -1,6 +1,6 @@
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, KeyboardAvoidingView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { ActivityIndicator, KeyboardAvoidingView, TouchableWithoutFeedback, View } from "react-native";
 import { AuthContext } from "../../hooks/context/AuthContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import FormInput from "../components/FormInput";
@@ -29,7 +29,7 @@ export default function SignIn() {
     };
     const PasswordVisibilityIcon = () => (
         <TouchableWithoutFeedback onPress={togglePasswordVisibility}>
-            <Icon name={secureTextEntry ? "eye-off" : "eye"} fill={themeMode === 'dark' ? 'white' : 'black'} height="20" width="20" />
+            <Icon name={secureTextEntry ? "eye-off" : "eye"} fill={themeMode === 'dark' ? theme['color-basic-500'] : 'black'} height="22" width="22" />
         </TouchableWithoutFeedback>
     );
 
@@ -38,15 +38,16 @@ export default function SignIn() {
             {isLoading ?
                 <LoadingAlert /> :
                 <>
-                    <View style={[styles.common, { marginVertical: 20 }]}>
-                        <Icon name="people" fill={themeMode === 'dark' ? 'white' : 'black'} height="100" width="100" />
+                    <View style={[styles.common, { flex: 1, paddingVertical: 50 }]}>
+                        <Icon name="people" fill={theme['background-alternative-color-4']} height="100" width="100" />
                         <Text style={{ fontSize: 30, fontFamily: "serif", fontStyle: "italic" }}>Admin</Text>
                     </View>
-                    <KeyboardAvoidingView style={{ width: "100%", alignItems: "center" }} behavior="padding">
+                    <KeyboardAvoidingView style={{ flex: 2, width: "100%", alignItems: "center" }} behavior="padding">
                         <View style={{ width: '80%' }}>
-                            <FormInput isTop title="Usuario" placeholder="Usuario" />
+                            <FormInput isTop keyboardType="email-address" textContentType="emailAddress" formColor={theme['background-basic-color-2']} title="Usuario" placeholder="Usuario" />
                             <FormInput
                                 isBottom
+                                formColor={theme['background-basic-color-2']}
                                 textContentType="password"
                                 accessoryRight={PasswordVisibilityIcon}
                                 secureTextEntry={secureTextEntry}
@@ -56,10 +57,10 @@ export default function SignIn() {
                                 onChangeText={input => setPassword(input)}
                             />
                         </View>
-                        <View style={[styles.common, { width: '100%', marginVertical: 30 }]}>
+                        <View style={[styles.common, { justifyContent: 'flex-start', width: '100%', marginVertical: 30 }]}>
                             <Button
                                 accessoryRight={() => <Icon name="log-in" fill="white" height="20" width="20" />}
-                                style={[{ width: '70%', backgroundColor: theme['color-info-500'] }]}
+                                style={[{ width: '70%', backgroundColor: theme['color-info-500'], borderWidth: 0 }]}
                                 onPress={() => {
                                     setLoading(true)
                                     tryToAuth()

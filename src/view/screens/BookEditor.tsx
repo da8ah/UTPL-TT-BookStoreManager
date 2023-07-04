@@ -1,7 +1,9 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Image, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
+import { ThemeContext } from "../../hooks/context/ThemeContext";
+import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import BookInput from "../components/BookInput";
 import DatePicker from "../components/DatePicker";
@@ -9,13 +11,14 @@ import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
 import { globalStyles } from "../styles/styles";
 import { RootNavProps } from "./screen";
-import { ThemeContext } from "../../hooks/context/ThemeContext";
 
-const EditorTop = (props: { setInputFocusState: any }) => {
+const EditorTop = () => {
+    const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
     return <View style={[styles.common]}>
         <View
             style={[globalStyles.common, {
+                display: isKeyboardVisible ? 'none' : 'flex',
                 backgroundColor: themeMode === 'dark' ? 'transparent' : "gainsboro",
                 flexDirection: "row",
                 justifyContent: "space-around",
@@ -33,20 +36,21 @@ const EditorTop = (props: { setInputFocusState: any }) => {
             </View>
             <View style={[styles.common, styles.topRightPanel]}>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"Título"} onFocus={() => props.setInputFocusState(true)} />
+                    <BookInput title={"Título"} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"ISBN"} onFocus={() => props.setInputFocusState(true)} />
+                    <BookInput title={"ISBN"} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput title={"Autor"} onFocus={() => props.setInputFocusState(true)} />
+                    <BookInput title={"Autor"} />
                 </View>
             </View>
         </View>
     </View>
 }
 
-const EditorMiddle = (props: { isInputFocused: boolean }) => {
+const EditorMiddle = () => {
+    const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
     const ClockIcon = <Icon name="clock-outline" fill={"tomato"} height="35" width="35" />
     // {/* <Icon name="clock-outline" fill={recent ? "tomato" : "darkgray"} height="35" width="35" /> */}
@@ -62,7 +66,7 @@ const EditorMiddle = (props: { isInputFocused: boolean }) => {
     // <Icon name={visible ? "eye" : "eye-off"} fill={visible ? "turquoise" : "darkgray"} height="35" width="35" />
 
     return <>{
-        props.isInputFocused ? <></> :
+        isKeyboardVisible ? <></> :
             <View style={[styles.common, styles.bodyMiddle]}>
                 <View
                     style={{
@@ -127,9 +131,10 @@ const EditorMiddle = (props: { isInputFocused: boolean }) => {
     </>
 }
 
-const EditorBottom = (props: { setInputFocusState: any, isNew: boolean }) => {
+const EditorBottom = (props: { isNew: boolean }) => {
+    const [isKeyboardVisible] = useKeyboard()
     const theme = useTheme()
-    const buttons = [
+    const bottomButtons = [
         {
             iconName: "edit",
             backgroundColor: theme['color-warning-500']
@@ -149,7 +154,7 @@ const EditorBottom = (props: { setInputFocusState: any, isNew: boolean }) => {
     ]
     return <View style={[styles.common, styles.bodyBottom]}>
         <View>
-            <BookInput textarea title="Descripción" onFocus={() => props.setInputFocusState(true)} />
+            <BookInput textarea title="Descripción" />
         </View>
         {/* <Modal
             visible={modalVisibility}
@@ -166,14 +171,14 @@ const EditorBottom = (props: { setInputFocusState: any, isNew: boolean }) => {
                     backgroundColor={theme['color-success-500']}
                 />
                 :
-                buttons.map((button, index) => {
+                bottomButtons.map((button, index) => {
                     return <ActionButton key={`editor-action-button-${index}`}
                         icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}
                         backgroundColor={button.backgroundColor}
                     />
                 })}
         </View>
-        <View>
+        <View style={{ display: isKeyboardVisible ? 'none' : 'flex' }}>
             <Text style={{ fontSize: 10, fontStyle: "italic", textAlign: "right" }}>{`(Fecha de creación del registro: ${Intl.DateTimeFormat("ec", {
                 day: "2-digit",
                 month: "2-digit",
@@ -193,8 +198,6 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         return () => { toggleEditor(false); }
     }, [])
 
-
-    const [isInputFocused, setInputFocusState] = useState(false)
     // const starHandler = () => {
     //     setStar(star => !star)
     //     Keyboard.dismiss()
@@ -203,12 +206,12 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
 
     return <TouchableWithoutFeedback
         style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
-        onPress={() => { setInputFocusState(false); Keyboard.dismiss(); return !Keyboard.isVisible(); }}
+        onPress={() => Keyboard.dismiss()}
     >
         <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
-            <EditorTop setInputFocusState={setInputFocusState} />
-            <EditorMiddle isInputFocused={isInputFocused} />
-            <EditorBottom setInputFocusState={setInputFocusState} isNew={route.params === undefined} />
+            <EditorTop />
+            <EditorMiddle />
+            <EditorBottom isNew={route.params === undefined} />
         </View>
     </TouchableWithoutFeedback>
 }

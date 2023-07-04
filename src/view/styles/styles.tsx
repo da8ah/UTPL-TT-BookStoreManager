@@ -13,7 +13,7 @@ export const globalStyles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     body: {
-        flex: 9
+        flex: 1
     }
 });
 

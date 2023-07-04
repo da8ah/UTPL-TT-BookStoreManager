@@ -1,7 +1,6 @@
-import { List, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { ThemeContext } from "../../hooks/context/ThemeContext";
+import { List } from "@ui-kitten/components";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 import BillingInfo from "../../model/core/entities/BillingInfo";
 import Card from "../../model/core/entities/Card";
 import { CardTransaction } from "../../model/core/entities/CardTransaction";
@@ -9,6 +8,7 @@ import Cart from "../../model/core/entities/Cart";
 import Client from "../../model/core/entities/Client";
 import ToBuyBook from "../../model/core/entities/ToBuyBook";
 import SearchBar from "../components/SearchBar";
+import { globalStyles as styles } from "../styles/styles";
 import { stockBooks } from "./Home";
 import TransactionCard from "./layouts/TransactionCard";
 
@@ -41,12 +41,32 @@ const cardTransactions = [
         new Date().toLocaleDateString(),
         cart.getTotalPrice(),
         cart
-    )
+    ),
+    new CardTransaction(
+        "id",
+        client.getCards()[0].getCardNumber(),
+        client.getUser(),
+        client.getName(),
+        client.getEmail(),
+        client.getMobile(),
+        new Date().toLocaleDateString(),
+        cart.getTotalPrice(),
+        cart
+    ),
+    new CardTransaction(
+        "id",
+        client.getCards()[0].getCardNumber(),
+        client.getUser(),
+        client.getName(),
+        client.getEmail(),
+        client.getMobile(),
+        new Date().toLocaleDateString(),
+        cart.getTotalPrice(),
+        cart
+    ),
 ]
 
 const TransactionsLayout = () => {
-    const { themeMode } = useContext(ThemeContext)
-    const theme = useTheme()
     const [transactions, setTransactions] = useState<CardTransaction[]>(cardTransactions.reverse());
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -61,13 +81,13 @@ const TransactionsLayout = () => {
     useEffect(() => { }, [transactions]);
 
     return (
-        <View style={styles.transactionsLayout}>
+        <View style={{ flex: 1 }}>
             <List
                 scrollEnabled
                 // testID='listTransactions'
                 key={"transactions"}
-                style={styles.mainListLayout}
-                contentContainerStyle={styles.flatListLayout}
+                style={{ backgroundColor: "transparent" }}
+                contentContainerStyle={{ backgroundColor: "transparent" }}
                 initialNumToRender={5}
                 data={transactions}
                 extraData={transactions}
@@ -81,16 +101,9 @@ const TransactionsLayout = () => {
 
 export default function Flow() {
     return (
-        <View style={{ flex: 1 }}>
+        <View style={[styles.common, styles.body]}>
             <SearchBar placeholder="Buscar por coincidencia o ID" />
             <TransactionsLayout />
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    transactionsLayout: { flex: 1 },
-    mainListLayout: { backgroundColor: "transparent", flex: 1 },
-    flatListLayout: { backgroundColor: "transparent" },
-});
-
