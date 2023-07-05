@@ -5,6 +5,7 @@ import { ThemeContext } from "../../hooks/context/ThemeContext";
 import Flow from "../screens/Flow";
 import Home from "../screens/Home";
 import User from "../screens/User";
+import { Keyboard } from "react-native";
 
 const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     const { themeMode } = useContext(ThemeContext)
@@ -20,20 +21,22 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     const FlowTitle = () => <Text style={{ color: indicatorColor, fontSize: 10 }}>Transacciones</Text>;
     const UserTitle = () => <Text style={{ color: indicatorColor, fontSize: 10 }}>Usuario</Text>;
 
-    const [isHomeSelected, setHomeSelected] = useState(true)
-
     return (
         <BottomNavigation
             style={{ backgroundColor: theme['tab-basic-color'], paddingVertical: 2 }}
             indicatorStyle={{ backgroundColor: themeMode === 'dark' ? theme['color-info-500'] : indicatorColor, height: 2 }}
             selectedIndex={state.index}
             onSelect={(index) => {
-                setHomeSelected(index === 0)
-                navigation.navigate(state.routeNames[index])
+                if (Keyboard.isVisible()) {
+                    Keyboard.dismiss();
+                    setTimeout(() => {
+                        if (!Keyboard.isVisible()) navigation.navigate(state.routeNames[index])
+                    }, 100)
+                } else navigation.navigate(state.routeNames[index])
             }}
         >
             <BottomNavigationTab
-                icon={isHomeSelected ? <HomeIconOpen /> : <HomeIconClose />}
+                icon={state.index === 0 ? <HomeIconOpen /> : <HomeIconClose />}
                 title={HomeTitle}
             />
             <BottomNavigationTab
