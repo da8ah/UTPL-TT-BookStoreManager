@@ -1,5 +1,5 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
@@ -8,6 +8,7 @@ import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import BookInput from "../components/BookInput";
 import DatePicker from "../components/DatePicker";
+import ModalDisplay, { ModalAttributes } from "../components/ModalDisplay";
 import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
 import { globalStyles } from "../styles/styles";
@@ -51,7 +52,7 @@ const EditorTop = (props: { isEditorDisabled: boolean }) => {
     </View>
 }
 
-const EditorMiddle = (props: { isEditorDisabled: boolean }) => {
+const EditorMiddle = (props: { isEditorDisabled: boolean, setModalAttributes: (modalAttributes: ModalAttributes) => any, data: { price: number } }) => {
     const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
     const ClockIcon = <Icon name="clock-outline" fill={"tomato"} height="35" width="35" />
@@ -121,7 +122,8 @@ const EditorMiddle = (props: { isEditorDisabled: boolean }) => {
                             justifyToEnd
                             captionText={'💲'}
                             captionFontSize={25}
-                        >25</StatusButton>
+                            onPress={() => props.setModalAttributes({ modalType: 'price', data: 25 })}
+                        >{props.data.price.toString()}</StatusButton>
                         <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={' 📦'} captionFontSize={20}>100</StatusButton>
                     </View>
                 </View>
@@ -204,6 +206,10 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
     const { toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
     const [isEditorDisabled, toggleDisabledState] = useEditor()
+    const [modalAttributes, setModalAttributes] = useState<ModalAttributes>()
+    const [modalVisibility, setModalVisibility] = useState(false);
+
+    const [price, setPrice] = useState(25)
 
     useEffect(() => {
         toggleEditor(true)
@@ -212,16 +218,25 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         return () => { toggleEditor(false) }
     }, [])
 
-    // const starHandler = () => {
-    //     setStar(star => !star)
-    //     Keyboard.dismiss()
-    //     inputRef.current!.blur()
-    // }
+    useEffect(() => {
+        setModalVisibility(modalAttributes !== undefined)
+    }, [modalAttributes])
 
     return <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
-        {/* <ModalLayout type="price" /> */}
+        <ModalDisplay
+            visible={modalVisibility}
+            onBackdropPress={() => setModalVisibility(false)}
+            modalType={modalAttributes?.modalType} data={modalAttributes?.data}
+            onPress={({ parteEntera, parteDecimal }) => {
+                const price = Number(`${parteEntera}.${parteDecimal}`);
+                if (!Number.isNaN(price)) {
+                    setPrice(price)
+                    setModalVisibility(false)
+                }
+            }}
+        />
         <EditorTop isEditorDisabled={isEditorDisabled} />
-        <EditorMiddle isEditorDisabled={isEditorDisabled} />
+        <EditorMiddle isEditorDisabled={isEditorDisabled} setModalAttributes={setModalAttributes} data={{ price }} />
         <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
     </View>
 }

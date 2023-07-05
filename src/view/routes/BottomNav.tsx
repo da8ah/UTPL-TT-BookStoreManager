@@ -1,11 +1,11 @@
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { BottomNavigation, BottomNavigationTab, Icon, Text, useTheme } from "@ui-kitten/components";
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
+import { Keyboard } from "react-native";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import Flow from "../screens/Flow";
 import Home from "../screens/Home";
 import User from "../screens/User";
-import { Keyboard } from "react-native";
 
 const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     const { themeMode } = useContext(ThemeContext)

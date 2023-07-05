@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
+import { Keyboard } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { RootNavProps } from "../screens/screen";
-import { Keyboard } from "react-native";
 
 export default function BookEditorToggle() {
     const { isEditorOpen } = useContext(EditorContext)
