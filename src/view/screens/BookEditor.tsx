@@ -91,13 +91,6 @@ const EditorMiddle = (props: { isEditorDisabled: boolean }) => {
                         <StatusTouch disabled={props.isEditorDisabled} icon={EyeIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
                     </View>
                 </View>
-                {/* <Modal
-            visible={modalVisibility}
-            style={{ width: "70%" }}
-            backdropStyle={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-            onBackdropPress={() => setModalVisibility(false)}
-            children={modalChildren}
-        /> */}
                 <View style={{ flex: 4, flexDirection: "row" }}>
                     <View
                         style={{
@@ -123,7 +116,12 @@ const EditorMiddle = (props: { isEditorDisabled: boolean }) => {
                         </View>
                     </View>
                     <View style={{ width: "30%", height: '100%', justifyContent: "space-around", alignItems: "flex-end" }}>
-                        <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={'💲'} captionFontSize={25}>25</StatusButton>
+                        <StatusButton
+                            disabled={props.isEditorDisabled}
+                            justifyToEnd
+                            captionText={'💲'}
+                            captionFontSize={25}
+                        >25</StatusButton>
                         <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={' 📦'} captionFontSize={20}>100</StatusButton>
                     </View>
                 </View>
@@ -209,9 +207,9 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
 
     useEffect(() => {
         toggleEditor(true)
-        route.params && console.log(route.params.bookIndex);
+        route.params && console.log(route.params.bookIndex)
         toggleDisabledState(route.params !== undefined)
-        return () => { toggleEditor(false); }
+        return () => { toggleEditor(false) }
     }, [])
 
     // const starHandler = () => {
@@ -221,6 +219,7 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
     // }
 
     return <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
+        {/* <ModalLayout type="price" /> */}
         <EditorTop isEditorDisabled={isEditorDisabled} />
         <EditorMiddle isEditorDisabled={isEditorDisabled} />
         <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
