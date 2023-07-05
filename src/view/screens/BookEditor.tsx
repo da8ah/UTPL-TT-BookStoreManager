@@ -1,6 +1,6 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
 import { useContext, useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Keyboard, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import useEditor from "../../hooks/useEditor";
@@ -122,7 +122,7 @@ const EditorMiddle = (props: { isEditorDisabled: boolean, setModalAttributes: (m
                             justifyToEnd
                             captionText={'💲'}
                             captionFontSize={25}
-                            onPress={() => props.setModalAttributes({ modalType: 'price', data: 25 })}
+                            onPress={() => props.setModalAttributes({ modalType: 'price', data: props.data.price })}
                         >{props.data.price.toString()}</StatusButton>
                         <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={' 📦'} captionFontSize={20}>100</StatusButton>
                     </View>
@@ -225,9 +225,9 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
     return <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
         <ModalDisplay
             visible={modalVisibility}
-            onBackdropPress={() => setModalVisibility(false)}
+            onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
             modalType={modalAttributes?.modalType} data={modalAttributes?.data}
-            onPress={({ parteEntera, parteDecimal }) => {
+            onButtonPress={({ parteEntera, parteDecimal }) => {
                 const price = Number(`${parteEntera}.${parteDecimal}`);
                 if (!Number.isNaN(price)) {
                     setPrice(price)

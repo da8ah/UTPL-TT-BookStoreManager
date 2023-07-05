@@ -1,12 +1,13 @@
 import { Button, Input, Modal, ModalProps, Text } from "@ui-kitten/components";
 import { useState } from "react";
+import { Keyboard } from "react-native";
 import { View } from "react-native";
 
 type ModalType = 'price' | 'stock'
 export type ModalAttributes = {
     modalType?: ModalType
     data?: number
-    onPress?: ({ ...args }) => any
+    onButtonPress?: ({ ...args }) => any
 }
 type ModalDisplayProps = ModalProps & ModalAttributes
 
@@ -23,7 +24,7 @@ export default function ModalDisplay(props: ModalDisplayProps) {
 function modalFactory(props: ModalAttributes) {
     switch (props.modalType) {
         case 'price':
-            return <ModalPrice grossPricePerUnit={props.data && props.data || 0} onPress={props.onPress} />
+            return <ModalPrice grossPricePerUnit={props.data && props.data || 0} onButtonPress={props.onButtonPress} />
         case 'stock':
             return <ModalStock stock={props.data && props.data || 0} />
     }
@@ -31,7 +32,7 @@ function modalFactory(props: ModalAttributes) {
 
 const ModalPrice = (props: {
     grossPricePerUnit: number;
-    onPress?: ({ parteEntera, parteDecimal }: { parteEntera: string, parteDecimal: string }) => any
+    onButtonPress?: ({ parteEntera, parteDecimal }: { parteEntera: string, parteDecimal: string }) => any
 }) => {
     const [parteEntera, setParteEntera] = useState(props.grossPricePerUnit.toFixed(2).split(".")[0]);
     const [parteDecimal, setParteDecimal] = useState(props.grossPricePerUnit.toFixed(2).split(".")[1]);
@@ -76,7 +77,8 @@ const ModalPrice = (props: {
             <Button
                 size="small"
                 style={{ width: "50%" }}
-                onPress={() => props.onPress && props.onPress({ parteEntera, parteDecimal })}
+                onPressIn={() => { if (Keyboard.isVisible()) Keyboard.dismiss() }}
+                onPress={() => props.onButtonPress && props.onButtonPress({ parteEntera, parteDecimal })}
             >
                 Confirmar
             </Button>
