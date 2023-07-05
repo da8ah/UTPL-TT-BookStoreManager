@@ -1,6 +1,6 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
 import { useContext, useEffect } from "react";
-import { Image, Keyboard, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import useEditor from "../../hooks/useEditor";
@@ -16,6 +16,7 @@ import { RootNavProps } from "./screen";
 const EditorTop = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
+    const theme = useTheme()
     return <View style={[styles.common]}>
         <View
             style={[globalStyles.common, {
@@ -32,7 +33,7 @@ const EditorTop = (props: { isEditorDisabled: boolean }) => {
             <DatePicker disabled={props.isEditorDisabled} />
         </View>
         <View style={{ flexDirection: "row" }}>
-            <View style={styles.topLeftPanel}>
+            <View style={[styles.topLeftPanel, { backgroundColor: theme['background-basic-color-2'], opacity: props.isEditorDisabled ? 0.5 : 1 }]}>
                 <Image style={styles.image} source={require("@Assets/bookstore.png")} />
             </View>
             <View style={[styles.common, styles.topRightPanel]}>
@@ -137,23 +138,27 @@ const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggle
     const bottomButtons = [
         {
             disabled: !props.isEditorDisabled,
+            width: 90,
             iconName: "edit",
             backgroundColor: theme['color-warning-500'],
             onPress: () => props.toggleDisabledState(false)
         },
         {
             disabled: props.isEditorDisabled,
+            width: 70,
             iconName: "slash",
             backgroundColor: theme['color-warning-500'],
             onPress: () => props.toggleDisabledState(true)
         },
         {
             disabled: props.isEditorDisabled,
+            width: 70,
             iconName: "trash-2",
             backgroundColor: theme['color-danger-500']
         },
         {
             disabled: props.isEditorDisabled,
+            width: 90,
             iconName: "save",
             backgroundColor: theme['color-success-500']
         },
@@ -180,6 +185,7 @@ const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggle
                 bottomButtons.map((button, index) => {
                     return <ActionButton key={`editor-action-button-${index}`}
                         disabled={button.disabled}
+                        width={button.width}
                         icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}
                         backgroundColor={button.backgroundColor}
                         onPress={button.onPress}
@@ -214,16 +220,11 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
     //     inputRef.current!.blur()
     // }
 
-    return <TouchableWithoutFeedback
-        style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 }}
-        onPress={() => Keyboard.dismiss()}
-    >
-        <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
-            <EditorTop isEditorDisabled={isEditorDisabled} />
-            <EditorMiddle isEditorDisabled={isEditorDisabled} />
-            <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
-        </View>
-    </TouchableWithoutFeedback>
+    return <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
+        <EditorTop isEditorDisabled={isEditorDisabled} />
+        <EditorMiddle isEditorDisabled={isEditorDisabled} />
+        <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
+    </View>
 }
 
 
@@ -248,7 +249,6 @@ const styles = StyleSheet.create({
     bodyMiddle: { zIndex: 0, flex: 3, backgroundColor: transparent, padding: 5 },
     bodyBottom: { zIndex: 1, flex: 5, backgroundColor: transparent, justifyContent: "space-around", padding: 5 },
     topLeftPanel: {
-        backgroundColor: "gainsboro",
         width: "35%",
         height: 250,
         justifyContent: "center",
@@ -258,22 +258,6 @@ const styles = StyleSheet.create({
     },
     topRightPanel: { backgroundColor: transparent, width: "60%", height: 250, justifyContent: "space-around" },
     inputLayout: { justifyContent: "center" },
-    inputTitle: {
-        backgroundColor: "darkgrey",
-        width: "30%",
-        justifyContent: "center",
-        alignItems: "center",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    input: {
-        width: "100%",
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
-        borderWidth: 1,
-        borderBottomWidth: 2,
-        borderColor: "darkgrey",
-    },
     image: {
         maxWidth: "80%",
         maxHeight: 120,

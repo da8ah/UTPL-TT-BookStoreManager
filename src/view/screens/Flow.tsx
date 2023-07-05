@@ -88,7 +88,7 @@ const TransactionsLayout = () => {
                 key={"transactions"}
                 style={{ backgroundColor: "transparent" }}
                 contentContainerStyle={{ backgroundColor: "transparent" }}
-                initialNumToRender={5}
+                initialNumToRender={transactions.length}
                 data={transactions}
                 extraData={transactions}
                 renderItem={TransactionCard}

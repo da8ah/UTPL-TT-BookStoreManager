@@ -17,8 +17,9 @@ const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
     const [text, setText] = useState(props.defaultValue || '')
-    return <View style={styles.inputLayout}>
-        <View style={[styles.inputTitle, { backgroundColor: props.formColor || 'darkgrey' }]}>
+    const defaultFormColor = themeMode === 'dark' ? theme['background-basic-color-1'] : 'gainsboro'
+    return <View style={[styles.inputLayout, { opacity: props.disabled ? 0.8 : 1 }]}>
+        <View style={[styles.inputTitle, { backgroundColor: props.formColor || defaultFormColor }]}>
             <Text adjustsFontSizeToFit style={{ fontSize: props.titleFontSize }}>{props.title}</Text>
         </View>
         {props.textarea ?
@@ -30,7 +31,7 @@ const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
                 autoCorrect={props.disabled}
                 showSoftInputOnFocus={!props.disabled}
                 textStyle={{ height: 50 }}
-                style={[styles.inputScroll, props.style, { borderColor: props.formColor || 'darkgrey' }]}
+                style={[styles.inputScroll, props.style, { borderColor: props.formColor || defaultFormColor }]}
                 selectionColor={themeMode === 'dark' ? theme['color-info-500'] : undefined}
                 cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
                 defaultValue={text}
@@ -38,7 +39,9 @@ const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
             />
             :
             <ScrollView
-                style={[styles.inputScroll, props.style, { borderColor: props.formColor || 'darkgrey' }]}
+                keyboardShouldPersistTaps="always"
+                keyboardDismissMode="none"
+                style={[styles.inputScroll, props.style, { borderColor: props.formColor || defaultFormColor }]}
                 horizontal
                 alwaysBounceHorizontal={props.disabled}
                 showsVerticalScrollIndicator={false}
@@ -77,6 +80,7 @@ const styles = StyleSheet.create({
     },
     inputScroll: {
         width: "100%",
+        backgroundColor: 'transparent',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         borderWidth: 1,

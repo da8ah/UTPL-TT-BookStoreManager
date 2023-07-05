@@ -1,8 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
-import { useContext } from "react";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
-import { ThemeContext } from "../../../hooks/context/ThemeContext";
 import StockBook from "../../../model/core/entities/StockBook";
 import { RootNavProps } from "../screen";
 
@@ -102,14 +100,13 @@ export default function BookCard(info: ListRenderItemInfo<StockBook>) {
 };
 const CardElement = (props: { info: any }) => {
     // const [stockBook] = useStockBook(info.item)
-    const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
     const { info } = props
     const stockBook = info.item
     return (
         <View style={styles.mainLayout}>
             {/* Card */}
-            <View style={[styles.cardLayout, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'gainsboro' }]}>
+            <View style={[styles.cardLayout, { backgroundColor: theme['background-basic-color-2'] }]}>
                 <CardTop
                     isVisible={stockBook.isVisible()}
                     isInOffer={stockBook.isInOffer()}

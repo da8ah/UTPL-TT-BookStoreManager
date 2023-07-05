@@ -153,7 +153,7 @@ const BookStore = () => {
                 contentContainerStyle={{ backgroundColor: "transparent" }}
                 columnWrapperStyle={[styles.common, { justifyContent: 'flex-start' }]}
                 numColumns={2}
-                initialNumToRender={1}
+                initialNumToRender={books.length}
                 data={books}
                 extraData={books}
                 renderItem={BookCard}
