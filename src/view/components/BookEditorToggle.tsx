@@ -19,10 +19,12 @@ export default function BookEditorToggle() {
         accessoryLeft={isEditorOpen ? Close : Open}
         style={{ flexDirection: 'column', borderWidth: 0 }}
         onPress={() => {
-            Keyboard.dismiss()
-            setTimeout(() => {
-                if (!Keyboard.isVisible()) navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
-            }, 100)
+            if (Keyboard.isVisible()) {
+                Keyboard.dismiss()
+                setTimeout(() => {
+                    if (!Keyboard.isVisible()) navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
+                }, 100)
+            } else navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
         }}
     >{isEditorOpen ? 'Cerrar' : 'Nuevo'}
     </Button>

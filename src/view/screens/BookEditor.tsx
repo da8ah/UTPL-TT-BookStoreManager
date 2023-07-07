@@ -203,7 +203,7 @@ const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggle
 }
 
 export default function BookEditor({ route }: { route?: RootNavProps }) {
-    const { toggleEditor } = useContext(EditorContext)
+    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
     const [isEditorDisabled, toggleDisabledState] = useEditor()
     const [modalAttributes, setModalAttributes] = useState<ModalAttributes>()
@@ -222,7 +222,7 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         setModalVisibility(modalAttributes !== undefined)
     }, [modalAttributes])
 
-    return <View style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
+    return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
         <ModalDisplay
             visible={modalVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}

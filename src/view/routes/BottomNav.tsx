@@ -27,7 +27,7 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
             indicatorStyle={{ backgroundColor: themeMode === 'dark' ? theme['color-info-500'] : indicatorColor, height: 2 }}
             selectedIndex={state.index}
             onSelect={(index) => {
-                if (Keyboard.isVisible()) {
+                if (index === 2 && Keyboard.isVisible()) {
                     Keyboard.dismiss();
                     setTimeout(() => {
                         if (!Keyboard.isVisible()) navigation.navigate(state.routeNames[index])
