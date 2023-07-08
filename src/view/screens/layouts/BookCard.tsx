@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
 import StockBook from "../../../model/core/entities/StockBook";
-import { RootNavProps } from "../screen";
+import { RootNavProps } from "../../routes/types.nav";
 
 const CardTop = (props: { isVisible: boolean; isInOffer: boolean; discountPercentage: number }) => {
     return (
@@ -77,7 +77,7 @@ const CardBottom = (props: { title: string; isbn: string; author: string; price:
 };
 
 const ButtonIcon = () => <Icon name="settings" fill="white" height="15" width="15" />;
-const CardButton = (props: { itemIndex: number }) => {
+const CardButton = (props: { itemIndex: string }) => {
     const navigation = useNavigation<RootNavProps>();
     return (
         <View style={[styles.common, styles.buttonLayout]}>
@@ -122,7 +122,7 @@ const CardElement = (props: { info: any }) => {
                 />
             </View>
             {/* Button */}
-            <CardButton itemIndex={info.index} />
+            <CardButton itemIndex={stockBook.getIsbn()} />
         </View>
     );
 }
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     },
     mainLayout: {
         backgroundColor: transparent,
-        width: "45%",
+        width: 173, //'45%',
         height: 300,
         margin: 10,
     },

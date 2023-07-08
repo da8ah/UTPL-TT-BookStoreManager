@@ -6,7 +6,7 @@ import { AuthContext } from "../hooks/context/AuthContext";
 import { ThemeContext } from "../hooks/context/ThemeContext";
 import BookEditorToggle from "./components/BookEditorToggle";
 import ThemeModeToggle from "./components/ThemeModeToggle";
-import AuthNav from "./routes/AuthNav";
+import RootNav from "./routes/RootNav";
 import { darkNavTheme, lightNavTheme, globalStyles as styles } from "./styles/styles";
 
 
@@ -15,7 +15,7 @@ export default function MainFrame() {
     return <Layout style={[styles.common, { flex: 1 }]}>
         <NavigationContainer theme={themeMode === 'dark' ? darkNavTheme : lightNavTheme}>
             <Header style={[styles.common, styles.header, { backgroundColor: '#272729' }]} />
-            <AuthNav />
+            <RootNav />
         </NavigationContainer>
     </Layout>
 }

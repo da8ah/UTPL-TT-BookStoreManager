@@ -11,8 +11,8 @@ import DatePicker from "../components/DatePicker";
 import ModalDisplay, { ModalAttributes } from "../components/ModalDisplay";
 import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
+import { BookEditorRouteProps } from "../routes/types.nav";
 import { globalStyles } from "../styles/styles";
-import { RootNavProps } from "./screen";
 
 const EditorTop = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
@@ -202,7 +202,8 @@ const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggle
     </View>
 }
 
-export default function BookEditor({ route }: { route?: RootNavProps }) {
+export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
+    const bookIndex = route.params?.bookIndex
     const { isEditorOpen, toggleEditor } = useContext(EditorContext)
     const theme = useTheme()
     const [isEditorDisabled, toggleDisabledState] = useEditor()
@@ -213,8 +214,8 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
 
     useEffect(() => {
         toggleEditor(true)
-        route.params && console.log(route.params.bookIndex)
-        toggleDisabledState(route.params !== undefined)
+        route.params && console.log(bookIndex)
+        toggleDisabledState(bookIndex !== undefined)
         return () => { toggleEditor(false) }
     }, [])
 
@@ -237,7 +238,7 @@ export default function BookEditor({ route }: { route?: RootNavProps }) {
         />
         <EditorTop isEditorDisabled={isEditorDisabled} />
         <EditorMiddle isEditorDisabled={isEditorDisabled} setModalAttributes={setModalAttributes} data={{ price }} />
-        <EditorBottom isNew={route.params === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
+        <EditorBottom isNew={bookIndex === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
     </View>
 }
 

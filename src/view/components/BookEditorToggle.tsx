@@ -3,7 +3,7 @@ import { Button, Icon, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { Keyboard } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
-import { RootNavProps } from "../screens/screen";
+import { RootNavProps } from "../routes/types.nav";
 
 export default function BookEditorToggle() {
     const { isEditorOpen } = useContext(EditorContext)
@@ -22,9 +22,9 @@ export default function BookEditorToggle() {
             if (Keyboard.isVisible()) {
                 Keyboard.dismiss()
                 setTimeout(() => {
-                    if (!Keyboard.isVisible()) navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
+                    if (!Keyboard.isVisible()) isEditorOpen ? navigation.navigate('BottomNav', { screen: 'Home' }) : navigation.navigate('BookEditor')
                 }, 100)
-            } else navigation.navigate(isEditorOpen ? 'BottomNav' : 'BookEditor')
+            } else isEditorOpen ? navigation.navigate('BottomNav', { screen: 'Home' }) : navigation.navigate('BookEditor')
         }}
     >{isEditorOpen ? 'Cerrar' : 'Nuevo'}
     </Button>
