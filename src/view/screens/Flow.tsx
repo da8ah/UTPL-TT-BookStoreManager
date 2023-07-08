@@ -1,5 +1,5 @@
 import { List } from "@ui-kitten/components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import BillingInfo from "../../model/core/entities/BillingInfo";
 import Card from "../../model/core/entities/Card";
@@ -7,7 +7,7 @@ import { CardTransaction } from "../../model/core/entities/CardTransaction";
 import Cart from "../../model/core/entities/Cart";
 import Client from "../../model/core/entities/Client";
 import ToBuyBook from "../../model/core/entities/ToBuyBook";
-import SearchBar from "../components/SearchBar";
+import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
 import { stockBooks } from "./Home";
 import TransactionCard from "./layouts/TransactionCard";
@@ -32,7 +32,7 @@ const cart = new Cart([toBuyBook]);
 
 const cardTransactions = [
     new CardTransaction(
-        "id",
+        "id-1",
         client.getCards()[0].getCardNumber(),
         client.getUser(),
         client.getName(),
@@ -43,7 +43,7 @@ const cardTransactions = [
         cart
     ),
     new CardTransaction(
-        "id",
+        "id-2",
         client.getCards()[0].getCardNumber(),
         client.getUser(),
         client.getName(),
@@ -54,7 +54,7 @@ const cardTransactions = [
         cart
     ),
     new CardTransaction(
-        "id",
+        "ffdd",
         client.getCards()[0].getCardNumber(),
         client.getUser(),
         client.getName(),
@@ -66,14 +66,13 @@ const cardTransactions = [
     ),
 ]
 
-const TransactionsLayout = () => {
-    const [transactions, setTransactions] = useState<CardTransaction[]>(cardTransactions.reverse());
+const TransactionsLayout = (props: { transactions: CardTransaction[] }) => {
+    const transactions = props.transactions.reverse()
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
     const queryDataFromServer = () => {
         setRefreshing(true);
         setTimeout(async () => {
-            setTransactions(cardTransactions.reverse());
             setRefreshing(false);
         }, 2000);
     };
@@ -84,7 +83,7 @@ const TransactionsLayout = () => {
         <View style={{ flex: 1 }}>
             <List
                 scrollEnabled
-                // testID='listTransactions'
+                testID='transactions'
                 key={"transactions"}
                 style={{ backgroundColor: "transparent" }}
                 contentContainerStyle={{ backgroundColor: "transparent" }}
@@ -100,10 +99,26 @@ const TransactionsLayout = () => {
 };
 
 export default function Flow() {
+    const [query, setQuey] = useState('')
+
+    useEffect(() => { }, [query])
+
+    const transactions = useMemo(() => {
+        return cardTransactions.filter((transaction) => {
+            return transaction.getId().toLowerCase().includes(query.toLowerCase())
+        })
+    }, [cardTransactions, query])
+
+    const CloseIcon = (<EmptyIcon onPress={() => setQuey('')} />)
     return (
         <View style={[styles.common, styles.body]}>
-            <SearchBar placeholder="Buscar por coincidencia o ID" />
-            <TransactionsLayout />
+            <SearchBar
+                placeholder="Buscar por coincidencia o ID"
+                accessoryRight={query.length > 0 ? CloseIcon : undefined}
+                value={query}
+                onChangeText={input => setQuey(input)}
+            />
+            <TransactionsLayout transactions={transactions} />
         </View>
     );
 };

@@ -1,8 +1,8 @@
 import { List } from "@ui-kitten/components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
 import StockBook from "../../model/core/entities/StockBook";
-import SearchBar from "../components/SearchBar";
+import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
 import BookCard from "./layouts/BookCard";
 
@@ -28,7 +28,7 @@ export const stockBooks = [
         "9789584293978",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
-        "Jordan B. Peterson",
+        "HIRR SEBASTIAN",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
@@ -45,7 +45,7 @@ export const stockBooks = [
         "9789584293978",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
-        "Jordan B. Peterson",
+        "ROUSSEAU",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
@@ -62,7 +62,7 @@ export const stockBooks = [
         "9789584293978",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
-        "Jordan B. Peterson",
+        "GOLEMAN DANIEL",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
@@ -79,7 +79,7 @@ export const stockBooks = [
         "9789584293978",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
-        "Jordan B. Peterson",
+        "DC COMICS",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
@@ -96,7 +96,7 @@ export const stockBooks = [
         "9789584293978",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
-        "Jordan B. Peterson",
+        "Aristóteles",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
@@ -129,8 +129,9 @@ export const stockBooks = [
     )
 ]
 
-const BookStore = () => {
-    const [books, setBooks] = useState<StockBook[]>(stockBooks);
+const BookStore = (props: { stockBooks: StockBook[] }) => {
+    const books = props.stockBooks;
+    // if (books.length <= 1) books.push(new StockBook("", "", "", "", "", "", ""))
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
     useEffect(() => { }, [books]);
@@ -138,7 +139,6 @@ const BookStore = () => {
     const queryDataFromServer = () => {
         setRefreshing(true);
         setTimeout(async () => {
-            setBooks(stockBooks)
             setRefreshing(false);
         }, 2000);
     };
@@ -147,11 +147,11 @@ const BookStore = () => {
         <View style={{ flex: 1 }}>
             <List
                 scrollEnabled
-                // testID='listBooks'
+                testID='books'
                 key={"books"}
                 style={{ backgroundColor: "transparent" }}
                 contentContainerStyle={{ backgroundColor: "transparent" }}
-                columnWrapperStyle={[styles.common, { justifyContent: 'flex-start' }]}
+                columnWrapperStyle={[styles.common, { justifyContent: 'flex-start', paddingRight: books.length <= 1 ? '50%' : undefined }]}
                 numColumns={2}
                 initialNumToRender={books.length}
                 data={books}
@@ -165,8 +165,24 @@ const BookStore = () => {
 };
 
 export default function Home() {
+    const [query, setQuey] = useState('')
+
+    useEffect(() => { }, [query])
+
+    const books = useMemo(() => {
+        return stockBooks.filter((book) => {
+            return book.getAuthor().toLowerCase().includes(query.toLowerCase())
+        })
+    }, [stockBooks, query])
+
+    const CloseIcon = (<EmptyIcon onPress={() => setQuey('')} />)
     return <View style={[styles.common, styles.body]}>
-        <SearchBar placeholder="Buscar por coincidencia o ISBN" />
-        <BookStore />
+        <SearchBar
+            placeholder="Buscar por coincidencia o ISBN"
+            accessoryRight={query.length > 0 ? CloseIcon : undefined}
+            value={query}
+            onChangeText={input => setQuey(input)}
+        />
+        <BookStore stockBooks={books} />
     </View>
 }
