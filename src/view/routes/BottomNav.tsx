@@ -6,6 +6,7 @@ import { ThemeContext } from "../../hooks/context/ThemeContext";
 import Flow from "../screens/Flow";
 import Home from "../screens/Home";
 import User from "../screens/User";
+import { BottomTabParamList } from "./types.nav";
 
 const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     const { themeMode } = useContext(ThemeContext)
@@ -51,7 +52,7 @@ const UiKittenBottomTabNav = ({ navigation, state }: BottomTabBarProps) => {
     );
 };
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomNav() {
     return (

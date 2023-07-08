@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import BookEditor from "../screens/BookEditor";
-import { RootNavProps } from "../screens/screen";
+import { RootStackParamList } from "./types.nav";
 import { globalStyles as styles } from "../styles/styles";
 import BottomNav from "./BottomNav";
 
-const Stack = createNativeStackNavigator<RootNavProps>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function RootNav() {
 	return <View style={[styles.common, styles.body, { alignItems: 'stretch', backgroundColor: 'transparent' }]}>
