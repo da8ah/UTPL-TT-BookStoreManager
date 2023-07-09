@@ -2,6 +2,7 @@ import { Icon, Text, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { KeyboardAvoidingView, View } from "react-native";
 import { AuthContext } from "../../hooks/context/AuthContext";
+import useAppData from "../../hooks/useAppData";
 import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import FormInput from "../components/FormInput";
@@ -9,6 +10,7 @@ import RoundButton from "../components/RoundButton";
 import { globalStyles as styles } from "../styles/styles";
 
 export default function User() {
+    const user = useAppData().data.getUser()
     const [isKeyboardVisible] = useKeyboard()
     const { logout } = useContext(AuthContext)
     const theme = useTheme()
@@ -66,13 +68,13 @@ export default function User() {
             <Text
                 style={{ fontSize: 30, fontFamily: "serif", fontStyle: "italic", textAlign: "center", textTransform: "uppercase" }}
             >
-                Admin
+                {user.getUser()}
             </Text>
         </View>
         <KeyboardAvoidingView style={{ flex: 2, width: '80%' }}>
-            <FormInput isTop disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Nombre" placeholder="Nombre" />
-            <FormInput disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} inputMode="email" title="Email" placeholder="Email" />
-            <FormInput isBottom disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Móvil" placeholder="Móvil" />
+            <FormInput isTop disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Nombre" placeholder="Nombre" textStyle={{ textTransform: "capitalize" }} value={user.getName()} />
+            <FormInput disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} inputMode="email" title="Email" placeholder="Email" value={user.getEmail()} />
+            <FormInput isBottom disabled showSoftInputOnFocus={false} formColor={theme['background-basic-color-2']} title="Móvil" placeholder="Móvil" value={user.getMobile()} />
         </KeyboardAvoidingView>
         <View style={{ display: isKeyboardVisible ? 'none' : 'flex', flex: 1, width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly' }}>
             {bottomButtons.map((button, index) => {
