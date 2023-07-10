@@ -8,7 +8,7 @@ type ModalType = 'grossPricePerUnit' | 'stock'
 export type ModalAttributes = {
     modalType?: ModalType
     data?: number
-    onButtonPress?: ({ ...args }) => any
+    onButtonPress?: (...args: any) => any
 }
 type ModalDisplayProps = ModalProps & ModalAttributes
 
@@ -27,13 +27,13 @@ function modalFactory(props: ModalAttributes) {
         case 'grossPricePerUnit':
             return <ModalPrice grossPricePerUnit={props.data && props.data || 0} onButtonPress={props.onButtonPress} />
         case 'stock':
-            return <ModalStock stock={props.data && props.data || 0} />
+            return <ModalStock stock={props.data && props.data || 0} onButtonPress={props.onButtonPress} />
     }
 }
 
 const ModalPrice = (props: {
-    grossPricePerUnit: number;
-    onButtonPress?: ({ parteEntera, parteDecimal }: { parteEntera: string, parteDecimal: string }) => any
+    grossPricePerUnit: number,
+    onButtonPress?: (...args: any) => any,
 }) => {
     const [parteEntera, setParteEntera] = useState(props.grossPricePerUnit.toFixed(2).split(".")[0]);
     const [parteDecimal, setParteDecimal] = useState(props.grossPricePerUnit.toFixed(2).split(".")[1]);
@@ -77,7 +77,7 @@ const ModalPrice = (props: {
                 size="small"
                 style={{ width: "50%" }}
                 onPressIn={() => { if (Keyboard.isVisible()) Keyboard.dismiss() }}
-                onPress={() => props.onButtonPress && props.onButtonPress({ parteEntera, parteDecimal })}
+                onPress={() => props.onButtonPress && grossPricePerUnitHandler(parteEntera, parteDecimal, props.onButtonPress)}
             >
                 Confirmar
             </Button>
@@ -85,7 +85,8 @@ const ModalPrice = (props: {
     );
 };
 const ModalStock = (props: {
-    stock: number;
+    stock: number,
+    onButtonPress?: (...args: any) => any,
 }) => {
     const [cant, setCant] = useState(props.stock.toFixed());
 
@@ -113,13 +114,21 @@ const ModalStock = (props: {
             <Button
                 size="small"
                 style={{ width: "50%" }}
-                onPress={() => {
-                    const parse = Number(cant);
-                    if (!Number.isNaN(parse)) console.log(parse)
-                }}
+                onPressIn={() => { if (Keyboard.isVisible()) Keyboard.dismiss() }}
+                onPress={() => props.onButtonPress && stockHandler(cant, props.onButtonPress)}
             >
                 Confirmar
             </Button>
         </View>
     );
 };
+
+
+function grossPricePerUnitHandler(parteEntera: string, parteDecimal: string, callback: (grossPricePerUnit: number) => void) {
+    const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
+    if (!Number.isNaN(grossPricePerUnit)) callback(grossPricePerUnit)
+}
+const stockHandler = (cant: string, callback: (grossPricePerUnit: number) => void) => {
+    const stock = Number(cant);
+    if (!Number.isNaN(stock)) callback(stock)
+}

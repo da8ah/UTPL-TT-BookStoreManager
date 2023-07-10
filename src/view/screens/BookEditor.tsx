@@ -1,5 +1,5 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Image, Keyboard, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
@@ -185,7 +185,7 @@ const EditorMiddle = (props: {
                             disabled={props.isEditorDisabled}
                             justifyToEnd captionText={' 📦'}
                             captionFontSize={20}
-                            onPress={() => props.setModalAttributes({ modalType: 'stock', data: stock })}
+                            onPress={() => { props.setModalAttributes({ modalType: 'stock', data: stock }) }}
                         >{stock.toString()}</StatusButton>
                     </View>
                 </View>
@@ -302,13 +302,23 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
             visible={modalVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
             modalType={modalAttributes?.modalType} data={modalAttributes?.data}
-            onButtonPress={({ parteEntera, parteDecimal }) => {
-                const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
-                if (!Number.isNaN(grossPricePerUnit)) {
+            onButtonPress={modalAttributes?.modalType === 'grossPricePerUnit' ?
+                (grossPricePerUnit: number) => {
                     setStatusProperty('grossPricePerUnit', grossPricePerUnit)
                     setModalVisibility(false)
+                } :
+                (stock: number) => {
+                    setStatusProperty('stock', stock)
+                    setModalVisibility(false)
                 }
-            }}
+            }
+        // onButtonPress={({ parteEntera, parteDecimal }) => {
+        //     const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
+        //     if (!Number.isNaN(grossPricePerUnit)) {
+        //         setStatusProperty('grossPricePerUnit', grossPricePerUnit)
+        //         setModalVisibility(false)
+        //     }
+        // }}
         />
         <EditorTop isEditorDisabled={isEditorDisabled} />
         <EditorMiddle
@@ -335,7 +345,6 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         />
     </View>
 }
-
 
 const transparent = "transparent";
 const styles = StyleSheet.create({

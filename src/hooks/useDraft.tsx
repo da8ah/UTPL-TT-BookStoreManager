@@ -17,7 +17,7 @@ export default function useDraft(initialValue: StockBook) {
     function setStatusProperty(propName: string, value: number | boolean) {
         switch (propName) {
             case 'grossPricePerUnit':
-                if (typeof (value) === 'number') setGrossPricePerUnit(value)
+                if (typeof (value) === 'number') { setGrossPricePerUnit(value); book.setGrossPricePerUnit(value) }
                 break;
             case 'inOffer':
                 if (typeof (value) === 'boolean') setInOffer(value);
@@ -33,7 +33,7 @@ export default function useDraft(initialValue: StockBook) {
                 }
                 break;
             case 'stock':
-                if (typeof (value) === 'number') setStock(value)
+                if (typeof (value) === 'number') { setStock(value); book.setGrossPricePerUnit(value) }
                 break;
             case 'visible':
                 if (typeof (value) === 'boolean') setVisible(value)
