@@ -1,12 +1,12 @@
 import { useState } from "react";
-import Admin from "../model/core/entities/Admin";
-import BillingInfo from "../model/core/entities/BillingInfo";
-import Card from "../model/core/entities/Card";
-import { CardTransaction } from "../model/core/entities/CardTransaction";
-import Cart from "../model/core/entities/Cart";
-import Client from "../model/core/entities/Client";
-import StockBook from "../model/core/entities/StockBook";
-import ToBuyBook from "../model/core/entities/ToBuyBook";
+import Admin from "../../model/core/entities/Admin";
+import BillingInfo from "../../model/core/entities/BillingInfo";
+import Card from "../../model/core/entities/Card";
+import { CardTransaction } from "../../model/core/entities/CardTransaction";
+import Cart from "../../model/core/entities/Cart";
+import Client from "../../model/core/entities/Client";
+import StockBook from "../../model/core/entities/StockBook";
+import ToBuyBook from "../../model/core/entities/ToBuyBook";
 
 export default function useAppData() {
     const [data] = useState<AppData>(AppData.getInstance());
@@ -22,12 +22,26 @@ class AppData {
         return AppData.instance;
     }
 
+    private draft = new StockBook('', '', '', '', '', '', '');
     private books: StockBook[] = []
     private transactions: CardTransaction[] = []
     private user: Admin = new Admin('', '', '', '', '');
 
+    public getDraft() {
+        return this.draft
+    }
+
     public getBooks() {
         return this.books
+    }
+
+    public createDraft() {
+        this.draft = new StockBook('', '', '', '', '', '', '')
+    }
+
+    public createDraftByISBN(isbn: string) {
+        const book = this.books.find((book) => book.getIsbn() === isbn)
+        if (book !== undefined) this.draft = book
     }
 
     public getTransactions() {
@@ -41,7 +55,7 @@ class AppData {
     async login(user: string, password: string) {
         // this.user = await GestionDeAdmin.iniciarSesionConUserPassword();
         this.user = new Admin('tiber', 'tiber', 'tiber@mail.com', '+5930000000001', '')
-        this.loadFromDataBase()
+        await this.loadFromDataBase()
     }
 
     async loadFromDataBase() {
@@ -88,14 +102,14 @@ export const stockBooks = [
         true,
         false,
     ), new StockBook(
-        "9789584293978",
+        "9789584293930",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
         "ROUSSEAU",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
-        25,
+        30,
         true,
         52,
         false,
@@ -105,14 +119,14 @@ export const stockBooks = [
         true,
         false,
     ), new StockBook(
-        "9789584293978",
+        "9789584293934",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
         "GOLEMAN DANIEL",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
-        25,
+        34,
         true,
         52,
         false,
@@ -122,14 +136,14 @@ export const stockBooks = [
         true,
         false,
     ), new StockBook(
-        "9789584293978",
+        "9789584293941",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
         "DC COMICS",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
-        25,
+        41,
         true,
         52,
         false,
@@ -139,14 +153,14 @@ export const stockBooks = [
         true,
         false,
     ), new StockBook(
-        "9789584293978",
+        "9789584291999",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
         "Aristóteles",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
-        25,
+        19.99,
         true,
         52,
         false,
@@ -156,14 +170,14 @@ export const stockBooks = [
         true,
         false,
     ), new StockBook(
-        "9789584293978",
+        "9789584292830",
         "https://azure.blob.url.jpg",
         "12 More Rules for Life: Beyond Order",
         "Jordan B. Peterson",
         "12/01/2018",
         "10/01/2023",
         "The most influential public intellectual in the Western world right now.",
-        25,
+        28.30,
         true,
         52,
         false,

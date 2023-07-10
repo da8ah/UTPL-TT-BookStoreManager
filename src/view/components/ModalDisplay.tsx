@@ -2,8 +2,9 @@ import { Button, Input, Modal, ModalProps, Text } from "@ui-kitten/components";
 import { useState } from "react";
 import { Keyboard } from "react-native";
 import { View } from "react-native";
+import { globalStyles as styles } from "../styles/styles";
 
-type ModalType = 'price' | 'stock'
+type ModalType = 'grossPricePerUnit' | 'stock'
 export type ModalAttributes = {
     modalType?: ModalType
     data?: number
@@ -23,7 +24,7 @@ export default function ModalDisplay(props: ModalDisplayProps) {
 
 function modalFactory(props: ModalAttributes) {
     switch (props.modalType) {
-        case 'price':
+        case 'grossPricePerUnit':
             return <ModalPrice grossPricePerUnit={props.data && props.data || 0} onButtonPress={props.onButtonPress} />
         case 'stock':
             return <ModalStock stock={props.data && props.data || 0} />
@@ -38,12 +39,10 @@ const ModalPrice = (props: {
     const [parteDecimal, setParteDecimal] = useState(props.grossPricePerUnit.toFixed(2).split(".")[1]);
 
     return (
-        <View style={{ backgroundColor: 'white', alignItems: "center", padding: 20, borderRadius: 20 }}>
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                <Text style={{ width: "25%", textAlign: "right", color: 'black' }}>Precio $</Text>
-                <Text style={{ width: "20%", textAlign: "right", color: 'black' }}>
-                    {parteEntera}.{parteDecimal}
-                </Text>
+        <View style={[styles.common, { backgroundColor: 'white', padding: 10, borderRadius: 20 }]}>
+            <View style={{ flexDirection: "row" }}>
+                <Text style={{ color: 'black' }}>Precio $</Text>
+                <Text style={{ color: 'black' }}>{parteEntera}.{parteDecimal}</Text>
             </View>
             <View style={{ flexDirection: "row", marginVertical: 20 }}>
                 <Input

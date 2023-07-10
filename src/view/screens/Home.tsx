@@ -1,7 +1,7 @@
 import { List, ListProps } from "@ui-kitten/components";
 import { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
-import useAppData from "../../hooks/useAppData";
+import { Keyboard, View } from "react-native";
+import useAppData from "../../hooks/context/useAppData";
 import StockBook from "../../model/core/entities/StockBook";
 import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
@@ -47,7 +47,7 @@ export default function Home() {
     const queryDataFromServer = () => {
         setRefreshing(true);
         setTimeout(async () => {
-            data.loadFromDataBase()
+            await data.loadFromDataBase()
             setRefreshing(false);
         }, 2000);
     };
@@ -64,6 +64,7 @@ export default function Home() {
             books={books}
             refreshing={refreshing}
             onRefresh={queryDataFromServer}
+            onScroll={() => Keyboard.dismiss()}
         />
     </View>
 }

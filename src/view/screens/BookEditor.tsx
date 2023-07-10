@@ -1,10 +1,13 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Image, Keyboard, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
+import useAppData from "../../hooks/context/useAppData";
+import useDraft from "../../hooks/useDraft";
 import useEditor from "../../hooks/useEditor";
 import useKeyboard from "../../hooks/useKeyboard";
+import useModal from "../../hooks/useModal";
 import ActionButton from "../components/ActionButton";
 import BookInput from "../components/BookInput";
 import DatePicker from "../components/DatePicker";
@@ -52,44 +55,79 @@ const EditorTop = (props: { isEditorDisabled: boolean }) => {
     </View>
 }
 
-const EditorMiddle = (props: { isEditorDisabled: boolean, setModalAttributes: (modalAttributes: ModalAttributes) => any, data: { price: number } }) => {
+const EditorMiddle = (props: {
+    isEditorDisabled: boolean, setModalAttributes: (modalAttributes: ModalAttributes) => any,
+    data: {
+        grossPricePerUnit: number,
+        inOffer: boolean,
+        discountPercentage: number,
+        hasIva: boolean,
+        ivaPercentage: number,
+        stock: number,
+        visible: boolean,
+        recommended: boolean,
+        bestSeller: boolean,
+        recent: boolean,
+        setStatusProperty: (propName: string, value: number | boolean) => void
+    }
+}) => {
+    const {
+        grossPricePerUnit,
+        inOffer,
+        discountPercentage,
+        hasIva,
+        ivaPercentage,
+        stock,
+        visible,
+        recommended,
+        bestSeller,
+        recent,
+        setStatusProperty
+    } = props.data
+
     const [isKeyboardVisible] = useKeyboard()
     const { themeMode } = useContext(ThemeContext)
-    const ClockIcon = <Icon name="clock-outline" fill={"tomato"} height="35" width="35" />
-    // {/* <Icon name="clock-outline" fill={recent ? "tomato" : "darkgray"} height="35" width="35" /> */}
-    // {/* <Icon name="clock" fill={recent ? "tomato" : "darkgray"} height="35" width="35" /> */}
-    const StarIcon = <Icon name="star-outline" fill={"gold"} height="35" width="35" />
-    // {/* <Icon name="star-outline" fill={bestSeller ? "gold" : "darkgray"} height="35" width="35" /> */}
-    // {/* <Icon name="star" fill={bestSeller ? "gold" : "darkgray"} height="35" width="35" /> */}
-    const CheckIcon = <Icon name="checkmark-circle-2-outline" fill={"greenyellow"} height="35" width="35" />
-    // {/* <Icon name="checkmark-circle-2-outline" fill={recommended ? "greenyellow" : "darkgray"} height="35" width="35" /> */}
-    // {/* <Icon name="checkmark-circle-2" fill={recommended ? "greenyellow" : "darkgray"} height="35" width="35" /> */}
-    const EyeIcon = <Icon name={"eye-outline"} fill={"turquoise"} height="35" width="35" />
-    // <Icon name={visible ? "eye-outline" : "eye-off-outline"} fill={visible ? "turquoise" : "darkgray"} height="35" width="35" />
-    // <Icon name={visible ? "eye" : "eye-off"} fill={visible ? "turquoise" : "darkgray"} height="35" width="35" />
+    const ClockIcon = <Icon name={!props.isEditorDisabled ? 'clock' : "clock-outline"} fill={recent ? "tomato" : 'darkgray'} height="35" width="35" />
+    const StarIcon = <Icon name={!props.isEditorDisabled ? 'star' : "star-outline"} fill={bestSeller ? "gold" : 'darkgray'} height="35" width="35" />
+    const CheckIcon = <Icon name={!props.isEditorDisabled ? 'checkmark-circle-2' : "checkmark-circle-2-outline"} fill={recommended ? "greenyellow" : 'darkgray'} height="35" width="35" />
+    const EyeIcon = <Icon name={!props.isEditorDisabled ? visible ? 'eye' : "eye-off" : visible ? 'eye-outline' : "eye-off-outline"} fill={visible ? "turquoise" : 'darkgray'} height="40" width="40" />
 
     return <>{
         isKeyboardVisible ? <></> :
             <View style={[styles.common, styles.bodyMiddle]}>
                 <View
                     style={{
-                        flex: 2,
+                        flex: 3,
                         backgroundColor: transparent,
                         flexDirection: "row",
                         justifyContent: "space-between",
                         marginHorizontal: 5,
-                        padding: 5,
                         borderRadius: 5,
                     }}
                 >
                     <View style={{ width: "10%" }} />
                     <View style={{ width: "70%", flexDirection: "row", justifyContent: "space-around" }}>
-                        <StatusTouch disabled={props.isEditorDisabled} title="Reciente" icon={ClockIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
-                        <StatusTouch disabled={props.isEditorDisabled} title="Más vendido" icon={StarIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
-                        <StatusTouch disabled={props.isEditorDisabled} title="Recomendado" icon={CheckIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <View style={{ width: '30%' }}>
+                            <StatusTouch disabled={props.isEditorDisabled} title="Reciente" icon={ClockIcon} height={40} width={40}
+                                onPress={() => setStatusProperty('recent', !recent)}
+                            />
+
+                        </View>
+                        <View style={{ width: '30%' }}>
+                            <StatusTouch disabled={props.isEditorDisabled} title="Más vendido" icon={StarIcon} height={40} width={40}
+                                onPress={() => setStatusProperty('bestSeller', !bestSeller)}
+                            />
+                        </View>
+                        <View style={{ width: '30%' }}>
+                            <StatusTouch disabled={props.isEditorDisabled} title="Recomendado" icon={CheckIcon} height={40} width={40}
+                                onPress={() => setStatusProperty('recommended', !recommended)}
+                            />
+                        </View>
                     </View>
                     <View style={{ width: "10%", justifyContent: "center", alignItems: "flex-end" }}>
-                        <StatusTouch disabled={props.isEditorDisabled} icon={EyeIcon} height={40} width={40} activeOpacity={1} backgroundColor={'transparent'} />
+                        <StatusTouch disabled={props.isEditorDisabled} icon={EyeIcon} height={45} width={45}
+                            onPress={() => setStatusProperty('visible', !visible)}
+                        />
                     </View>
                 </View>
                 <View style={{ flex: 4, flexDirection: "row" }}>
@@ -104,16 +142,35 @@ const EditorMiddle = (props: { isEditorDisabled: boolean, setModalAttributes: (m
                         }}
                     >
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around" }}>
-                            <Toggle disabled={props.isEditorDisabled} />
-                            <Toggle disabled={props.isEditorDisabled} />
+                            <Toggle disabled={props.isEditorDisabled} checked={inOffer}
+                                onChange={() => setStatusProperty('inOffer', !inOffer)}
+                            />
+                            <Toggle disabled={props.isEditorDisabled} checked={hasIva} status={hasIva ? "danger" : 'basic'}
+                                onChange={() => setStatusProperty('hasIva', !hasIva)}
+                            />
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around" }}>
                             <Text>Descuento</Text>
                             <Text>IVA</Text>
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around", alignItems: "flex-start" }}>
-                            <StatusButton disabled={props.isEditorDisabled} textLeft captionText={'% '} captionFontColor={themeMode === 'dark' ? 'white' : "black"}>25</StatusButton>
-                            <StatusButton disabled={props.isEditorDisabled} textLeft captionText={'% '} status="danger" captionFontColor={themeMode === 'dark' ? 'white' : "black"}>12</StatusButton>
+                            <StatusButton
+                                disabled={props.isEditorDisabled}
+                                textLeft
+                                captionText={'% '}
+                                appearance={inOffer ? 'filled' : 'outline'}
+                                status={inOffer ? "primary" : 'basic'}
+                                captionFontColor={themeMode === 'dark' ? 'white' : "black"}
+                            >{inOffer ? discountPercentage.toString() : '0'}</StatusButton>
+                            <StatusButton
+                                disabled={props.isEditorDisabled}
+                                textLeft
+                                captionText={'% '}
+                                appearance={hasIva ? 'filled' : 'outline'}
+                                status={hasIva ? "danger" : 'basic'}
+                                captionFontColor={themeMode === 'dark' ? 'white' : "black"}
+                                onPress={() => setStatusProperty('hasIva', !hasIva)}
+                            >{ivaPercentage.toString()}</StatusButton>
                         </View>
                     </View>
                     <View style={{ width: "30%", height: '100%', justifyContent: "space-around", alignItems: "flex-end" }}>
@@ -122,9 +179,14 @@ const EditorMiddle = (props: { isEditorDisabled: boolean, setModalAttributes: (m
                             justifyToEnd
                             captionText={'💲'}
                             captionFontSize={25}
-                            onPress={() => props.setModalAttributes({ modalType: 'price', data: props.data.price })}
-                        >{props.data.price.toString()}</StatusButton>
-                        <StatusButton disabled={props.isEditorDisabled} justifyToEnd captionText={' 📦'} captionFontSize={20}>100</StatusButton>
+                            onPress={() => props.setModalAttributes({ modalType: 'grossPricePerUnit', data: grossPricePerUnit })}
+                        >{grossPricePerUnit % 1 !== 0 ? grossPricePerUnit.toFixed(2) : grossPricePerUnit.toString()}</StatusButton>
+                        <StatusButton
+                            disabled={props.isEditorDisabled}
+                            justifyToEnd captionText={' 📦'}
+                            captionFontSize={20}
+                            onPress={() => props.setModalAttributes({ modalType: 'stock', data: stock })}
+                        >{stock.toString()}</StatusButton>
                     </View>
                 </View>
             </View>
@@ -203,19 +265,31 @@ const EditorBottom = (props: { isNew: boolean, isEditorDisabled: boolean, toggle
 }
 
 export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
-    const bookIndex = route.params?.bookIndex
-    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
+    const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
-    const [isEditorDisabled, toggleDisabledState] = useEditor()
-    const [modalAttributes, setModalAttributes] = useState<ModalAttributes>()
-    const [modalVisibility, setModalVisibility] = useState(false);
 
-    const [price, setPrice] = useState(25)
+    const { data } = useAppData()
+    const bookISBN = route.params?.bookISBN
+    const { isEditorOpen, toggleEditor } = useContext(EditorContext)
+    const [isEditorDisabled, toggleDisabledState] = useEditor()
+    const [modalAttributes, setModalAttributes, modalVisibility, setModalVisibility] = useModal()
+    const [
+        grossPricePerUnit,
+        inOffer,
+        discountPercentage,
+        hasIva,
+        ivaPercentage,
+        stock,
+        visible,
+        recommended,
+        bestSeller,
+        recent,
+        setStatusProperty
+    ] = useDraft(data.getDraft())
 
     useEffect(() => {
         toggleEditor(true)
-        route.params && console.log(bookIndex)
-        toggleDisabledState(bookIndex !== undefined)
+        toggleDisabledState(bookISBN !== undefined)
         return () => { toggleEditor(false) }
     }, [])
 
@@ -223,22 +297,42 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         setModalVisibility(modalAttributes !== undefined)
     }, [modalAttributes])
 
-    return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: theme['background-basic-color-3'] }]}>
+    return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'white' }]}>
         <ModalDisplay
             visible={modalVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
             modalType={modalAttributes?.modalType} data={modalAttributes?.data}
             onButtonPress={({ parteEntera, parteDecimal }) => {
-                const price = Number(`${parteEntera}.${parteDecimal}`);
-                if (!Number.isNaN(price)) {
-                    setPrice(price)
+                const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
+                if (!Number.isNaN(grossPricePerUnit)) {
+                    setStatusProperty('grossPricePerUnit', grossPricePerUnit)
                     setModalVisibility(false)
                 }
             }}
         />
         <EditorTop isEditorDisabled={isEditorDisabled} />
-        <EditorMiddle isEditorDisabled={isEditorDisabled} setModalAttributes={setModalAttributes} data={{ price }} />
-        <EditorBottom isNew={bookIndex === undefined} isEditorDisabled={isEditorDisabled} toggleDisabledState={toggleDisabledState} />
+        <EditorMiddle
+            isEditorDisabled={isEditorDisabled}
+            setModalAttributes={setModalAttributes}
+            data={{
+                grossPricePerUnit,
+                inOffer,
+                discountPercentage,
+                hasIva,
+                ivaPercentage,
+                stock,
+                visible,
+                recommended,
+                bestSeller,
+                recent,
+                setStatusProperty
+            }}
+        />
+        <EditorBottom
+            isNew={bookISBN === undefined}
+            isEditorDisabled={isEditorDisabled}
+            toggleDisabledState={toggleDisabledState}
+        />
     </View>
 }
 

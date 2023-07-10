@@ -4,8 +4,10 @@ import { useContext } from "react";
 import { Keyboard } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { RootNavProps } from "../routes/types.nav";
+import useAppData from "../../hooks/context/useAppData";
 
 export default function BookEditorToggle() {
+    const { data } = useAppData()
     const { isEditorOpen } = useContext(EditorContext)
     const navigation = useNavigation<RootNavProps>()
     const theme = useTheme()
@@ -19,6 +21,7 @@ export default function BookEditorToggle() {
         accessoryLeft={isEditorOpen ? Close : Open}
         style={{ flexDirection: 'column', borderWidth: 0 }}
         onPress={() => {
+            if (!isEditorOpen) data.createDraft()
             if (Keyboard.isVisible()) {
                 Keyboard.dismiss()
                 setTimeout(() => {

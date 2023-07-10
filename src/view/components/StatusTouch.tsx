@@ -27,9 +27,8 @@ export default function StatusTouch(props: StatusTouchProps) {
                 }
             ]}
         >
-            <>
-                {props.icon}
-            </>
+
+            {props.icon}
         </TouchableOpacity>
     </View>
 }

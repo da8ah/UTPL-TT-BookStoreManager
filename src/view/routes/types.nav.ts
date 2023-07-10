@@ -14,7 +14,7 @@ export type TabBarUserProps = BottomTabScreenProps<BottomTabParamList, 'User'>
 
 export type RootStackParamList = {
 	BottomNav: NavigatorScreenParams<BottomTabParamList>;
-	BookEditor?: { bookIndex: string };
+	BookEditor?: { bookISBN: string };
 };
 
 export type RootNavProps = NativeStackNavigationProp<RootStackParamList, 'BottomNav'>

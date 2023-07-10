@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
+import useAppData from "../../../hooks/context/useAppData";
 import StockBook from "../../../model/core/entities/StockBook";
 import { RootNavProps } from "../../routes/types.nav";
 
@@ -52,7 +53,7 @@ const CardBottom = (props: { title: string; isbn: string; author: string; price:
                     {props.isbn}
                 </Text>
                 <Text style={{ fontSize: 12.5 }} adjustsFontSizeToFit={true}>
-                    {props.price.toFixed(2)} 💲
+                    {props.price % 1 !== 0 ? props.price.toFixed(2) : props.price} 💲
                 </Text>
             </View>
             <View style={[styles.common, styles.bodyProperties]}>
@@ -77,7 +78,8 @@ const CardBottom = (props: { title: string; isbn: string; author: string; price:
 };
 
 const ButtonIcon = () => <Icon name="settings" fill="white" height="15" width="15" />;
-const CardButton = (props: { itemIndex: string }) => {
+const CardButton = (props: { bookISBN: string }) => {
+    const { data } = useAppData()
     const navigation = useNavigation<RootNavProps>();
     return (
         <View style={[styles.common, styles.buttonLayout]}>
@@ -86,7 +88,10 @@ const CardButton = (props: { itemIndex: string }) => {
                 size="small"
                 status="info"
                 accessoryLeft={ButtonIcon}
-                onPress={() => navigation.navigate("BookEditor", { bookIndex: props.itemIndex })}
+                onPress={() => {
+                    data.createDraftByISBN(props.bookISBN)
+                    navigation.navigate("BookEditor", { bookISBN: props.bookISBN })
+                }}
             >
                 EDITAR
             </Button>
@@ -99,30 +104,28 @@ export default function BookCard(info: ListRenderItemInfo<StockBook>) {
     return <CardElement info={info} />
 };
 const CardElement = (props: { info: any }) => {
-    // const [stockBook] = useStockBook(info.item)
     const theme = useTheme()
-    const { info } = props
-    const stockBook = info.item
+    const book = props.info.item
     return (
         <View style={styles.mainLayout}>
             {/* Card */}
             <View style={[styles.cardLayout, { backgroundColor: theme['background-basic-color-2'] }]}>
                 <CardTop
-                    isVisible={stockBook.isVisible()}
-                    isInOffer={stockBook.isInOffer()}
-                    discountPercentage={stockBook.getDiscountPercentage()}
+                    isVisible={book.isVisible()}
+                    isInOffer={book.isInOffer()}
+                    discountPercentage={book.getDiscountPercentage()}
                 />
-                <CardMiddle isRecommended={stockBook.isRecommended()} isBestSeller={stockBook.isBestSeller()} isRecent={stockBook.isRecent()} />
+                <CardMiddle isRecommended={book.isRecommended()} isBestSeller={book.isBestSeller()} isRecent={book.isRecent()} />
                 <CardBottom
-                    title={stockBook.getTitle()}
-                    isbn={stockBook.getIsbn()}
-                    author={stockBook.getAuthor()}
-                    price={stockBook.getGrossPricePerUnit()}
-                    stock={stockBook.getStock()}
+                    title={book.getTitle()}
+                    isbn={book.getIsbn()}
+                    author={book.getAuthor()}
+                    price={book.getGrossPricePerUnit()}
+                    stock={book.getStock()}
                 />
             </View>
             {/* Button */}
-            <CardButton itemIndex={stockBook.getIsbn()} />
+            <CardButton bookISBN={book.getIsbn()} />
         </View>
     );
 }

@@ -1,11 +1,12 @@
 import { List, ListProps } from "@ui-kitten/components";
 import { useEffect, useMemo, useState } from "react";
 import { View } from "react-native";
-import useAppData from "../../hooks/useAppData";
+import useAppData from "../../hooks/context/useAppData";
 import { CardTransaction } from "../../model/core/entities/CardTransaction";
 import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
 import TransactionCard from "./layouts/TransactionCard";
+import { Keyboard } from "react-native";
 
 const TransactionsLayout = (props: { transactions: CardTransaction[] } & Omit<ListProps, 'data' | 'renderItem'>) => {
     const transactions = props.transactions
@@ -45,7 +46,7 @@ export default function Flow() {
     const queryDataFromServer = () => {
         setRefreshing(true);
         setTimeout(async () => {
-            data.loadFromDataBase()
+            await data.loadFromDataBase()
             setRefreshing(false);
         }, 2000);
     };
@@ -63,6 +64,7 @@ export default function Flow() {
                 transactions={transactions}
                 refreshing={refreshing}
                 onRefresh={queryDataFromServer}
+                onScroll={() => Keyboard.dismiss()}
             />
         </View>
     );
