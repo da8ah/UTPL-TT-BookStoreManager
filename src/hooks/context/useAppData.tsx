@@ -7,6 +7,9 @@ import Cart from "../../model/core/entities/Cart";
 import Client from "../../model/core/entities/Client";
 import StockBook from "../../model/core/entities/StockBook";
 import ToBuyBook from "../../model/core/entities/ToBuyBook";
+import GestionDeLibros from "../../model/core/usecases/admin/GestionDeLibros";
+import GestionDeTransacciones from "../../model/core/usecases/admin/GestionDeTransacciones";
+import RemoteService from "../../model/services/RemoteService";
 
 export default function useAppData() {
     const [data] = useState<AppData>(AppData.getInstance());
@@ -27,14 +30,6 @@ class AppData {
     private transactions: CardTransaction[] = []
     private user: Admin = new Admin('', '', '', '', '');
 
-    public getDraft() {
-        return this.draft
-    }
-
-    public getBooks() {
-        return this.books
-    }
-
     public createDraft() {
         const date = Intl.DateTimeFormat("ec", {
             day: "2-digit", month: "2-digit", year: "numeric",
@@ -46,6 +41,14 @@ class AppData {
         const book = this.books.find((book) => book.getIsbn() === isbn)
         if (book !== undefined) this.draft = Cloner.stockBook(book)
         // if (book !== undefined) this.draft = book
+    }
+
+    public getDraft() {
+        return this.draft
+    }
+
+    public getBooks() {
+        return this.books
     }
 
     public getTransactions() {
@@ -63,9 +66,8 @@ class AppData {
     }
 
     async loadFromDataBase() {
-        // this.books = await GestionDeLibros.listarCatalogoDeLibrosEnStock();
-        this.books = stockBooks
-        this.transactions = cardTransactions
+        this.books = await GestionDeLibros.listarCatalogoDeLibrosEnStock(new RemoteService())
+        this.transactions = await GestionDeTransacciones.listarTodasLasTransacciones(new RemoteService()) as CardTransaction[]
     }
 }
 

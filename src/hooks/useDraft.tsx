@@ -92,6 +92,7 @@ export default function useDraft(initialValue: StockBook) {
 
     return [
         isbn,
+        // imgRef,
         title,
         author,
         releaseDate,
