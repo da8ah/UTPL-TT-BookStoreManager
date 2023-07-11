@@ -1,5 +1,5 @@
 import { Input, InputProps, Text, useTheme } from "@ui-kitten/components";
-import { LegacyRef, forwardRef, useContext, useState } from "react";
+import { LegacyRef, forwardRef, useContext } from "react";
 import { ColorValue, ScrollView, StyleSheet, View } from "react-native";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 
@@ -16,7 +16,6 @@ type BookInputProps = Omit<InputProps, 'disabled'> & {
 const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
-    const [text, setText] = useState(props.defaultValue || '')
     const defaultFormColor = themeMode === 'dark' ? theme['background-basic-color-1'] : 'gainsboro'
     return <View style={[styles.inputLayout, { opacity: props.disabled ? 0.8 : 1 }]}>
         <View style={[styles.inputTitle, { backgroundColor: props.formColor || defaultFormColor }]}>
@@ -34,8 +33,6 @@ const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
                 style={[styles.inputScroll, props.style, { borderColor: props.formColor || defaultFormColor }]}
                 selectionColor={themeMode === 'dark' ? theme['color-info-500'] : undefined}
                 cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
-                defaultValue={text}
-                onChangeText={input => setText(input)}
             />
             :
             <ScrollView
@@ -58,8 +55,6 @@ const BookInput = forwardRef((props: BookInputProps, ref: LegacyRef<Input>) => {
                     style={styles.input}
                     selectionColor={themeMode === 'dark' ? theme['color-info-500'] : undefined}
                     cursorColor={themeMode === 'dark' ? theme['color-info-500'] : 'gray'}
-                    defaultValue={text}
-                    onChangeText={input => setText(input)}
                 />
             </ScrollView>
         }

@@ -3,8 +3,8 @@ import { Button, Icon, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { Keyboard } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
-import { RootNavProps } from "../routes/types.nav";
 import useAppData from "../../hooks/context/useAppData";
+import { RootNavProps } from "../routes/types.nav";
 
 export default function BookEditorToggle() {
     const { data } = useAppData()

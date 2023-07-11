@@ -3,6 +3,13 @@ import StockBook from "../model/core/entities/StockBook"
 
 export default function useDraft(initialValue: StockBook) {
     const [book] = useState<StockBook>(initialValue)
+    const [isbn, setIsbn] = useState(book.getIsbn())
+    // const [imgRef, setImgRef] = useState(book.getImgRef())
+    const [title, setTitle] = useState(book.getTitle())
+    const [author, setAuthor] = useState(book.getAuthor())
+    const [releaseDate, setReleaseDate] = useState(book.getReleaseDate())
+    const [createdDate, setCreatedDate] = useState(book.getCreatedDate())
+    const [description, setDescription] = useState(book.getDescription())
     const [grossPricePerUnit, setGrossPricePerUnit] = useState(book.getGrossPricePerUnit())
     const [inOffer, setInOffer] = useState(book.isInOffer())
     const [discountPercentage, setDiscountPercentage] = useState(book.getDiscountPercentage())
@@ -13,6 +20,39 @@ export default function useDraft(initialValue: StockBook) {
     const [recommended, setRecommended] = useState(book.isRecommended())
     const [bestSeller, setBestSeller] = useState(book.isBestSeller())
     const [recent, setRecent] = useState(book.isRecent())
+
+    function setBasicProperty(propName: string, value: string) {
+        switch (propName) {
+            case 'isbn':
+                book.setIsbn(value)
+                setIsbn(value)
+                break;
+            // case 'imgRef':
+            //     book.setImgRef(value)
+            //     setImgRef(value)
+            //     break;
+            case 'title':
+                book.setTitle(value)
+                setTitle(value)
+                break;
+            case 'author':
+                book.setAuthor(value)
+                setAuthor(value)
+                break;
+            case 'releaseDate':
+                book.setReleaseDate(value)
+                setReleaseDate(value)
+                break;
+            case 'createdDate':
+                book.setCreatedDate(value)
+                setCreatedDate(value)
+                break;
+            case 'description':
+                book.setDescription(value)
+                setDescription(value)
+                break;
+        }
+    }
 
     function setStatusProperty(propName: string, value: number | boolean) {
         switch (propName) {
@@ -33,7 +73,7 @@ export default function useDraft(initialValue: StockBook) {
                 }
                 break;
             case 'stock':
-                if (typeof (value) === 'number') { book.setGrossPricePerUnit(value); setStock(value); }
+                if (typeof (value) === 'number') { book.setStock(value); setStock(value); }
                 break;
             case 'visible':
                 if (typeof (value) === 'boolean') { book.setVisible(value); setVisible(value) }
@@ -51,6 +91,12 @@ export default function useDraft(initialValue: StockBook) {
     }
 
     return [
+        isbn,
+        title,
+        author,
+        releaseDate,
+        createdDate,
+        description,
         grossPricePerUnit,
         inOffer,
         discountPercentage,
@@ -61,6 +107,7 @@ export default function useDraft(initialValue: StockBook) {
         recommended,
         bestSeller,
         recent,
+        setBasicProperty,
         setStatusProperty
     ] as const
 }

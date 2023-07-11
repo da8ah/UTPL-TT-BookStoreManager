@@ -1,8 +1,6 @@
 import { Button, Datepicker, DatepickerProps, I18nConfig, Icon, NativeDateService, useTheme } from "@ui-kitten/components";
-import { createRef, useContext } from "react";
+import { createRef } from "react";
 import { View } from "react-native";
-import { ThemeContext } from "../../hooks/context/ThemeContext";
-import useDatePicker from "../../hooks/useDatePicker";
 
 export default function DatePicker(props: DatepickerProps) {
     const theme = useTheme()
@@ -18,7 +16,6 @@ export default function DatePicker(props: DatepickerProps) {
         },
     };
     const localeDateService = new NativeDateService("ec", { i18n, startDayOfWeek: 1 });
-    const localePickerState = useDatePicker(new Date());
     const componentRef = createRef<Datepicker>();
 
     const IrAHoy = () => (
@@ -39,14 +36,13 @@ export default function DatePicker(props: DatepickerProps) {
         accessoryLeft={props.accessoryLeft || DatepickerIcon}
         min={new Date(1900, 0, 1)}
         dateService={localeDateService}
-        {...localePickerState}
         renderFooter={IrAHoy}
     />
 }
 
 export const toDate = function (date: string) {
     try {
-        if (new RegExp(/[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/).test(date)) throw Error('Format must be (dd/MM/yyyy)!');
+        if (!new RegExp(/[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}/).test(date)) throw Error('Fecha debe estar en formato (dd/MM/yyyy)');
 
         const dateSplitted = date.split("/");
         return new Date(
@@ -56,6 +52,6 @@ export const toDate = function (date: string) {
         );
     } catch (error) {
         console.error(error);
-        throw error;
+        return new Date()
     }
 };

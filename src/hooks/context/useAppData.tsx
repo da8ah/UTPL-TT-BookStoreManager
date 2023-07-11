@@ -36,13 +36,16 @@ class AppData {
     }
 
     public createDraft() {
-        this.draft = new StockBook('', '', '', '', '', '', '')
+        const date = Intl.DateTimeFormat("ec", {
+            day: "2-digit", month: "2-digit", year: "numeric",
+        }).format(new Date)
+        this.draft = new StockBook('', '', '', '', date, date, '')
     }
 
     public createDraftByISBN(isbn: string) {
         const book = this.books.find((book) => book.getIsbn() === isbn)
-        if (book !== undefined) this.draft = book
-        // if (book !== undefined) this.draft = Object.assign(StockBook.prototype, book)
+        if (book !== undefined) this.draft = Cloner.stockBook(book)
+        // if (book !== undefined) this.draft = book
     }
 
     public getTransactions() {
@@ -66,6 +69,28 @@ class AppData {
     }
 }
 
+class Cloner {
+    public static stockBook(stockBook: StockBook) {
+        return new StockBook(
+            stockBook.getIsbn(),
+            stockBook.getImgRef(),
+            stockBook.getTitle(),
+            stockBook.getAuthor(),
+            stockBook.getReleaseDate(),
+            stockBook.getCreatedDate(),
+            stockBook.getDescription(),
+            stockBook.getGrossPricePerUnit(),
+            stockBook.isInOffer(),
+            stockBook.getDiscountPercentage(),
+            stockBook.itHasIva(),
+            stockBook.getStock(),
+            stockBook.isVisible(),
+            stockBook.isRecommended(),
+            stockBook.isBestSeller(),
+            stockBook.isRecent(),
+        );
+    }
+}
 
 export const stockBooks = [
     new StockBook(
