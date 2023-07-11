@@ -56,8 +56,3 @@ export default function ModalPrice(props: { grossPricePerUnit: number, onButtonP
         </View>
     );
 };
-
-function grossPricePerUnitHandler(parteEntera: string, parteDecimal: string, callback: (grossPricePerUnit: number) => void) {
-    const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
-    if (!Number.isNaN(grossPricePerUnit)) callback(grossPricePerUnit)
-}

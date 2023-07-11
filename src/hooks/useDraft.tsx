@@ -17,35 +17,35 @@ export default function useDraft(initialValue: StockBook) {
     function setStatusProperty(propName: string, value: number | boolean) {
         switch (propName) {
             case 'grossPricePerUnit':
-                if (typeof (value) === 'number') { setGrossPricePerUnit(value); book.setGrossPricePerUnit(value) }
+                if (typeof (value) === 'number') { book.setGrossPricePerUnit(value); setGrossPricePerUnit(value) }
                 break;
             case 'inOffer':
-                if (typeof (value) === 'boolean') setInOffer(value);
+                if (typeof (value) === 'boolean') { book.setInOffer(value); setInOffer(value) }
                 break;
             case 'discountPercentage':
-                if (typeof (value) === 'number') setDiscountPercentage(value)
+                if (typeof (value) === 'number') { book.setDiscountPercentage(value); setDiscountPercentage(value) }
                 break;
             case 'hasIva':
                 if (typeof (value) === 'boolean') {
-                    setHasIva(value);
                     book.setHasIva(value);
+                    setHasIva(value);
                     setIvaPercentage(book.getIvaPercentage())
                 }
                 break;
             case 'stock':
-                if (typeof (value) === 'number') { setStock(value); book.setGrossPricePerUnit(value) }
+                if (typeof (value) === 'number') { book.setGrossPricePerUnit(value); setStock(value); }
                 break;
             case 'visible':
-                if (typeof (value) === 'boolean') setVisible(value)
+                if (typeof (value) === 'boolean') { book.setVisible(value); setVisible(value) }
                 break;
             case 'recommended':
-                if (typeof (value) === 'boolean') setRecommended(value)
+                if (typeof (value) === 'boolean') { book.setRecommended(value); setRecommended(value) }
                 break;
             case 'bestSeller':
-                if (typeof (value) === 'boolean') setBestSeller(value)
+                if (typeof (value) === 'boolean') { book.setBestSeller(value); setBestSeller(value) }
                 break;
             case 'recent':
-                if (typeof (value) === 'boolean') setRecent(value)
+                if (typeof (value) === 'boolean') { book.setRecent(value); setRecent(value) }
                 break;
         }
     }

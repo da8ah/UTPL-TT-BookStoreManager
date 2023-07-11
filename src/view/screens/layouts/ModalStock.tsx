@@ -40,8 +40,3 @@ export default function ModalStock(props: { stock: number, onButtonPress: (stock
         </View>
     );
 };
-
-const stockHandler = (cant: string, callback: (stock: number) => void) => {
-    const stock = Number(cant);
-    if (!Number.isNaN(stock)) callback(stock)
-}

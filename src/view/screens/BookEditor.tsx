@@ -16,7 +16,7 @@ import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
 import { BookEditorRouteProps } from "../routes/types.nav";
 import { globalStyles } from "../styles/styles";
-import ModalEditorFactory, { DraftModalAttributes } from "./layouts/ModalEditorFactory";
+import ModalBookFactory, { DraftModalAttributes } from "./layouts/ModalBookFactory";
 
 const EditorTop = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
@@ -162,6 +162,7 @@ const EditorMiddle = (props: {
                                 appearance={inOffer ? 'filled' : 'outline'}
                                 status={inOffer ? "primary" : 'basic'}
                                 captionFontColor={themeMode === 'dark' ? 'white' : "black"}
+                                onPress={() => { props.setModalAttributes({ modalType: 'discountPercentage', data: { grossPricePerUnit, discountPercentage } }) }}
                             >{inOffer ? discountPercentage.toString() : '0'}</StatusButton>
                             <StatusButton
                                 disabled={props.isEditorDisabled}
@@ -180,17 +181,18 @@ const EditorMiddle = (props: {
                             justifyToEnd
                             captionText={'💲'}
                             captionFontSize={25}
-                            onPress={() => props.setModalAttributes({ modalType: 'grossPricePerUnit', data: grossPricePerUnit })}
+                            onPress={() => props.setModalAttributes({ modalType: "grossPricePerUnit", data: { grossPricePerUnit } })}
                         >{grossPricePerUnit % 1 !== 0 ? grossPricePerUnit.toFixed(2) : grossPricePerUnit.toString()}</StatusButton>
                         <StatusButton
                             disabled={props.isEditorDisabled}
-                            justifyToEnd captionText={' 📦'}
+                            justifyToEnd
+                            captionText={' 📦'}
                             captionFontSize={20}
-                            onPress={() => { props.setModalAttributes({ modalType: 'stock', data: stock }) }}
+                            onPress={() => { props.setModalAttributes({ modalType: 'stock', data: { stock } }) }}
                         >{stock.toString()}</StatusButton>
                     </View>
                 </View>
-            </View>
+            </View >
     }
     </>
 }
@@ -291,12 +293,11 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     useEffect(() => {
         toggleEditor(true)
         toggleDisabledState(bookISBN !== undefined)
-        setModalVisibility(false)
         return () => { toggleEditor(false) }
     }, [])
 
     useEffect(() => {
-        setModalVisibility(modalAttributes.modalType !== '')
+        setModalVisibility(modalAttributes?.modalType !== undefined)
     }, [modalAttributes])
 
     return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'white' }]}>
@@ -304,14 +305,14 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
             visible={modalVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
         >
-            <ModalEditorFactory
-                modalType={modalAttributes.modalType}
-                data={modalAttributes.data}
+            {modalAttributes && <ModalBookFactory
+                {...modalAttributes}
                 onButtonPress={(data: number) => {
+                    if (modalAttributes.modalType === "discountPercentage") setStatusProperty('inOffer', true)
                     setStatusProperty(modalAttributes.modalType, data)
                     setModalVisibility(false)
                 }}
-            />
+            />}
         </ModalDisplay>
         <EditorTop isEditorDisabled={isEditorDisabled} />
         <EditorMiddle

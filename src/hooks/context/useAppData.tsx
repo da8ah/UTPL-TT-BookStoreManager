@@ -42,6 +42,7 @@ class AppData {
     public createDraftByISBN(isbn: string) {
         const book = this.books.find((book) => book.getIsbn() === isbn)
         if (book !== undefined) this.draft = book
+        // if (book !== undefined) this.draft = Object.assign(StockBook.prototype, book)
     }
 
     public getTransactions() {
