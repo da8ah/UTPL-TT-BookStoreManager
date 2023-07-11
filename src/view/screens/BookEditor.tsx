@@ -1,5 +1,5 @@
 import { Icon, Text, Toggle, useTheme } from "@ui-kitten/components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Image, Keyboard, StyleSheet, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
@@ -11,11 +11,12 @@ import useModal from "../../hooks/useModal";
 import ActionButton from "../components/ActionButton";
 import BookInput from "../components/BookInput";
 import DatePicker from "../components/DatePicker";
-import ModalDisplay, { ModalAttributes } from "../components/ModalDisplay";
+import ModalDisplay from "../components/ModalDisplay";
 import StatusButton from "../components/StatusButton";
 import StatusTouch from "../components/StatusTouch";
 import { BookEditorRouteProps } from "../routes/types.nav";
 import { globalStyles } from "../styles/styles";
+import ModalEditorFactory, { DraftModalAttributes } from "./layouts/ModalEditorFactory";
 
 const EditorTop = (props: { isEditorDisabled: boolean }) => {
     const [isKeyboardVisible] = useKeyboard()
@@ -56,7 +57,7 @@ const EditorTop = (props: { isEditorDisabled: boolean }) => {
 }
 
 const EditorMiddle = (props: {
-    isEditorDisabled: boolean, setModalAttributes: (modalAttributes: ModalAttributes) => any,
+    isEditorDisabled: boolean, setModalAttributes: (modalAttributes: DraftModalAttributes) => any,
     data: {
         grossPricePerUnit: number,
         inOffer: boolean,
@@ -290,36 +291,28 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     useEffect(() => {
         toggleEditor(true)
         toggleDisabledState(bookISBN !== undefined)
+        setModalVisibility(false)
         return () => { toggleEditor(false) }
     }, [])
 
     useEffect(() => {
-        setModalVisibility(modalAttributes !== undefined)
+        setModalVisibility(modalAttributes.modalType !== '')
     }, [modalAttributes])
 
     return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'white' }]}>
         <ModalDisplay
             visible={modalVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
-            modalType={modalAttributes?.modalType} data={modalAttributes?.data}
-            onButtonPress={modalAttributes?.modalType === 'grossPricePerUnit' ?
-                (grossPricePerUnit: number) => {
-                    setStatusProperty('grossPricePerUnit', grossPricePerUnit)
+        >
+            <ModalEditorFactory
+                modalType={modalAttributes.modalType}
+                data={modalAttributes.data}
+                onButtonPress={(data: number) => {
+                    setStatusProperty(modalAttributes.modalType, data)
                     setModalVisibility(false)
-                } :
-                (stock: number) => {
-                    setStatusProperty('stock', stock)
-                    setModalVisibility(false)
-                }
-            }
-        // onButtonPress={({ parteEntera, parteDecimal }) => {
-        //     const grossPricePerUnit = Number(`${parteEntera}.${parteDecimal}`);
-        //     if (!Number.isNaN(grossPricePerUnit)) {
-        //         setStatusProperty('grossPricePerUnit', grossPricePerUnit)
-        //         setModalVisibility(false)
-        //     }
-        // }}
-        />
+                }}
+            />
+        </ModalDisplay>
         <EditorTop isEditorDisabled={isEditorDisabled} />
         <EditorMiddle
             isEditorDisabled={isEditorDisabled}
