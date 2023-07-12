@@ -2,6 +2,7 @@ import Slider from "@react-native-community/slider";
 import { Button, Text } from "@ui-kitten/components";
 import { useState } from "react";
 import { View } from "react-native";
+import { globalStyles as styles } from "../../styles/styles";
 
 export default function ModalDiscount(props: { grossPricePerUnit: number, discountPercentage: number, onButtonPress: (discountPercentage: number) => void }) {
     const price = props.grossPricePerUnit;
@@ -10,7 +11,7 @@ export default function ModalDiscount(props: { grossPricePerUnit: number, discou
     const [amount, setAmount] = useState(calcAmount(price, percentage));
 
     return (
-        <View style={{ alignItems: "center", padding: 20, borderRadius: 20 }}>
+        <View style={[styles.common, { backgroundColor: 'white', padding: 20, borderRadius: 20 }]}>
             <View style={{ width: "100%", flexDirection: "row", justifyContent: "space-between" }}>
                 <Text>Descuento de {percentage}% equivale a $ </Text>
                 <Text style={{ textAlign: "left" }}>-{amount.toFixed(2)}</Text>

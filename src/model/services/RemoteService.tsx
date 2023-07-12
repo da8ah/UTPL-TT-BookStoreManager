@@ -45,9 +45,9 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     }
 
     async iniciarSesionConToken(): Promise<Admin | undefined> {
-        if (this.token === '') throw Error('Error: Token was not provided!')
-
         try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
             let admin
             const httpContent = {
                 method: "GET",
@@ -67,39 +67,84 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
 
     // BOOKS
     async guardarLibroNuevo(stockBook: StockBook): Promise<{ duplicado: boolean; creado: boolean; }> {
-        throw new Error("Method not implemented.");
+        try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
+            const httpContent = {
+                method: "POST",
+                headers: {
+                    Authorization: this.token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(stockBook),
+            };
+            return await fetch(this.apiBooks, httpContent).then((res) => res.json()).then((body) => body);
+        } catch (error) {
+            console.error(error);
+            return { duplicado: false, creado: false }
+        }
     }
     async obtenerLibrosEnStock(): Promise<StockBook[]> {
-        if (this.token === '') throw Error('Error: Token was not provided!')
-
         try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
             const httpContent = {
                 method: "GET",
                 headers: {
-                    Authorization: this.token,
-                },
+                    Authorization: this.token
+                }
             };
             let data: StockBook[] = await fetch(this.apiBooks, httpContent)
                 .then((res) => res.json())
-                .then((data) => data.map((item: StockBook) => BookConverter.jsonToBook(item)));
+                .then((body) => body.map((item: StockBook) => BookConverter.jsonToBook(item)));
             return data;
         } catch (error) {
             console.error(error);
             return [];
         }
     }
-    async actualizarLibro(stockBook: StockBook, originalStockBookToChangeISBN?: StockBook | undefined): Promise<boolean> {
-        throw new Error("Method not implemented.");
+    async actualizarLibro(stockBook: StockBook, originalStockBookToChangeISBN?: string): Promise<boolean> {
+        try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
+            const httpContent = {
+                method: "PUT",
+                headers: {
+                    Authorization: this.token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(stockBook),
+            }
+
+            if (originalStockBookToChangeISBN) return await fetch(`${this.apiBooks}/${originalStockBookToChangeISBN}`, httpContent).then((res) => res.ok);
+            return await fetch(`${this.apiBooks}/${stockBook.getIsbn()}`, httpContent).then((res) => res.ok);
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
     async eliminarLibro(stockBook: StockBook): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
+            const httpContent = {
+                method: "DELETE",
+                headers: {
+                    Authorization: this.token
+                }
+            };
+            return await fetch(`${this.apiBooks}/${stockBook.getIsbn()}`, httpContent).then((res) => res.ok);
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     }
 
     // TRANSACTIONS
     async obtenerTodasLasTransacciones(): Promise<CardTransaction[]> {
-        if (this.token === '') throw Error('Error: Token was not provided!')
-
         try {
+            if (this.token === '') throw Error('Error: Token was not provided!')
+
             const httpContent = {
                 method: "GET",
                 headers: {
@@ -108,7 +153,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
             };
             let data: CardTransaction[] = await fetch(`${this.apiTransactions}`, httpContent)
                 .then((res) => res.json())
-                .then((data) => data.map((item: CardTransaction) => TransactionConverter.jsonToCardTransaction(item)));
+                .then((body) => body.map((item: CardTransaction) => TransactionConverter.jsonToCardTransaction(item)));
 
             return data;
         } catch (error) {

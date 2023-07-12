@@ -99,6 +99,25 @@ class AppViewModel {
         if (this.remoteService === undefined) return
         this.transactions = (await GestionDeTransacciones.listarTodasLasTransacciones(this.remoteService)) as CardTransaction[]
     }
+
+    async saveBook() {
+        if (this.remoteService === undefined) return
+        return GestionDeLibros.crearLibro(this.remoteService, this.draft)
+    }
+    async updateBook(bookISBN: string) {
+        if (this.remoteService === undefined) return
+
+        if (bookISBN === this.draft.getIsbn())
+            return GestionDeLibros.actualizarLibro(this.remoteService, this.draft)
+
+        const original = this.books.find(book => book.getIsbn() === bookISBN)
+        return GestionDeLibros.actualizarLibro(this.remoteService, this.draft, original)
+    }
+    async deleteBook(bookISBN: string) {
+        if (this.remoteService === undefined) return
+        const book = this.books.find(book => book.getIsbn() === bookISBN)
+        return book && GestionDeLibros.eliminarLibro(this.remoteService, book)
+    }
 }
 
 class Cloner {

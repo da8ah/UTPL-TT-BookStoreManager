@@ -1,12 +1,13 @@
 import { Button, Input, Text } from "@ui-kitten/components";
 import { useState } from "react";
 import { Keyboard, View } from "react-native";
+import { globalStyles as styles } from "../../styles/styles";
 
 export default function ModalStock(props: { stock: number, onButtonPress: (stock: number) => void }) {
     const [cant, setCant] = useState(props.stock.toFixed());
 
     return (
-        <View style={{ alignItems: "center", padding: 20, borderRadius: 20 }}>
+        <View style={[styles.common, { backgroundColor: 'white', padding: 20, borderRadius: 20 }]}>
             <View style={{ flexDirection: "row", justifyContent: "center" }}>
                 <Text style={{ textAlign: "right" }}>Cantidad de Artículos</Text>
                 <Text style={{ width: "20%", textAlign: "center" }}>{Number(cant) !== 0 ? cant : "0"}</Text>

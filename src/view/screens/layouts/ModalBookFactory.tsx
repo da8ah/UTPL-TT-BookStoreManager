@@ -1,8 +1,9 @@
+import { ModalAttributes } from "../../components/ModalDisplay"
 import ModalDiscount from "./ModalDiscount"
 import ModalPrice from "./ModalPrice"
 import ModalStock from "./ModalStock"
 
-type ModalDiscountType = {
+interface ModalDiscountType extends ModalAttributes {
     modalType: 'discountPercentage',
     data: {
         discountPercentage: number,
@@ -10,7 +11,7 @@ type ModalDiscountType = {
         stock?: never
     }
 }
-type ModalPriceType = {
+interface ModalPriceType extends ModalAttributes {
     modalType: 'grossPricePerUnit',
     data: {
         discountPercentage?: never,
@@ -18,7 +19,7 @@ type ModalPriceType = {
         stock?: never
     }
 }
-type ModalStockType = {
+interface ModalStockType extends ModalAttributes {
     modalType: 'stock',
     data: {
         discountPercentage?: never,

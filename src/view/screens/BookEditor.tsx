@@ -13,7 +13,7 @@ import { globalStyles } from "../styles/styles";
 import EditorBasicData from "./layouts/EditorBasicData";
 import EditorBottom from "./layouts/EditorBottom";
 import EditorStatus from "./layouts/EditorStatus";
-import ModalBookFactory from "./layouts/ModalBookFactory";
+import ModalBookFactory, { DraftModalAttributes } from "./layouts/ModalBookFactory";
 
 export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     const { themeMode } = useContext(ThemeContext)
@@ -23,7 +23,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     const bookISBN = route.params?.bookISBN
     const { isEditorOpen, toggleEditor } = useContext(EditorContext)
     const [isEditorDisabled, toggleDisabledState] = useEditor()
-    const [modalAttributes, setModalAttributes, modalVisibility, setModalVisibility] = useModal()
+    const [modalAttributes, setModalAttributes, modalVisibility, setModalVisibility] = useModal<DraftModalAttributes>()
     const [
         isbn,
         title,
@@ -99,7 +99,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
             }}
         />
         <EditorBottom
-            isNew={bookISBN === undefined}
+            bookISBN={bookISBN}
             isEditorDisabled={isEditorDisabled}
             toggleDisabledState={toggleDisabledState}
             data={{
