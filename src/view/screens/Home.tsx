@@ -1,7 +1,7 @@
 import { List, ListProps } from "@ui-kitten/components";
 import { useEffect, useMemo, useState } from "react";
 import { Keyboard, View } from "react-native";
-import useAppData from "../../hooks/context/useAppData";
+import useAppViewModel from "../../hooks/context/useAppViewModel";
 import StockBook from "../../model/core/entities/StockBook";
 import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
@@ -32,24 +32,22 @@ const BookStore = (props: { books: StockBook[] } & Omit<ListProps, 'data' | 'ren
 };
 
 export default function Home() {
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const [query, setQuey] = useState('')
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
     useEffect(() => { }, [query])
 
     const books = useMemo(() => {
-        return data.getBooks().filter((book) => {
+        return vimo.getBooks().filter((book) => {
             return book.getAuthor().toLowerCase().includes(query.toLowerCase())
         })
-    }, [data.getBooks(), query])
+    }, [vimo.getBooks(), query])
 
-    const queryDataFromServer = () => {
+    const queryData = async () => {
         setRefreshing(true);
-        setTimeout(async () => {
-            await data.loadFromDataBase()
-            setRefreshing(false);
-        }, 2000);
+        await vimo.queryBooksFromService()
+        setRefreshing(false);
     };
 
     const CloseIcon = (<EmptyIcon onPress={() => setQuey('')} />)
@@ -63,7 +61,7 @@ export default function Home() {
         <BookStore
             books={books}
             refreshing={refreshing}
-            onRefresh={queryDataFromServer}
+            onRefresh={queryData}
             onScroll={() => Keyboard.dismiss()}
         />
     </View>

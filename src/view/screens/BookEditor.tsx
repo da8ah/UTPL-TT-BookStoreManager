@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { Keyboard, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
-import useAppData from "../../hooks/context/useAppData";
+import useAppViewModel from "../../hooks/context/useAppViewModel";
 import useDraft from "../../hooks/useDraft";
 import useEditor from "../../hooks/useEditor";
 import useModal from "../../hooks/useModal";
@@ -19,7 +19,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
 
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const bookISBN = route.params?.bookISBN
     const { isEditorOpen, toggleEditor } = useContext(EditorContext)
     const [isEditorDisabled, toggleDisabledState] = useEditor()
@@ -43,7 +43,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         recent,
         setBasicProperty,
         setStatusProperty
-    ] = useDraft(data.getDraft())
+    ] = useDraft(vimo.getDraft())
 
     useEffect(() => {
         toggleEditor(true)

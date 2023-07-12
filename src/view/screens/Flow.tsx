@@ -1,12 +1,11 @@
 import { List, ListProps } from "@ui-kitten/components";
 import { useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
-import useAppData from "../../hooks/context/useAppData";
+import { Keyboard, View } from "react-native";
+import useAppViewModel from "../../hooks/context/useAppViewModel";
 import { CardTransaction } from "../../model/core/entities/CardTransaction";
 import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
 import TransactionCard from "./layouts/TransactionCard";
-import { Keyboard } from "react-native";
 
 const TransactionsLayout = (props: { transactions: CardTransaction[] } & Omit<ListProps, 'data' | 'renderItem'>) => {
     const transactions = props.transactions
@@ -31,22 +30,23 @@ const TransactionsLayout = (props: { transactions: CardTransaction[] } & Omit<Li
 };
 
 export default function Flow() {
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const [query, setQuey] = useState('')
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
+    useEffect(() => { queryData() }, [])
     useEffect(() => { }, [query])
 
     const transactions = useMemo(() => {
-        return data.getTransactions().filter((transaction) => {
+        return vimo.getTransactions().filter((transaction) => {
             return transaction.getId().toLowerCase().includes(query.toLowerCase())
         })
-    }, [data.getTransactions(), query])
+    }, [vimo.getTransactions(), query])
 
-    const queryDataFromServer = () => {
+    const queryData = async () => {
         setRefreshing(true);
         setTimeout(async () => {
-            await data.loadFromDataBase()
+            await vimo.queryTransactionsFromService()
             setRefreshing(false);
         }, 2000);
     };
@@ -61,9 +61,9 @@ export default function Flow() {
                 onChangeText={input => setQuey(input)}
             />
             <TransactionsLayout
-                transactions={transactions}
+                transactions={transactions.reverse()}
                 refreshing={refreshing}
-                onRefresh={queryDataFromServer}
+                onRefresh={queryData}
                 onScroll={() => Keyboard.dismiss()}
             />
         </View>

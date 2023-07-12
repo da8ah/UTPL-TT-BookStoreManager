@@ -1,14 +1,13 @@
 import { useState } from "react";
-import useAppData from "./useAppData";
+import Admin from "../../model/core/entities/Admin";
+import useAppViewModel from "./useAppViewModel";
 
 export const useAuthCTX = () => {
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const [isAuth, setAuth] = useState(false);
-    const tryToAuth = async (user: string, password: string) => {
-        setTimeout(async () => {
-            await data.login(user, password)
-            setAuth(true);
-        }, 2000);
+    const tryToAuth = async (credentials?: { user: string, password: string }) => {
+        if (credentials === undefined) setAuth(await vimo.login())
+        else setAuth(await vimo.login(new Admin(credentials.user, '', '', '', credentials.password)))
     }
     const logout = () => {
         setAuth(false);

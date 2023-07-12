@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
+import { memo } from "react";
 import { Image, ListRenderItemInfo, ScrollView, StyleSheet, View } from "react-native";
-import useAppData from "../../../hooks/context/useAppData";
+import useAppViewModel from "../../../hooks/context/useAppViewModel";
 import StockBook from "../../../model/core/entities/StockBook";
 import { RootNavProps } from "../../routes/types.nav";
 
@@ -79,7 +80,7 @@ const CardBottom = (props: { title: string; isbn: string; author: string; price:
 
 const ButtonIcon = () => <Icon name="settings" fill="white" height="15" width="15" />;
 const CardButton = (props: { bookISBN: string }) => {
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const navigation = useNavigation<RootNavProps>();
     return (
         <View style={[styles.common, styles.buttonLayout]}>
@@ -89,7 +90,7 @@ const CardButton = (props: { bookISBN: string }) => {
                 status="info"
                 accessoryLeft={ButtonIcon}
                 onPress={() => {
-                    data.createDraftByISBN(props.bookISBN)
+                    vimo.createDraftByISBN(props.bookISBN)
                     navigation.navigate("BookEditor", { bookISBN: props.bookISBN })
                 }}
             >
@@ -103,7 +104,7 @@ const CardButton = (props: { bookISBN: string }) => {
 export default function BookCard(info: ListRenderItemInfo<StockBook>) {
     return <CardElement info={info} />
 };
-const CardElement = (props: { info: any }) => {
+const CardElement = memo((props: { info: any }) => {
     const theme = useTheme()
     const book = props.info.item
     return (
@@ -128,7 +129,7 @@ const CardElement = (props: { info: any }) => {
             <CardButton bookISBN={book.getIsbn()} />
         </View>
     );
-}
+})
 
 const transparent = "transparent";
 

@@ -2,10 +2,10 @@ import Admin from "../../entities/Admin";
 
 export type IPersistenciaCuentaLocal = {
 	almacenarTokenEnLocal(token: string): Promise<boolean>;
-	obtenerTokenAlmacenado(key: string): Promise<string>;
+	obtenerTokenAlmacenado(): Promise<string | undefined>;
 }
 
 export default interface IPersistenciaCuenta {
-	iniciarSesion(admin: Admin): Promise<{ user: Admin, token: string }>;
-	iniciarSesionConToken(token: string): Promise<Admin | undefined>;
+	iniciarSesion(admin: Admin): Promise<{ user: Admin, token: string } | undefined>;
+	iniciarSesionConToken(token?: string): Promise<Admin | undefined>;
 }

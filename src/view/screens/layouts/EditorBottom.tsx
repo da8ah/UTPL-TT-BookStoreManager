@@ -4,7 +4,7 @@ import useKeyboard from "../../../hooks/useKeyboard"
 import ActionButton from "../../components/ActionButton"
 import BookInput from "../../components/BookInput"
 import { globalStyles as styles } from "../../styles/styles"
-import useAppData from "../../../hooks/context/useAppData"
+import useAppViewModel from "../../../hooks/context/useAppViewModel"
 
 export default function EditorBottom(props: {
     isNew: boolean
@@ -22,7 +22,7 @@ export default function EditorBottom(props: {
         setBasicProperty
     } = props.data
 
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const [isKeyboardVisible] = useKeyboard()
     const theme = useTheme()
     const bottomButtons = [
@@ -38,21 +38,21 @@ export default function EditorBottom(props: {
             width: 70,
             iconName: "slash",
             backgroundColor: theme['color-warning-500'],
-            onPress: () => { props.toggleDisabledState(true); console.log(data.getDraft()) }
+            onPress: () => { props.toggleDisabledState(true); console.log(vimo.getDraft()) }
         },
         {
             disabled: props.isEditorDisabled,
             width: 70,
             iconName: "trash-2",
             backgroundColor: theme['color-danger-500'],
-            onPress: () => console.log(data.getDraft())
+            onPress: () => console.log(vimo.getDraft())
         },
         {
             disabled: props.isEditorDisabled,
             width: 90,
             iconName: "save",
             backgroundColor: theme['color-success-500'],
-            onPress: () => console.log(data.getDraft())
+            onPress: () => console.log(vimo.getDraft())
         },
     ]
     return <View style={[styles.common, { zIndex: 1, flex: 5, padding: 5, backgroundColor: 'transparent', justifyContent: "space-around", alignItems: 'stretch' }]}>

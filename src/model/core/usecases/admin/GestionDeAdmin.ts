@@ -9,8 +9,7 @@ export default class GestionDeAdmin {
 	}
 
 	public static async iniciarSesionConToken(iPersistenciaCuenta: IPersistenciaCuenta, iPersistenciaCuentaLocal: IPersistenciaCuentaLocal): Promise<Admin | undefined> {
-		const key = ''
-		const token = await iPersistenciaCuentaLocal.obtenerTokenAlmacenado(key)
+		const token = await iPersistenciaCuentaLocal.obtenerTokenAlmacenado()
 		return await iPersistenciaCuenta.iniciarSesionConToken(token)
 	}
 }

@@ -2,7 +2,7 @@ import { Icon, Text, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { KeyboardAvoidingView, View } from "react-native";
 import { AuthContext } from "../../hooks/context/AuthContext";
-import useAppData from "../../hooks/context/useAppData";
+import useAppViewModel from "../../hooks/context/useAppViewModel";
 import useKeyboard from "../../hooks/useKeyboard";
 import ActionButton from "../components/ActionButton";
 import FormInput from "../components/FormInput";
@@ -10,7 +10,7 @@ import RoundButton from "../components/RoundButton";
 import { globalStyles as styles } from "../styles/styles";
 
 export default function User() {
-    const user = useAppData().data.getUser()
+    const user = useAppViewModel().vimo.getUser()
     const [isKeyboardVisible] = useKeyboard()
     const { logout } = useContext(AuthContext)
     const theme = useTheme()

@@ -3,11 +3,11 @@ import { Button, Icon, useTheme } from "@ui-kitten/components";
 import { useContext } from "react";
 import { Keyboard } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
-import useAppData from "../../hooks/context/useAppData";
+import useAppViewModel from "../../hooks/context/useAppViewModel";
 import { RootNavProps } from "../routes/types.nav";
 
 export default function BookEditorToggle() {
-    const { data } = useAppData()
+    const { vimo } = useAppViewModel()
     const { isEditorOpen } = useContext(EditorContext)
     const navigation = useNavigation<RootNavProps>()
     const theme = useTheme()
@@ -21,7 +21,7 @@ export default function BookEditorToggle() {
         accessoryLeft={isEditorOpen ? Close : Open}
         style={{ flexDirection: 'column', borderWidth: 0 }}
         onPress={() => {
-            if (!isEditorOpen) data.createDraft()
+            if (!isEditorOpen) vimo.createDraft()
             if (Keyboard.isVisible()) {
                 Keyboard.dismiss()
                 setTimeout(() => {

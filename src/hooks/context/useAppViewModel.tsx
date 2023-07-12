@@ -7,24 +7,27 @@ import Cart from "../../model/core/entities/Cart";
 import Client from "../../model/core/entities/Client";
 import StockBook from "../../model/core/entities/StockBook";
 import ToBuyBook from "../../model/core/entities/ToBuyBook";
+import GestionDeAdmin from "../../model/core/usecases/admin/GestionDeAdmin";
 import GestionDeLibros from "../../model/core/usecases/admin/GestionDeLibros";
 import GestionDeTransacciones from "../../model/core/usecases/admin/GestionDeTransacciones";
+import LocalService from "../../model/services/LocalService";
 import RemoteService from "../../model/services/RemoteService";
 
-export default function useAppData() {
-    const [data] = useState<AppData>(AppData.getInstance());
-    return { data }
+export default function useAppViewModel() {
+    const [vimo] = useState<AppViewModel>(AppViewModel.getInstance());
+    return { vimo }
 }
 
-class AppData {
+class AppViewModel {
 
     // Singleton
-    private static instance: AppData | null = null;
+    private static instance: AppViewModel | null = null;
     static getInstance() {
-        if (!AppData.instance) AppData.instance = new AppData();
-        return AppData.instance;
+        if (!AppViewModel.instance) AppViewModel.instance = new AppViewModel();
+        return AppViewModel.instance;
     }
 
+    // STATE
     private draft = new StockBook('', '', '', '', '', '', '');
     private books: StockBook[] = []
     private transactions: CardTransaction[] = []
@@ -59,15 +62,42 @@ class AppData {
         return this.user
     }
 
-    async login(user: string, password: string) {
-        // this.user = await GestionDeAdmin.iniciarSesionConUserPassword();
-        this.user = new Admin('tiber', 'tiber', 'tiber@mail.com', '+5930000000001', '')
-        await this.loadFromDataBase()
+    // SERVICES
+    private localService: LocalService = new LocalService()
+    private remoteService: RemoteService = new RemoteService()
+    private constructor() {
+        this.setService()
+    }
+    public async setService() {
+        this.remoteService.setToken(await this.localService.obtenerTokenAlmacenado() || '')
     }
 
-    async loadFromDataBase() {
-        this.books = await GestionDeLibros.listarCatalogoDeLibrosEnStock(new RemoteService())
-        this.transactions = await GestionDeTransacciones.listarTodasLasTransacciones(new RemoteService()) as CardTransaction[]
+    async login(admin?: Admin) {
+        try {
+            const user = admin === undefined ?
+                await GestionDeAdmin.iniciarSesionConToken(this.remoteService, this.localService)
+                :
+                await GestionDeAdmin.iniciarSesionConUserPassword(this.remoteService, this.localService, new Admin(admin.getUser(), '', '', '', admin.getPassword()))
+            if (user !== undefined) {
+                this.user = user
+                this.setService()
+                await this.queryBooksFromService()
+                return true
+            }
+            return false
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+
+    async queryBooksFromService() {
+        if (this.remoteService === undefined) return
+        this.books = await GestionDeLibros.listarCatalogoDeLibrosEnStock(this.remoteService)
+    }
+    async queryTransactionsFromService() {
+        if (this.remoteService === undefined) return
+        this.transactions = (await GestionDeTransacciones.listarTodasLasTransacciones(this.remoteService)) as CardTransaction[]
     }
 }
 

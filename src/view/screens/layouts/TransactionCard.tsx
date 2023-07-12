@@ -1,8 +1,8 @@
 import { Button, Divider, Icon, Text, useTheme } from "@ui-kitten/components";
+import { memo, useContext } from "react";
 import { ListRenderItemInfo, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { CardTransaction } from "../../../model/core/entities/CardTransaction";
-import { useContext } from "react";
 import { ThemeContext } from "../../../hooks/context/ThemeContext";
+import { CardTransaction } from "../../../model/core/entities/CardTransaction";
 
 const CardHeader = (props: { id: string, date: string }) => (
     <View style={[styles.transparentBackground, styles.cardHeader]}>
@@ -98,7 +98,7 @@ const CardButton = (props: { itemIndex: number }) => {
 export default function TransactionCard(info: ListRenderItemInfo<CardTransaction>) {
     return <CardElement info={info} />
 };
-const CardElement = (props: { info: any }) => {
+const CardElement = memo((props: { info: any }) => {
     const { themeMode } = useContext(ThemeContext)
     const theme = useTheme()
     const { info } = props
@@ -127,8 +127,7 @@ const CardElement = (props: { info: any }) => {
             <CardButton itemIndex={info.index} />
         </View>
     );
-
-}
+})
 
 const transparent = "transparent";
 
