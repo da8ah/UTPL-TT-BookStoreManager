@@ -66,7 +66,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     }
 
     // BOOKS
-    async guardarLibroNuevo(stockBook: StockBook): Promise<{ duplicado: boolean; creado: boolean; }> {
+    async guardarLibroNuevo(stockBook: StockBook): Promise<{ duplicado?: boolean; creado?: boolean; }> {
         try {
             if (this.token === '') throw Error('Error: Token was not provided!')
 
@@ -78,10 +78,10 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
                 },
                 body: JSON.stringify(stockBook),
             };
-            return await fetch(this.apiBooks, httpContent).then((res) => res.json()).then((body) => body);
+            return await fetch(this.apiBooks, httpContent).then((res) => res.json()).then((body) => { console.log(body); return body });
         } catch (error) {
             console.error(error);
-            return { duplicado: false, creado: false }
+            return { duplicado: undefined, creado: undefined }
         }
     }
     async obtenerLibrosEnStock(): Promise<StockBook[]> {

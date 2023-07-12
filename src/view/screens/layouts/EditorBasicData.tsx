@@ -62,7 +62,7 @@ export default function EditorBasicData(props: {
                     <BookInput disabled={props.isEditorDisabled} title={"Título"} defaultValue={title} onChangeText={input => setBasicProperty('title', input)} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput disabled={props.isEditorDisabled} title={"ISBN"} defaultValue={isbn} onChangeText={input => setBasicProperty('isbn', input)} />
+                    <BookInput disabled={props.isEditorDisabled} keyboardType="number-pad" title={"ISBN"} defaultValue={isbn} onChangeText={input => setBasicProperty('isbn', input)} />
                 </View>
                 <View style={styles.inputLayout}>
                     <BookInput disabled={props.isEditorDisabled} title={"Autor"} defaultValue={author} onChangeText={input => setBasicProperty('author', input)} />

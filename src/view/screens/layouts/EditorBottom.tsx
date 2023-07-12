@@ -1,8 +1,10 @@
 import { Icon, Text, useTheme } from "@ui-kitten/components"
+import { useEffect } from "react"
 import { Keyboard, View } from "react-native"
 import useAppViewModel from "../../../hooks/context/useAppViewModel"
 import useKeyboard from "../../../hooks/useKeyboard"
 import useModal from "../../../hooks/useModal"
+import { InputValidator } from "../../../utils/validations"
 import ActionButton from "../../components/ActionButton"
 import BookInput from "../../components/BookInput"
 import ModalDisplay from "../../components/ModalDisplay"
@@ -57,9 +59,7 @@ export default function EditorBottom(props: {
             iconName: "trash-2",
             backgroundColor: theme['color-danger-500'],
             onPress: () => {
-                props.bookISBN && setConfirmationAttrs({ modalType: "delete", data: { bookISBN: props.bookISBN } })
-                //props.bookISBN && vimo.deleteBook(props.bookISBN)
-                setAlertVisibility(false)
+                props.bookISBN && setConfirmationAttrs({ modalType: "delete" })
                 setConfirmationVisibility(true)
             }
         },
@@ -71,6 +71,11 @@ export default function EditorBottom(props: {
             onPress: () => console.log(props.bookISBN)//props.bookISBN && vimo.updateBook(props.bookISBN)
         },
     ]
+
+    // If one Modal is Open close the other
+    useEffect(() => { if (confirmationVisibility) setAlertVisibility(false) }, [confirmationVisibility])
+    useEffect(() => { if (alertVisibility) setConfirmationVisibility(false) }, [alertVisibility])
+
     return <View style={[styles.common, { zIndex: 1, flex: 5, padding: 5, backgroundColor: 'transparent', justifyContent: "space-around", alignItems: 'stretch' }]}>
         <View>
             <BookInput disabled={props.isEditorDisabled} textarea title="Descripción" defaultValue={description} onChangeText={input => setBasicProperty('description', input)} />
@@ -80,7 +85,10 @@ export default function EditorBottom(props: {
                 <ActionButton
                     icon={() => <Icon name="save" fill="white" height="30" width="30" />}
                     backgroundColor={theme['color-success-500']}
-                    onPress={() => vimo.saveBook()}
+                    onPress={() => {
+                        setConfirmationAttrs({ modalType: "save" })
+                        setConfirmationVisibility(true)
+                    }}
                 />
                 :
                 bottomButtons.map((button, index) => {
@@ -104,26 +112,58 @@ export default function EditorBottom(props: {
             visible={confirmationVisibility || alertVisibility}
             onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setConfirmationVisibility(false); setAlertVisibility(false) }}
         >
-            {/* {confirmationVisibility && !alertVisibility ?
+            {confirmationVisibility && !alertVisibility ?
                 confirmationAttrs && <ConfirmationFactory
                     {...confirmationAttrs}
-                    onButtonPress={() => {
-                        if (confirmationAttrs.modalType === "delete") {
-                            setConfirmationVisibility(false)
-                            setAlertAttrs({ modalType: "failed" })
-                            setAlertVisibility(true)
+                    onButtonPress={async () => {
+                        if (confirmationAttrs.modalType === "save") {
+                            if (!InputValidator.validateStockBook(vimo.getDraft())) {
+                                setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'Compruebe los datos incorrectos' } })
+                                setAlertVisibility(true)
+                                return
+                            }
+
+                            const result = await vimo.saveBook()
+                            if (result === undefined) {
+                                setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'Servicio no cargado, intente reiniciar' } })
+                                setAlertVisibility(true)
+                                return
+                            }
+                            if (result.creado === undefined && result.duplicado === undefined) {
+                                setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'Error en la petición al Servidor' } })
+                                setAlertVisibility(true)
+                                return
+                            }
+                            if (result.duplicado) {
+                                setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'El registro está duplicado' } })
+                                setAlertVisibility(true)
+                                return
+                            }
+                            if (!(result.creado && result.duplicado)) {
+                                setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'El Servidor no pudo guardar el registro' } })
+                                setAlertVisibility(true)
+                                return
+                            }
+                            if (result.creado && !result.duplicado) {
+                                setAlertAttrs({ modalType: "success", data: { title: 'Registro Actualizado', message: 'Se redireccionará al Inicio' } })
+                                setAlertVisibility(true)
+                                return
+                            }
                         }
+
+                        if (confirmationAttrs.modalType === "update") {
+
+                        }
+                        if (confirmationAttrs.modalType === "delete") {
+                            // setAlertAttrs({ modalType: "failed", data: { message: 'El registro no pudo ser eliminado'} })
+                            // setAlertVisibility(true)
+                            //await vimo.deleteBook(props.bookISBN)
+                        }
+
+                        setConfirmationVisibility(false)
                     }}
                 />
                 : alertAttrs && <AlertFactory
-                    {...alertAttrs}
-                    onButtonPress={() => {
-                        setAlertVisibility(false)
-                    }}
-                />
-            } */}
-            {
-                alertAttrs && <AlertFactory
                     {...alertAttrs}
                     onButtonPress={() => {
                         setAlertVisibility(false)
