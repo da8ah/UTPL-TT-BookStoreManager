@@ -1,19 +1,11 @@
 import { Button, Icon, Text, useTheme } from "@ui-kitten/components";
 import { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, KeyboardAvoidingView, TouchableWithoutFeedback, View } from "react-native";
+import { KeyboardAvoidingView, TouchableWithoutFeedback, View } from "react-native";
 import { AuthContext } from "../../hooks/context/AuthContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import FormInput from "../components/FormInput";
+import LoadingAlert from "../components/LoadingAlert";
 import { globalStyles as styles } from "../styles/styles";
-
-const LoadingAlert = () => (
-    <>
-        <Text status='info' appearance='hint' style={{ fontSize: 10, fontStyle: "italic", textTransform: "uppercase" }}>
-            Loading
-        </Text>
-        <ActivityIndicator />
-    </>
-);
 
 export default function SignIn() {
     const { tryToAuth } = useContext(AuthContext)
@@ -22,7 +14,8 @@ export default function SignIn() {
     const [isLoading, setLoading] = useState(false)
     useEffect(() => { }, [isLoading])
 
-    const [password, setPassword] = useState<string>('');
+    const [user, setUser] = useState<string>('tiber');
+    const [password, setPassword] = useState<string>('tiber');
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const togglePasswordVisibility = () => {
         setSecureTextEntry(!secureTextEntry);
@@ -44,8 +37,19 @@ export default function SignIn() {
                     </View>
                     <KeyboardAvoidingView style={{ flex: 2, width: "100%", alignItems: "center" }} behavior="padding">
                         <View style={{ width: '80%' }}>
-                            <FormInput isTop keyboardType="email-address" textContentType="emailAddress" formColor={theme['background-basic-color-2']} title="Usuario" placeholder="Usuario" />
                             <FormInput
+                                disabled
+                                isTop
+                                keyboardType="email-address"
+                                textContentType="emailAddress"
+                                formColor={theme['background-basic-color-2']}
+                                title="Usuario"
+                                placeholder="Usuario"
+                                defaultValue={user}
+                                onChangeText={input => setUser(input)}
+                            />
+                            <FormInput
+                                disabled
                                 isBottom
                                 formColor={theme['background-basic-color-2']}
                                 textContentType="password"
@@ -53,20 +57,19 @@ export default function SignIn() {
                                 secureTextEntry={secureTextEntry}
                                 title="Clave"
                                 placeholder="Clave"
-                                value={password}
+                                defaultValue={password}
                                 onChangeText={input => setPassword(input)}
                             />
                         </View>
                         <View style={[styles.common, { justifyContent: 'flex-start', width: '100%', marginVertical: 30 }]}>
                             <Button
+                                testID="button-auth"
                                 accessoryRight={() => <Icon name="log-in" fill="white" height="20" width="20" />}
                                 style={[{ width: '70%', backgroundColor: theme['color-info-500'], borderWidth: 0 }]}
-                                onPress={() => {
+                                onPress={async () => {
                                     setLoading(true)
-                                    tryToAuth()
-                                    setTimeout(() => {
-                                        setLoading(false)
-                                    }, 2000);
+                                    await tryToAuth({ user, password })
+                                    setLoading(false)
                                 }}
                             >
                                 INICIAR SESIÓN

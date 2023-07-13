@@ -16,7 +16,6 @@ const BookStore = (props: { books: StockBook[] } & Omit<ListProps, 'data' | 'ren
             <List
                 {...props}
                 scrollEnabled
-                testID='books'
                 key={"books"}
                 style={{ backgroundColor: "transparent" }}
                 contentContainerStyle={{ backgroundColor: "transparent" }}
@@ -64,6 +63,7 @@ export default function Home() {
             onChangeText={input => setQuey(input)}
         />
         <BookStore
+            testID='books'
             books={books}
             refreshing={refreshing}
             onRefresh={queryData}
