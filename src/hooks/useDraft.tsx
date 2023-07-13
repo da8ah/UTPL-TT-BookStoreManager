@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import StockBook from "../model/core/entities/StockBook"
 
 export default function useDraft(initialValue: StockBook) {
-    const [book] = useState<StockBook>(initialValue)
+    const [book, setBook] = useState<StockBook>(initialValue)
     const [isbn, setIsbn] = useState(book.getIsbn())
     // const [imgRef, setImgRef] = useState(book.getImgRef())
     const [title, setTitle] = useState(book.getTitle())
@@ -21,10 +21,29 @@ export default function useDraft(initialValue: StockBook) {
     const [bestSeller, setBestSeller] = useState(book.isBestSeller())
     const [recent, setRecent] = useState(book.isRecent())
 
+    useEffect(() => {
+        setIsbn(book.getIsbn())
+        setTitle(book.getTitle())
+        setAuthor(book.getAuthor())
+        setReleaseDate(book.getReleaseDate())
+        setCreatedDate(book.getCreatedDate())
+        setDescription(book.getDescription())
+        setGrossPricePerUnit(book.getGrossPricePerUnit())
+        setInOffer(book.isInOffer())
+        setDiscountPercentage(book.getDiscountPercentage())
+        setHasIva(book.itHasIva())
+        setIvaPercentage(book.getIvaPercentage())
+        setStock(book.getStock())
+        setVisible(book.isVisible())
+        setRecommended(book.isRecommended())
+        setBestSeller(book.isBestSeller())
+        setRecent(book.isRecent())
+    }, [book])
+
     function setBasicProperty(propName: string, value: string) {
         switch (propName) {
             case 'isbn':
-                book.setIsbn(value)
+                book.setIsbn(value.trim())
                 setIsbn(value)
                 break;
             // case 'imgRef':
@@ -32,23 +51,23 @@ export default function useDraft(initialValue: StockBook) {
             //     setImgRef(value)
             //     break;
             case 'title':
-                book.setTitle(value)
+                book.setTitle(value.trim())
                 setTitle(value)
                 break;
             case 'author':
-                book.setAuthor(value)
+                book.setAuthor(value.trim())
                 setAuthor(value)
                 break;
             case 'releaseDate':
-                book.setReleaseDate(value)
+                book.setReleaseDate(value.trim())
                 setReleaseDate(value)
                 break;
             case 'createdDate':
-                book.setCreatedDate(value)
+                book.setCreatedDate(value.trim())
                 setCreatedDate(value)
                 break;
             case 'description':
-                book.setDescription(value)
+                book.setDescription(value.trim())
                 setDescription(value)
                 break;
         }
@@ -108,6 +127,7 @@ export default function useDraft(initialValue: StockBook) {
         recommended,
         bestSeller,
         recent,
+        setBook,
         setBasicProperty,
         setStatusProperty
     ] as const

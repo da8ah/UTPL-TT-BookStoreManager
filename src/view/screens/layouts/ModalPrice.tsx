@@ -2,6 +2,7 @@ import { Button, Input, Text } from "@ui-kitten/components";
 import { useState } from "react";
 import { Keyboard, View } from "react-native";
 import { globalStyles as styles } from "../../styles/styles";
+import { patterns } from "../../../utils/validations";
 
 export default function ModalPrice(props: { grossPricePerUnit: number, onButtonPress: (grossPricePerUnit: number) => void }) {
     const [parteEntera, setParteEntera] = useState(props.grossPricePerUnit.toFixed(2).split(".")[0]);
@@ -23,11 +24,11 @@ export default function ModalPrice(props: { grossPricePerUnit: number, onButtonP
                     defaultValue={parteEntera}
                     value={parteEntera}
                     onChangeText={(newInt) => {
-                        const regex = new RegExp(/^\d{0,3}$/);
+                        const regex = new RegExp(patterns.ModalInputs.GROSS_PRICE_PER_UNIT_ENTERO);
                         if (!Number.isNaN(Number(newInt)) && regex.test(newInt)) setParteEntera(newInt);
                     }}
                 />
-                <Text style={{ textAlignVertical: "bottom" }}> . </Text>
+                <Text style={{ color: 'black', textAlignVertical: "bottom" }}> . </Text>
                 <Input
                     selectTextOnFocus
                     keyboardType="phone-pad"
@@ -37,7 +38,7 @@ export default function ModalPrice(props: { grossPricePerUnit: number, onButtonP
                     defaultValue={parteDecimal}
                     value={parteDecimal}
                     onChangeText={(newFloat) => {
-                        const regex = new RegExp(/^\d{0,2}$/);
+                        const regex = new RegExp(patterns.ModalInputs.GROSS_PRICE_PER_UNIT_DECIMAL);
                         if (!Number.isNaN(Number(newFloat)) && regex.test(newFloat)) setParteDecimal(newFloat);
                     }}
                 />

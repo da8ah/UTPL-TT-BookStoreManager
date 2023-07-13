@@ -2,6 +2,11 @@ import StockBook from "../model/core/entities/StockBook";
 import User from "../model/core/entities/User";
 
 export const patterns = {
+	ModalInputs: {
+		GROSS_PRICE_PER_UNIT_ENTERO: /^\d{0,3}$/,
+		GROSS_PRICE_PER_UNIT_DECIMAL: /^\d{0,2}$/,
+		STOCK: /^\d{0,4}$/,
+	},
 	StockBook: {
 		ISBN: /^(\d{13}|\d{10})$/,
 		IMG_REF: /^(https:\/\/)[\w+\.]+(png|jpg)$/,

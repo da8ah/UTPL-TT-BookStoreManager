@@ -5,6 +5,7 @@ interface FailedType extends ModalAttributes {
     modalType: 'failed',
     data: {
         title: string,
+        iconName?: string,
         message: string
     }
 }
@@ -12,6 +13,7 @@ interface SuccessType extends ModalAttributes {
     modalType: 'success',
     data: {
         title: string,
+        iconName?: string,
         message: string
     }
 }

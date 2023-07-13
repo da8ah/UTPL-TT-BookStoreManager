@@ -14,7 +14,20 @@ export default function useAppViewModel() {
     return { vimo }
 }
 
+export type BooksObserver = () => void;
+
 class AppViewModel {
+    private observer: BooksObserver | null = null;
+    public attach(observer: BooksObserver) {
+        this.observer = observer;
+    }
+    public detach() {
+        this.observer = null;
+    }
+    public async forceBooksUpdate() {
+        await this.queryBooksFromService()
+        this.observer && this.observer()
+    }
 
     // Singleton
     private static instance: AppViewModel | null = null;
@@ -33,7 +46,24 @@ class AppViewModel {
         const date = Intl.DateTimeFormat("ec", {
             day: "2-digit", month: "2-digit", year: "numeric",
         }).format(new Date)
-        this.draft = new StockBook('', '', '', '', date, date, '')
+        // this.draft = new StockBook('', '', '', '', date, date, '')
+        this.draft = new StockBook(
+            '9786073152181',
+            '',
+            '¡Crear o Morir!',
+            'Andrés Oppenheimer',
+            '01/01/2014', date,
+            'La esperanza de Latinoamérica y las cinco claves de la innovación.',
+            16.95,
+            true,
+            100,
+            false,
+            300,
+            true,
+            true,
+            false,
+            false
+        )
     }
 
     public createDraftByISBN(isbn: string) {
@@ -42,6 +72,7 @@ class AppViewModel {
     }
 
     public getDraft() {
+        this.draft.setImgRef('https://azure.blob.png')
         return this.draft
     }
 

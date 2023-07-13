@@ -8,6 +8,7 @@ import DatePicker, { toDate } from "../../components/DatePicker"
 import { globalStyles } from "../../styles/styles"
 
 export default function EditorBasicData(props: {
+    clearInputFocus: boolean
     isNew: boolean
     isEditorDisabled: boolean
     data: {
@@ -59,13 +60,13 @@ export default function EditorBasicData(props: {
             </View>
             <View style={[globalStyles.common, styles.topRightPanel]}>
                 <View style={styles.inputLayout}>
-                    <BookInput disabled={props.isEditorDisabled} title={"Título"} defaultValue={title} onChangeText={input => setBasicProperty('title', input)} />
+                    <BookInput disabled={props.isEditorDisabled} editable={props.clearInputFocus} title={"Título"} defaultValue={title} onChangeText={input => setBasicProperty('title', input)} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput disabled={props.isEditorDisabled} keyboardType="number-pad" title={"ISBN"} defaultValue={isbn} onChangeText={input => setBasicProperty('isbn', input)} />
+                    <BookInput disabled={props.isEditorDisabled} editable={props.clearInputFocus} keyboardType="number-pad" title={"ISBN"} defaultValue={isbn} onChangeText={input => setBasicProperty('isbn', input)} />
                 </View>
                 <View style={styles.inputLayout}>
-                    <BookInput disabled={props.isEditorDisabled} title={"Autor"} defaultValue={author} onChangeText={input => setBasicProperty('author', input)} />
+                    <BookInput disabled={props.isEditorDisabled} editable={props.clearInputFocus} title={"Autor"} defaultValue={author} onChangeText={input => setBasicProperty('author', input)} />
                 </View>
             </View>
         </View>

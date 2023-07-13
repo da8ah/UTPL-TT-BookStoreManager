@@ -78,9 +78,16 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
                 },
                 body: JSON.stringify(stockBook),
             };
-            return await fetch(this.apiBooks, httpContent).then((res) => res.json()).then((body) => { console.log(body); return body });
+            const res: { msg: string } = await fetch(this.apiBooks, httpContent)
+                .then((res) => res.json())
+                .then((body) => body)
+
+            if (res.msg.includes('saved')) return { duplicado: false, creado: true }
+            if (res.msg.includes('already exists')) return { duplicado: true, creado: false }
+
+            return { duplicado: false, creado: false }
         } catch (error) {
-            console.error(error);
+            console.error(error)
             return { duplicado: undefined, creado: undefined }
         }
     }

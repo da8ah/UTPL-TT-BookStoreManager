@@ -13,10 +13,10 @@ export default function ModalDiscount(props: { grossPricePerUnit: number, discou
     return (
         <View style={[styles.common, { backgroundColor: 'white', padding: 20, borderRadius: 20 }]}>
             <View style={styles.common}>
-                <Text>-{percentage}% equivale a $ -{amount.toFixed(2)}</Text>
+                <Text style={{ color: 'black' }}>-{percentage}% equivale a $ -{amount.toFixed(2)}</Text>
             </View>
             <View style={styles.common}>
-                <Text>con precio de ${(price - amount).toFixed(2)}</Text>
+                <Text style={{ color: 'black' }}>con precio de <Text style={{ color: 'black', fontWeight: 'bold' }}>${(price - amount).toFixed(2)}</Text></Text>
             </View>
             <Slider
                 style={{ width: "100%", height: 40, marginVertical: 20 }}

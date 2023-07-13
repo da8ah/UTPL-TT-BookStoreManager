@@ -12,7 +12,7 @@ export default function ConfirmationUpdate(props: {
 
     return (
         <View style={[styles.common, { backgroundColor: 'white', padding: 20, borderRadius: 20 }]}>
-            <Text>Actualizar Registro</Text>
+            <Text style={{ color: 'black' }}>Actualizar Registro</Text>
             <Slider
                 style={{ width: "100%", height: 40, paddingTop: 10 }}
                 value={percentage}
@@ -22,7 +22,7 @@ export default function ConfirmationUpdate(props: {
                 onValueChange={(value) => setPercentage(value)}
                 onSlidingComplete={(value) => (value === 100 ? setButtonDisabledState(false) : setButtonDisabledState(true))}
             />
-            <Text style={{ fontSize: 12, paddingVertical: 5 }}>(Deslice para confirmar {percentage}%)</Text>
+            <Text style={{ color: 'black', fontSize: 12, paddingVertical: 5 }}>(Deslice para confirmar {percentage}%)</Text>
             <Button
                 disabled={buttonDisabled}
                 size="small"

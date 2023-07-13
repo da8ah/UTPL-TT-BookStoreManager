@@ -1,6 +1,6 @@
 import { useTheme } from "@ui-kitten/components";
-import { useContext, useEffect } from "react";
-import { Keyboard, View } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { EditorContext } from "../../hooks/context/EditorContext";
 import { ThemeContext } from "../../hooks/context/ThemeContext";
 import useAppViewModel from "../../hooks/context/useAppViewModel";
@@ -41,9 +41,11 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         recommended,
         bestSeller,
         recent,
+        setBook,
         setBasicProperty,
         setStatusProperty
     ] = useDraft(vimo.getDraft())
+    const [clearInputFocus, setClearInputFocus] = useState(false)
 
     useEffect(() => {
         toggleEditor(true)
@@ -55,58 +57,67 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         setModalVisibility(modalAttributes?.modalType !== undefined)
     }, [modalAttributes])
 
-    return <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'white' }]}>
-        <ModalDisplay
-            visible={modalVisibility}
-            onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
-        >
-            {modalAttributes && <ModalBookFactory
-                {...modalAttributes}
-                onButtonPress={(data: number) => {
-                    if (modalAttributes.modalType === "discountPercentage") setStatusProperty('inOffer', true)
-                    setStatusProperty(modalAttributes.modalType, data)
-                    setModalVisibility(false)
+    return <TouchableWithoutFeedback onPress={() => {
+        setClearInputFocus(true)
+        setClearInputFocus(false)
+    }}
+        style={{ top: 0, right: 0, bottom: 0, left: 0 }}
+    >
+        <View pointerEvents={isEditorOpen ? 'auto' : 'none'} style={[globalStyles.common, globalStyles.body, { backgroundColor: themeMode === 'dark' ? theme['background-basic-color-3'] : 'white' }]}>
+            <ModalDisplay
+                visible={modalVisibility}
+                onBackdropPress={() => { if (Keyboard.isVisible()) Keyboard.dismiss(); setModalVisibility(false) }}
+            >
+                {modalAttributes && <ModalBookFactory
+                    {...modalAttributes}
+                    onButtonPress={(data: number) => {
+                        if (modalAttributes.modalType === "discountPercentage") setStatusProperty('inOffer', true)
+                        setStatusProperty(modalAttributes.modalType, data)
+                        setModalVisibility(false)
+                    }}
+                />}
+            </ModalDisplay>
+            <EditorBasicData
+                clearInputFocus={clearInputFocus}
+                isNew={bookISBN === undefined}
+                isEditorDisabled={isEditorDisabled}
+                data={{
+                    isbn,
+                    // imgRef,
+                    title,
+                    author,
+                    releaseDate,
+                    setBasicProperty
                 }}
-            />}
-        </ModalDisplay>
-        <EditorBasicData
-            isNew={bookISBN === undefined}
-            isEditorDisabled={isEditorDisabled}
-            data={{
-                isbn,
-                // imgRef,
-                title,
-                author,
-                releaseDate,
-                setBasicProperty
-            }}
-        />
-        <EditorStatus
-            isEditorDisabled={isEditorDisabled}
-            setModalAttributes={setModalAttributes}
-            data={{
-                grossPricePerUnit,
-                inOffer,
-                discountPercentage,
-                hasIva,
-                ivaPercentage,
-                stock,
-                visible,
-                recommended,
-                bestSeller,
-                recent,
-                setStatusProperty
-            }}
-        />
-        <EditorBottom
-            bookISBN={bookISBN}
-            isEditorDisabled={isEditorDisabled}
-            toggleDisabledState={toggleDisabledState}
-            data={{
-                createdDate,
-                description,
-                setBasicProperty
-            }}
-        />
-    </View>
+            />
+            <EditorStatus
+                isEditorDisabled={isEditorDisabled}
+                setModalAttributes={setModalAttributes}
+                data={{
+                    grossPricePerUnit,
+                    inOffer,
+                    discountPercentage,
+                    hasIva,
+                    ivaPercentage,
+                    stock,
+                    visible,
+                    recommended,
+                    bestSeller,
+                    recent,
+                    setStatusProperty
+                }}
+            />
+            <EditorBottom
+                bookISBN={bookISBN}
+                resetBook={setBook}
+                isEditorDisabled={isEditorDisabled}
+                toggleDisabledState={toggleDisabledState}
+                data={{
+                    createdDate,
+                    description,
+                    setBasicProperty
+                }}
+            />
+        </View>
+    </TouchableWithoutFeedback>
 }

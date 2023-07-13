@@ -1,7 +1,7 @@
 import { List, ListProps } from "@ui-kitten/components";
 import { useEffect, useMemo, useState } from "react";
 import { Keyboard, View } from "react-native";
-import useAppViewModel from "../../hooks/context/useAppViewModel";
+import useAppViewModel, { BooksObserver } from "../../hooks/context/useAppViewModel";
 import StockBook from "../../model/core/entities/StockBook";
 import SearchBar, { EmptyIcon } from "../components/SearchBar";
 import { globalStyles as styles } from "../styles/styles";
@@ -36,8 +36,16 @@ export default function Home() {
     const [query, setQuey] = useState('')
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
-    useEffect(() => { }, [query])
+    const forceUpdateAfterBookModification: BooksObserver = () => {
+        queryData()
+    }
 
+    useEffect(() => {
+        vimo.attach(forceUpdateAfterBookModification);
+        return () => vimo.detach();
+    }, []);
+
+    useEffect(() => { }, [query])
     const books = useMemo(() => {
         return vimo.getBooks().filter((book) => {
             return book.getAuthor().toLowerCase().includes(query.toLowerCase())
