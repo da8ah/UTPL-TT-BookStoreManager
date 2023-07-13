@@ -50,7 +50,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
     useEffect(() => {
         toggleEditor(true)
         toggleDisabledState(bookISBN !== undefined)
-        return () => { toggleEditor(false) }
+        return () => { if (bookISBN !== undefined) vimo.forceBooksUpdate(); toggleEditor(false) }
     }, [])
 
     useEffect(() => {

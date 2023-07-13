@@ -23,6 +23,7 @@ export default function useDraft(initialValue: StockBook) {
 
     useEffect(() => {
         setIsbn(book.getIsbn())
+        // setImgRef(book.getImgRef())
         setTitle(book.getTitle())
         setAuthor(book.getAuthor())
         setReleaseDate(book.getReleaseDate())

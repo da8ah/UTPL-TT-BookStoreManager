@@ -9,7 +9,8 @@ export const useAuthCTX = () => {
         if (credentials === undefined) setAuth(await vimo.login())
         else setAuth(await vimo.login(new Admin(credentials.user, '', '', '', credentials.password)))
     }
-    const logout = () => {
+    const logout = async () => {
+        await vimo.logout()
         setAuth(false);
     }
 

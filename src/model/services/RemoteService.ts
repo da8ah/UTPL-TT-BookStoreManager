@@ -46,7 +46,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
 
     async iniciarSesionConToken(): Promise<Admin | undefined> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             let admin
             const httpContent = {
@@ -60,7 +60,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
                 .then((body) => (admin = AdminConverter.jsonToAdmin(body)));
             return admin
         } catch (error) {
-            console.error(error);
+            console.log(error);
             return
         }
     }
@@ -68,7 +68,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     // BOOKS
     async guardarLibroNuevo(stockBook: StockBook): Promise<{ duplicado?: boolean; creado?: boolean; }> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             const httpContent = {
                 method: "POST",
@@ -93,7 +93,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     }
     async obtenerLibrosEnStock(): Promise<StockBook[]> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             const httpContent = {
                 method: "GET",
@@ -112,7 +112,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     }
     async actualizarLibro(stockBook: StockBook, originalStockBookToChangeISBN?: string): Promise<boolean> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             const httpContent = {
                 method: "PUT",
@@ -132,7 +132,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     }
     async eliminarLibro(stockBook: StockBook): Promise<boolean> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             const httpContent = {
                 method: "DELETE",
@@ -150,7 +150,7 @@ export default class RemoteService implements IPersistenciaCuenta, IPersistencia
     // TRANSACTIONS
     async obtenerTodasLasTransacciones(): Promise<CardTransaction[]> {
         try {
-            if (this.token === '') throw Error('Error: Token was not provided!')
+            if (this.token === '') throw Error('Token was not provided, must signin!')
 
             const httpContent = {
                 method: "GET",

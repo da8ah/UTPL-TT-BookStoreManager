@@ -9,9 +9,12 @@ import LoadingAlert from "./components/LoadingAlert";
 import ThemeModeToggle from "./components/ThemeModeToggle";
 import RootNav from "./routes/RootNav";
 import { darkNavTheme, lightNavTheme, globalStyles as styles } from "./styles/styles";
+import { useNetInfo } from "@react-native-community/netinfo";
+import NetworkError from "./screens/NetworkError";
 
 
 export default function MainFrame() {
+    const { isConnected } = useNetInfo()
     const { themeMode } = useContext(ThemeContext);
     const { isAuth, tryToAuth } = useContext(AuthContext)
     const [isLoadin, setLoading] = useState(true)
@@ -28,8 +31,8 @@ export default function MainFrame() {
         {isLoadin ? <LoadingAlert />
             :
             <NavigationContainer theme={themeMode === 'dark' ? darkNavTheme : lightNavTheme}>
-                <Header isAuth={isAuth} style={[styles.common, styles.header, { backgroundColor: '#272729' }]} />
-                <RootNav />
+                <Header isAuth={isAuth && isConnected || false} style={[styles.common, styles.header, { backgroundColor: '#272729' }]} />
+                {!isConnected ? <NetworkError /> : <RootNav />}
             </NavigationContainer>}
     </Layout>
 }

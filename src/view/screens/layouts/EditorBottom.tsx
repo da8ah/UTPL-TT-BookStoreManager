@@ -108,7 +108,7 @@ export default function EditorBottom(props: {
             return
         }
         if (result.duplicado) {
-            setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'El registro ya se encuentra guardado' } })
+            setAlertAttrs({ modalType: "failed", data: { title: 'La operación falló', message: 'El registro se encuentra duplicado' } })
             setAlertVisibility(true)
             return
         }
@@ -118,6 +118,7 @@ export default function EditorBottom(props: {
             return
         }
 
+        vimo.forceBooksUpdate()
         setAlertAttrs({ modalType: "success", data: { title: 'Registro Actualizado', message: 'Se redireccionará al Inicio' } })
         setAlertVisibility(true)
     }
@@ -227,10 +228,7 @@ export default function EditorBottom(props: {
                     {...alertAttrs}
                     onButtonPress={() => {
                         setAlertVisibility(false)
-                        if (alertAttrs.modalType === "success") {
-                            vimo.forceBooksUpdate()
-                            navigation.navigate('BottomNav', { screen: 'Home' })
-                        }
+                        if (alertAttrs.modalType === "success") navigation.navigate('BottomNav', { screen: 'Home' })
                     }}
                 />
             }

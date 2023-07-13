@@ -109,7 +109,7 @@ export class TransactionConverter {
 	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
 	public static jsonToCardTransaction(req: any): CardTransaction {
 		const { id, cardNumber, user, name, email, mobile, date, payment, cart } = req;
-
+		// No se utilizan porque se recalculan los valores
 		const { discountCalc, ivaCalc, subtotal, totalPrice, toBuyBooks } = cart;
 
 		const books = toBuyBooks.map(
@@ -117,8 +117,8 @@ export class TransactionConverter {
 			(book: any) => new ToBuyBook(book.isbn, book.imgRef, book.title, book.author, book.releaseDate, book.grossPricePerUnit, book.inOffer, book.discountPercentage, book.hasIva, book.cant),
 		);
 
+		// Valores recalculados automáticamente
 		const newCart = new Cart(books);
-		console.log(`Total: ${totalPrice} ${newCart.getTotalPrice()}`);
 
 		return new CardTransaction(id, cardNumber, user, name, email, mobile, date, payment, newCart);
 	}

@@ -46,24 +46,7 @@ class AppViewModel {
         const date = Intl.DateTimeFormat("ec", {
             day: "2-digit", month: "2-digit", year: "numeric",
         }).format(new Date)
-        // this.draft = new StockBook('', '', '', '', date, date, '')
-        this.draft = new StockBook(
-            '9786073152181',
-            '',
-            '¡Crear o Morir!',
-            'Andrés Oppenheimer',
-            '01/01/2014', date,
-            'La esperanza de Latinoamérica y las cinco claves de la innovación.',
-            16.95,
-            true,
-            100,
-            false,
-            300,
-            true,
-            true,
-            false,
-            false
-        )
+        this.draft = new StockBook('', '', '', '', date, date, '')
     }
 
     public createDraftByISBN(isbn: string) {
@@ -95,7 +78,8 @@ class AppViewModel {
         this.setService()
     }
     public async setService() {
-        this.remoteService.setToken(await this.localService.obtenerTokenAlmacenado() || '')
+        const token = await this.localService.obtenerTokenAlmacenado()
+        token && this.remoteService.setToken(token)
     }
 
     async login(admin?: Admin) {
@@ -106,11 +90,19 @@ class AppViewModel {
                 await GestionDeAdmin.iniciarSesionConUserPassword(this.remoteService, this.localService, new Admin(admin.getUser(), '', '', '', admin.getPassword()))
             if (user !== undefined) {
                 this.user = user
-                this.setService()
+                await this.setService()
                 await this.queryBooksFromService()
                 return true
             }
             return false
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+    async logout() {
+        try {
+            return await GestionDeAdmin.cerrarSesion(this.localService)
         } catch (error) {
             console.error(error)
             return false

@@ -36,14 +36,11 @@ export default function Home() {
     const [query, setQuey] = useState('')
     const [refreshing, setRefreshing] = useState<boolean>(false);
 
-    const forceUpdateAfterBookModification: BooksObserver = () => {
-        queryData()
-    }
-
+    const forceUpdateAfterBookModification: BooksObserver = () => queryData()
     useEffect(() => {
         vimo.attach(forceUpdateAfterBookModification);
         return () => vimo.detach();
-    }, []);
+    }, [])
 
     useEffect(() => { }, [query])
     const books = useMemo(() => {
