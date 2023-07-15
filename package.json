@@ -1,10 +1,10 @@
 {
   "name": "utpl-tt-bookstoremanager",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "npx expo start --tunnel",
-    "test": "jest --forceExit --runInBand --detectOpenHandles"
+    "test": "jest --forceExit --runInBand"
   },
   "jest": {
     "preset": "jest-expo",

@@ -1,8 +1,8 @@
 import React from 'react';
-import { act, create } from 'react-test-renderer';
+import { create } from 'react-test-renderer';
+import StockBook from '../src/model/core/entities/StockBook';
 import Home from '../src/view/screens/Home';
 import Wrapper from './wrapper';
-import StockBook from '../src/model/core/entities/StockBook';
 
 jest.useFakeTimers()
 
@@ -34,14 +34,10 @@ const listBooks = [
 describe('<Home />', () => {
     let comp;
     beforeAll(() => {
-        // comp = create(<Home />).root;
-        // {/* <RootNav navigation={navigation} /> */ }
-        // {/* <MainFrame navigation={navigation} /> */ }
         comp = create(<Wrapper>
             <Home navigation={navigation} />
         </Wrapper>)
-        // console.log(comp.root);
-    });
+    })
 
     it('should render <BookStore />', async () => {
         expect(comp).toBeDefined()
@@ -49,13 +45,5 @@ describe('<Home />', () => {
         books = comp.root.findByProps({ testID: 'books' }).props
         console.log(books)
         expect(books).toBeDefined()
-    });
-
-    // it('should render home: <BookEditor />', async () => {
-    //     let home
-    //     await act(async () => {
-    //         home = await comp.findByProps({ testID: 'nav' });
-    //     });
-    //     expect(home).toBeDefined();
-    // });
-});
+    })
+})
