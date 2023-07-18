@@ -15,7 +15,7 @@ export default function RootNav() {
 	return <>
 		{
 			!isAuth ? <SignIn /> :
-				<View style={[styles.common, styles.body, { alignItems: 'stretch', backgroundColor: 'transparent' }]}>
+				<View testID="root-nav" style={[styles.common, styles.body, { alignItems: 'stretch', backgroundColor: 'transparent' }]}>
 					<Stack.Navigator initialRouteName='BottomNav' screenOptions={{ headerShown: false }}>
 						<Stack.Screen name='BottomNav' component={BottomNav} />
 						<Stack.Screen

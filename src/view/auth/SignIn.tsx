@@ -27,7 +27,7 @@ export default function SignIn() {
     );
 
     return (
-        <View style={[styles.common, styles.body]}>
+        <View testID="test-signin" style={[styles.common, styles.body]}>
             {isLoading ?
                 <LoadingAlert /> :
                 <>

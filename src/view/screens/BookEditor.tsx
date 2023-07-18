@@ -57,7 +57,7 @@ export default function BookEditor({ route }: { route: BookEditorRouteProps }) {
         setModalVisibility(modalAttributes?.modalType !== undefined)
     }, [modalAttributes])
 
-    return <TouchableWithoutFeedback onPress={() => {
+    return <TouchableWithoutFeedback testID="editor" onPress={() => {
         setClearInputFocus(true)
         setClearInputFocus(false)
     }}
