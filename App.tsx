@@ -26,7 +26,7 @@ export default () => {
 				<ApplicationProvider {...eva} theme={{ ...eva[themeMode], ...customTheme.basic, ...customTheme[themeMode] }}>
 					<AuthContext.Provider value={{ isAuth, tryToAuth, logout }}>
 						<EditorContext.Provider value={{ isEditorOpen, toggleEditor }}>
-							<View style={{ height: 25, backgroundColor: "transparent" }} />
+							<View style={{ height: 25, backgroundColor: '#272729' }} />
 							<SafeAreaView style={[styles.common, { flex: 1 }]}>
 								<MainFrame />
 								<StatusBar style="auto" />
