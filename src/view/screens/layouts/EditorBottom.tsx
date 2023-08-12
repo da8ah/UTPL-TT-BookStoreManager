@@ -185,6 +185,7 @@ export default function EditorBottom(props: {
         <View style={[styles.common, { flexDirection: 'row', justifyContent: 'space-evenly' }]}>
             {isNew ?
                 <ActionButton
+                    isHidden={isKeyboardVisible}
                     icon={() => <Icon name="save" fill="white" height="30" width="30" />}
                     backgroundColor={theme['color-success-500']}
                     onPress={() => {
@@ -195,6 +196,7 @@ export default function EditorBottom(props: {
                 :
                 bottomButtons.map((button, index) => {
                     return <ActionButton key={`editor-action-button-${index}`}
+                        isHidden={isKeyboardVisible}
                         disabled={button.disabled}
                         width={button.width}
                         icon={() => <Icon name={button.iconName} fill="white" height="30" width="30" />}

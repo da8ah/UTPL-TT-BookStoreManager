@@ -19,7 +19,7 @@ const BookStore = (props: { books: StockBook[] } & Omit<ListProps, 'data' | 'ren
                 key={"books"}
                 style={{ backgroundColor: "transparent" }}
                 contentContainerStyle={{ backgroundColor: "transparent" }}
-                columnWrapperStyle={[styles.common, { justifyContent: 'flex-start', paddingRight: books.length <= 1 ? '50%' : undefined }]}
+                columnWrapperStyle={[styles.common, { justifyContent: books.length <= 1 ? 'flex-end' : 'flex-start', flexDirection: books.length <= 1 ? 'row-reverse' : 'row' }]}
                 numColumns={2}
                 initialNumToRender={books.length}
                 data={books}

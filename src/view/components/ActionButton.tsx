@@ -7,6 +7,7 @@ export type ActionButtonProps = Omit<ButtonProps, 'title' | 'color'> & {
     width?: string | number,
     rounded?: number,
     activeOpacity?: number,
+    isHidden?: boolean,
     backgroundColor?: ColorValue,
     icon?: () => JSX.Element
 }
@@ -19,6 +20,7 @@ export default function ActionButton(props: ActionButtonProps) {
         style={[
             { borderRadius: props.rounded || 5, height: props.height || 50, width: props.width || 80, backgroundColor: props.disabled ? 'darkgray' : props.backgroundColor, borderWidth: 0, opacity: props.disabled ? 0.3 : 1 },
             {
+                display: props.isHidden ? 'none' : 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
                 flexDirection: props.icon === undefined ? 'row' : 'column'

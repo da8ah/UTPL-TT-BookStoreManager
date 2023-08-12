@@ -45,7 +45,7 @@ class AppViewModel {
     public createDraft() {
         const date = Intl.DateTimeFormat("ec", {
             day: "2-digit", month: "2-digit", year: "numeric",
-        }).format(new Date)
+        }).format(new Date())
         this.draft = new StockBook('', '', '', '', date, date, '')
     }
 

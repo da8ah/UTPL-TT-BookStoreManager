@@ -39,14 +39,12 @@ export default function EditorBasicData(props: {
                 display: isKeyboardVisible ? 'none' : 'flex',
                 backgroundColor: themeMode === 'dark' ? 'transparent' : "gainsboro",
                 flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: 'stretch',
+                justifyContent: "space-between",
                 borderRadius: 20,
-                margin: 5
-
+                padding: 5
             }]}
         >
-            <Text>Fecha de Lanzamiento: </Text>
+            <Text>Fecha de Lanzamiento</Text>
             <DatePicker
                 disabled={props.isEditorDisabled}
                 date={toDate(releaseDate)}

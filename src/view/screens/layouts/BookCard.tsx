@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
     },
     mainLayout: {
         backgroundColor: transparent,
-        width: 173, //'45%',
+        width: '45%',
         height: 300,
-        margin: 10,
+        margin: 9
     },
     mainLayoutDisplay: {
         display: "none",

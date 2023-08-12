@@ -14,7 +14,7 @@ export default function ModalPrice(props: { grossPricePerUnit: number, onButtonP
                 <Text style={{ color: 'black' }}>Precio $</Text>
                 <Text style={{ color: 'black' }}>{parteEntera}.{parteDecimal}</Text>
             </View>
-            <View style={{ flexDirection: "row", marginVertical: 20 }}>
+            <View style={{ flexDirection: "row", paddingVertical: 19 }}>
                 <Input
                     selectTextOnFocus
                     keyboardType="phone-pad"
