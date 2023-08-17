@@ -134,7 +134,7 @@ export default function EditorStatus(props: {
                             disabled={props.isEditorDisabled}
                             justifyToEnd
                             captionText={'💲'}
-                            captionFontSize={25}
+                            captionFontSize={24}
                             onPress={() => props.setModalAttributes({ modalType: "grossPricePerUnit", data: { grossPricePerUnit } })}
                         >{grossPricePerUnit % 1 !== 0 ? grossPricePerUnit.toFixed(2) : grossPricePerUnit.toString()}</StatusButton>
                         <StatusButton

@@ -1,13 +1,6 @@
 import { Modal, ModalProps } from "@ui-kitten/components";
 
-export interface ModalFactory extends JSX.Element, ModalAttributes, ModalCallback { }
-export interface ModalAttributes {
-    modalType?: string,
-    data?: {}
-}
-export interface ModalCallback { onButtonPress?: (...args: any) => any }
-
-type ModalDisplayProps = Omit<ModalProps, 'children'> & { children: ModalFactory | undefined }
+type ModalDisplayProps = Omit<ModalProps, 'children'> & { children: JSX.Element | undefined }
 
 export default function ModalDisplay(props: ModalDisplayProps) {
     return <Modal
