@@ -105,8 +105,8 @@ export default function EditorStatus(props: {
                             />
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around" }}>
-                            <Text>Descuento</Text>
-                            <Text>IVA</Text>
+                            <Text style={{fontSize: 14}}>Descuento</Text>
+                            <Text style={{fontSize: 14}}>IVA</Text>
                         </View>
                         <View style={{ width: "30%", height: "100%", justifyContent: "space-around", alignItems: "flex-start" }}>
                             <StatusButton
